@@ -24,10 +24,32 @@ class SignInEnterState extends SignInState {
   final bool simple;
   final int selectButton;
 
-  SignInEnterState({required this.selectButton, required this.simple, required this.passwordSuffix, required this.emailSuffix, required this.phoneSuffix, required this.phone, required this.email, required this.password, required this.obscure, required this.rememberMe});
+  SignInEnterState(
+      {required this.selectButton,
+      required this.simple,
+      required this.passwordSuffix,
+      required this.emailSuffix,
+      required this.phoneSuffix,
+      required this.phone,
+      required this.email,
+      required this.password,
+      required this.obscure,
+      required this.rememberMe,
+      });
 
   @override
-  List<Object?> get props => [selectButton, simple, passwordSuffix, emailSuffix, phoneSuffix, phone, email, password, obscure, rememberMe];
+  List<Object?> get props => [
+        selectButton,
+        simple,
+        passwordSuffix,
+        emailSuffix,
+        phoneSuffix,
+        phone,
+        email,
+        password,
+        obscure,
+        rememberMe
+      ];
 }
 
 class SignInLoadingState extends SignInState {
@@ -36,7 +58,11 @@ class SignInLoadingState extends SignInState {
   final bool obscure;
   final bool rememberMe;
 
-  SignInLoadingState({required this.email, required this.password, required this.obscure, required this.rememberMe});
+  SignInLoadingState(
+      {required this.email,
+      required this.password,
+      required this.obscure,
+      required this.rememberMe});
 
   @override
   List<Object?> get props => [email, password, obscure, rememberMe];

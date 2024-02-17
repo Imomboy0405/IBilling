@@ -66,23 +66,24 @@ class SignInPage extends StatelessWidget {
                             physics: const NeverScrollableScrollPhysics(),
                             child: Row(children: [
                               // #phone
-                              MyPhoneTextField(
-                                bloc: bloc,
-                                state: state,
-                                suffixIc: bloc.phoneSuffix,
-                                snackBarTxt: 'snackBar'.tr(),
-                                labelTxt: 'phone_num'.tr(),
-                                keyboard: TextInputType.phone,
-                                hintTxt: '(00) 000-00-00',
-                                errorTxt: 'invalid_phone'.tr(),
-                                errorState: state is SignInErrorState,
-                                enterStateAndField: state is SignInEnterState && state.phone,
-                                context1: context,
-                                focus: bloc.focusPhone,
-                                icon: Icons.phone,
-                                controller: bloc.phoneNumberController,
+                              MyTextField(
+                                phoneInputFormatter: bloc.phoneInputFormatter,
+                                countryData: bloc.countryData,
                                 pageName: id,
+                                controller: bloc.phoneNumberController,
+                                enterStateAndField: state is SignInEnterState && state.phone,
+                                errorState: state is SignInErrorState,
+                                suffixIc: bloc.phoneSuffix,
+                                keyboard: TextInputType.phone,
+                                focus: bloc.focusPhone,
+                                errorTxt: 'invalid_phone'.tr(),
+                                context1: context,
+                                icon: Icons.phone,
+                                hintTxt: bloc.countryData.phoneMaskWithoutCountryCode,
+                                labelTxt: 'phone_num'.tr(),
+                                snackBarTxt: 'snackBar'.tr(),
                               ),
+
                               // #email
                               MyTextField(
                                 pageName: id,
@@ -99,89 +100,6 @@ class SignInPage extends StatelessWidget {
                                 labelTxt: 'email_address'.tr(),
                                 snackBarTxt: 'snackBar'.tr(),
                               ),
-                              /*SizedBox(
-                                height: 44,
-                                width: MediaQuery.of(context).size.width - 60,
-                                child: Align(
-                                  alignment: AlignmentDirectional.bottomEnd,
-                                  child: TextField(
-                                    controller: bloc.emailController,
-                                    style: AppTextStyles.style7,
-                                    onChanged: (v) => context
-                                        .read<SignInBloc>()
-                                        .add(SignInChangeEvent()),
-                                    onTap: () => context
-                                        .read<SignInBloc>()
-                                        .add(SignInChangeEvent()),
-                                    onSubmitted: (v) => context
-                                        .read<SignInBloc>()
-                                        .add(OnSubmittedEvent()),
-                                    textInputAction: TextInputAction.done,
-                                    focusNode: bloc.focusEmail,
-                                    keyboardType: TextInputType.emailAddress,
-                                    decoration: InputDecoration(
-                                      contentPadding: const EdgeInsets.only(
-                                          top: 0,
-                                          bottom: 0,
-                                          left: 20,
-                                          right: 0),
-                                      suffixIconConstraints:
-                                          const BoxConstraints(maxWidth: 48),
-                                      errorText: state is SignInErrorState
-                                          ? 'invalid_email'.tr()
-                                          : null,
-                                      prefixIcon: Icon(Icons.mail,
-                                          color: state is SignInEnterState &&
-                                                      state.email ||
-                                                  bloc.focusEmail.hasFocus
-                                              ? AppColors.blue
-                                              : AppColors.darkGrey),
-                                      suffixIcon: bloc.emailController.text
-                                                  .isNotEmpty ||
-                                              bloc.focusEmail.hasFocus
-                                          ? IconButton(
-                                              padding: EdgeInsets.zero,
-                                              onPressed: () => !bloc.emailSuffix
-                                                  ? mySnackBar(
-                                                      context: context,
-                                                      txt: 'snackBar'.tr())
-                                                  : {},
-                                              splashRadius:
-                                                  bloc.emailSuffix ? 0.1 : 20,
-                                              icon: bloc.emailSuffix
-                                                  ? const Icon(Icons.done,
-                                                      color: AppColors.blue)
-                                                  : const Icon(
-                                                      Icons.error_outline,
-                                                      color: AppColors.red),
-                                            )
-                                          : const SizedBox.shrink(),
-                                      labelText: 'email_address'.tr(),
-                                      hintText: 'aaabbbccc@dddd.eee',
-                                      labelStyle: bloc.emailController.text
-                                                  .isNotEmpty ||
-                                              bloc.focusEmail.hasFocus
-                                          ? AppTextStyles.style3
-                                          : AppTextStyles.style6,
-                                      hintStyle: AppTextStyles.style6,
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(6),
-                                        borderSide: BorderSide(
-                                            width: 1.2,
-                                            color: state is SignInEnterState &&
-                                                    state.email
-                                                ? AppColors.blue
-                                                : AppColors.disableBlue),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(6),
-                                        borderSide: const BorderSide(
-                                            width: 1.2, color: AppColors.red),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),*/
                             ]),
                           ),
                         ),

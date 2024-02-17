@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
+import 'package:flutter_multi_formatter/formatters/phone_input_formatter.dart';
 
 import '../../../../Data/Service/google_sign_in_service.dart';
 import '../../../../Data/Service/lang_service.dart';
@@ -12,7 +14,6 @@ part 'sign_in_state.dart';
 
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
   Language selectedLang = LangService.getLanguage;
-  bool wasPressed = false;
   bool rememberMe = false;
   bool obscure = true;
   bool phoneSuffix = false;
@@ -24,10 +25,16 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   FocusNode focusEmail = FocusNode();
   FocusNode focusPassword = FocusNode();
   ScrollController scrollController = ScrollController();
-  var maskFormatter = MaskTextInputFormatter(
-    mask: '(##) ###-##-##',
-    filter: {"#": RegExp(r'[0-9]')},
-    type: MaskAutoCompletionType.eager,
+  PhoneInputFormatter phoneInputFormatter = PhoneInputFormatter(
+    defaultCountryCode: 'UZ',
+  );
+  PhoneCountryData countryData = PhoneCountryData.fromMap({
+    'country': 'Uzbekistan',
+    'countryRU': 'Узбекистан',
+    'internalPhoneCode': '998',
+    'countryCode': 'UZ',
+    'phoneMask': '+000 (00) 000-00-00',
+  },
   );
 
   TextEditingController phoneNumberController = TextEditingController();
@@ -59,6 +66,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     on<FaceBookEvent>(pressFacebook);
     on<GoogleEvent>(pressGoogle);
     on<SignUpEvent>(pressSignUp);
+    on<SignInCountryEvent>(pressCountry);
   }
 
   void pressFlagButton(FlagEvent event, Emitter emit) {
@@ -201,11 +209,37 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     print(email);
   }
 
+  Future<void> pressCountry(SignInCountryEvent event, Emitter<SignInState> emit) async {
+    countryData = event.countryData;
+    phoneInputFormatter = PhoneInputFormatter(defaultCountryCode: event.countryData.countryCode);
+    focusPhone.unfocus();
+    focusEmail.unfocus();
+    focusPassword.unfocus();
+    simple = !simple;
+    emit(SignInEnterState(
+        selectButton: selectButton,
+        simple: simple,
+        email: emailController.text
+            .trim()
+            .isNotEmpty,
+        password: passwordController.text
+            .trim()
+            .isNotEmpty,
+        phone: phoneNumberController.text.isNotEmpty,
+        obscure: obscure,
+        rememberMe: rememberMe,
+        phoneSuffix: phoneSuffix,
+        emailSuffix: emailSuffix,
+        passwordSuffix: passwordSuffix));
+    await Future.delayed(const Duration(milliseconds: 30));
+    focusPhone.requestFocus();
+  }
+
   void change(SignInChangeEvent event, Emitter<SignInState> emit) {
-    if (phoneNumberController.text.length != 14) {
+    if (phoneNumberController.text.length != countryData.phoneMaskWithoutCountryCode.length) {
       phoneSuffix = false;
     }
-    if (!phoneSuffix && phoneNumberController.text.length == 14) {
+    if (!phoneSuffix && phoneNumberController.text.length == countryData.phoneMaskWithoutCountryCode.length) {
       phoneSuffix = true;
     }
 

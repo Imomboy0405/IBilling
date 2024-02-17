@@ -23,6 +23,7 @@ dependencies:
   avatar_glow: any
   mask_text_input_formatter: any
   scrollable_positioned_list: any
+  flutter_multi_formatter: ^2.12.4
 
   # state management
   flutter_bloc: any

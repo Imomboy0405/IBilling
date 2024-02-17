@@ -1,3 +1,5 @@
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
+import 'package:flutter_multi_formatter/widgets/country_flag.dart';
 import 'package:i_billing/Application/Welcome/SignIn/Bloc/sign_in_bloc.dart'
     as sign_in;
 import 'package:i_billing/Application/Welcome/Start/Bloc/start_bloc.dart'
@@ -8,7 +10,6 @@ import 'package:i_billing/Data/Service/lang_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../../../Configuration/app_colors.dart';
 import '../../../Configuration/app_text_styles.dart';
@@ -122,168 +123,6 @@ class MyFlagButton extends StatelessWidget {
   }
 }
 
-class MyTextField extends StatelessWidget {
-  const MyTextField({
-    super.key,
-    required this.pageName,
-    required this.context1,
-    required this.controller,
-    required this.keyboard,
-    required this.focus,
-    required this.errorTxt,
-    required this.errorState,
-    required this.suffixIc,
-    required this.enterStateAndField,
-    required this.icon,
-    required this.labelTxt,
-    required this.hintTxt,
-    required this.snackBarTxt,
-    this.obscure,
-  });
-
-  final String pageName;
-  final BuildContext context1;
-  final TextEditingController controller;
-  final TextInputType keyboard;
-  final FocusNode focus;
-  final String errorTxt;
-  final bool errorState;
-  final bool suffixIc;
-  final bool enterStateAndField;
-  final IconData icon;
-  final String labelTxt;
-  final String hintTxt;
-  final String snackBarTxt;
-  final bool? obscure;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 44,
-      width: MediaQuery.of(context1).size.width - 60,
-      child: Align(
-        alignment: AlignmentDirectional.bottomEnd,
-        child: TextField(
-          obscureText: icon == Icons.lock ? obscure! : false,
-          cursorColor: AppColors.blue,
-          controller: controller,
-          style: AppTextStyles.style7,
-          onChanged: (v) {
-            if (icon == Icons.phone && v.isNotEmpty) {
-              if (v.substring(0, 1) != '(') {
-                String newInput = '(${v[0]}';
-                controller.text = newInput;
-                controller.selection = TextSelection.fromPosition(
-                  TextPosition(offset: newInput.length),
-                );
-              }
-            }
-            switch (pageName) {
-              case '/sign_in_page':
-                context1
-                    .read<sign_in.SignInBloc>()
-                    .add(sign_in.SignInChangeEvent());
-                break;
-            }
-          },
-          onTap: () {
-            switch (pageName) {
-              case '/sign_in_page':
-                context1
-                    .read<sign_in.SignInBloc>()
-                    .add(sign_in.SignInChangeEvent());
-                break;
-            }
-          },
-          onSubmitted: (v) {
-            switch (pageName) {
-              case '/sign_in_page':
-                context1
-                    .read<sign_in.SignInBloc>()
-                    .add(sign_in.OnSubmittedEvent(password: icon == Icons.lock));
-                break;
-            }
-          },
-          textInputAction: icon == Icons.lock ? TextInputAction.done : TextInputAction.next,
-          keyboardType: keyboard,
-          inputFormatters: icon == Icons.add
-              ? [MaskTextInputFormatter(mask: '(##) ###-##-##', filter: {"#": RegExp(r'[0-9]')}, type: MaskAutoCompletionType.eager)]
-              : null,
-          focusNode: focus,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-            errorText: errorState ? errorTxt : null,
-            prefixIcon: Icon(icon,
-                color: enterStateAndField || focus.hasFocus
-                    ? AppColors.blue
-                    : AppColors.darkGrey),
-            suffixIcon: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-
-                // #eye_button
-                  icon == Icons.lock && controller.text.isNotEmpty
-                    ? IconButton(
-                  padding: EdgeInsets.zero,
-                  alignment: Alignment.centerRight,
-                  onPressed: () {
-                    switch (pageName) {
-                      case '/sign_in_page':
-                        context1
-                            .read<sign_in.SignInBloc>()
-                            .add(sign_in.EyeEvent());
-                        break;
-                    }
-                  },
-                  icon: Icon(
-                    obscure!
-                        ? CupertinoIcons.eye
-                        : CupertinoIcons.eye_slash,
-                    color: AppColors.blue,
-                  ),
-                )
-                    : const SizedBox.shrink(),
-
-                // #error_button_and_done
-                controller.text.isNotEmpty || focus.hasFocus
-                    ? IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () => !suffixIc
-                        ? mySnackBar(context: context1, txt: snackBarTxt)
-                        : {},
-                    icon: suffixIc
-                        ? const Icon(Icons.done, color: AppColors.blue)
-                        : const Icon(Icons.error_outline, color: AppColors.red)
-                )
-                    : const SizedBox.shrink(),
-              ],
-            ),
-
-            labelText: labelTxt,
-            prefixText: icon == Icons.phone ? '+998 ' : null,
-            hintText: hintTxt,
-            hintStyle: AppTextStyles.style6,
-            prefixStyle: AppTextStyles.style7,
-            labelStyle: controller.text.isNotEmpty || focus.hasFocus
-                ? AppTextStyles.style3
-                : AppTextStyles.style6,
-            border: myInputBorder(color1: AppColors.blue),
-            enabledBorder: myInputBorder(
-              color1: AppColors.blue,
-              color2: AppColors.disableBlue,
-              itsColor1: enterStateAndField,
-            ),
-            errorBorder: myInputBorder(color1: AppColors.red),
-            focusedBorder: myInputBorder(color1: AppColors.blue),
-          ),
-        ),
-      ),
-    );
-
-  }
-}
-
 class SelectButton extends StatelessWidget {
   const SelectButton({
     super.key,
@@ -331,7 +170,8 @@ class SelectButton extends StatelessWidget {
   }
 }
 
-ScaffoldFeatureController<SnackBar, SnackBarClosedReason> mySnackBar({required String txt, required BuildContext context}) {
+ScaffoldFeatureController<SnackBar, SnackBarClosedReason> mySnackBar(
+    {required String txt, required BuildContext context}) {
   return ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       backgroundColor: AppColors.transparent,
@@ -375,18 +215,17 @@ TextButton myTextButton(
   );
 }
 
-OutlineInputBorder myInputBorder({required Color color1, bool itsColor1 = true, Color? color2}) {
+OutlineInputBorder myInputBorder(
+    {required Color color1, bool itsColor1 = true, Color? color2}) {
   return OutlineInputBorder(
     borderRadius: BorderRadius.circular(6),
     borderSide: BorderSide(width: 1.2, color: itsColor1 ? color1 : color2!),
   );
 }
 
-class MyPhoneTextField extends StatelessWidget {
-  const MyPhoneTextField({
+class MyTextField extends StatelessWidget {
+  MyTextField({
     super.key,
-    required this.bloc,
-    required this.state,
     required this.pageName,
     required this.context1,
     required this.controller,
@@ -401,10 +240,10 @@ class MyPhoneTextField extends StatelessWidget {
     required this.hintTxt,
     required this.snackBarTxt,
     this.obscure,
+    this.countryData,
+    this.phoneInputFormatter,
   });
 
-  final sign_in.SignInBloc bloc;
-  final dynamic state;
   final String pageName;
   final BuildContext context1;
   final TextEditingController controller;
@@ -419,119 +258,213 @@ class MyPhoneTextField extends StatelessWidget {
   final String hintTxt;
   final String snackBarTxt;
   final bool? obscure;
+  final PhoneInputFormatter? phoneInputFormatter;
+  final List<String> countryIsoCodes = [
+    'UZ',
+    'RU',
+    'US',
+    'AF',
+    'KZ',
+    'KG',
+    'TJ',
+    'TM',
+  ];
+  final FocusNode? focusNodeCountry = FocusNode();
+  final PhoneCountryData? countryData;
 
   @override
   Widget build(BuildContext context) {
+    if (icon == Icons.phone) {
+      PhoneInputFormatter.replacePhoneMask(
+        countryCode: 'UZ', newMask: '+000 (00) 000-00-00');
+      context1.read<sign_in.SignInBloc>().add(sign_in.SignInChangeEvent());
+    }
+    print('aaaaaaaaaaaaaaaaa');
+
     return SizedBox(
       height: 44,
       width: MediaQuery.of(context1).size.width - 60,
-      child: Align(
-        alignment: AlignmentDirectional.bottomEnd,
-        child: TextField(
-          obscureText: icon == Icons.lock ? obscure! : false,
-          cursorColor: AppColors.blue,
-          controller: controller,
-          style: AppTextStyles.style7,
-          onChanged: (v) {
-            switch (pageName) {
-              case '/sign_in_page':
-                context1
-                    .read<sign_in.SignInBloc>()
-                    .add(sign_in.SignInChangeEvent());
-                break;
-            }
-          },
-          onTap: () {
-            switch (pageName) {
-              case '/sign_in_page':
-                context1
-                    .read<sign_in.SignInBloc>()
-                    .add(sign_in.SignInChangeEvent());
-                break;
-            }
-          },
-          onSubmitted: (v) {
-            switch (pageName) {
-              case '/sign_in_page':
-                context1
-                    .read<sign_in.SignInBloc>()
-                    .add(sign_in.OnSubmittedEvent(password: icon == Icons.lock));
-                break;
-            }
-          },
-          textInputAction: icon == Icons.lock ? TextInputAction.done : TextInputAction.next,
-          keyboardType: keyboard,
-          inputFormatters: icon == Icons.phone
-              ? [MaskTextInputFormatter(mask: '(##) ###-##-##', filter: {"#": RegExp(r'[0-9]')}, type: MaskAutoCompletionType.eager)]
-              : null,
-          focusNode: focus,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-            errorText: errorState ? errorTxt : null,
-            prefixIcon: Icon(icon,
-                color: enterStateAndField || focus.hasFocus
-                    ? AppColors.blue
-                    : AppColors.darkGrey),
-            suffixIcon: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
+      child: TextField(
+        key: icon == Icons.phone ? Key(phoneInputFormatter!.defaultCountryCode!) : null,
+        obscureText: icon == Icons.lock ? obscure! : false,
+        cursorColor: AppColors.blue,
+        controller: controller,
+        style: AppTextStyles.style7,
+        onChanged: (v) {
+          switch (pageName) {
+            case '/sign_in_page':
+              context1
+                  .read<sign_in.SignInBloc>()
+                  .add(sign_in.SignInChangeEvent());
+              break;
+          }
+        },
+        onTap: () {
+          switch (pageName) {
+            case '/sign_in_page':
+              context1
+                  .read<sign_in.SignInBloc>()
+                  .add(sign_in.SignInChangeEvent());
+              break;
+          }
+        },
+        onSubmitted: (v) {
+          switch (pageName) {
+            case '/sign_in_page':
+              context1
+                  .read<sign_in.SignInBloc>()
+                  .add(sign_in.OnSubmittedEvent());
+              break;
+          }
+        },
+
+        textInputAction: icon == Icons.lock ? TextInputAction.done : TextInputAction.next,
+        keyboardType: keyboard,
+        focusNode: focus,
+        inputFormatters: icon == Icons.phone
+            ? [phoneInputFormatter!]
+            : null,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+          errorText: errorState ? errorTxt : null,
+          prefixIcon: SizedBox(
+            width: icon == Icons.phone && (focus.hasFocus || controller.text.isNotEmpty) ? 121 : 20,
+            child: Row(
               children: [
-
-                // #eye_button
-                icon == Icons.lock && controller.text.isNotEmpty
-                    ? IconButton(
-                  padding: EdgeInsets.zero,
-                  alignment: Alignment.centerRight,
-                  onPressed: () {
-                    switch (pageName) {
-                      case '/sign_in_page':
-                        context1
-                            .read<sign_in.SignInBloc>()
-                            .add(sign_in.EyeEvent());
-                        break;
-                    }
-                  },
-                  icon: Icon(
-                    obscure!
-                        ? CupertinoIcons.eye
-                        : CupertinoIcons.eye_slash,
-                    color: AppColors.blue,
-                  ),
-                )
-                    : const SizedBox.shrink(),
-
-                // #error_button_and_done
-                controller.text.isNotEmpty || focus.hasFocus
-                    ? IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () => !suffixIc
-                        ? mySnackBar(context: context1, txt: snackBarTxt)
-                        : {},
-                    icon: suffixIc
-                        ? const Icon(Icons.done, color: AppColors.blue)
-                        : const Icon(Icons.error_outline, color: AppColors.red)
-                )
+                Expanded(
+                  flex: 2,
+                  child: Icon(icon,
+                      color: enterStateAndField || focus.hasFocus
+                          ? AppColors.blue
+                          : AppColors.darkGrey),
+                ),
+                icon == Icons.phone && (focus.hasFocus || controller.text.isNotEmpty || focusNodeCountry!.hasFocus)
+                    ? Expanded(
+                        flex: 3,
+                        child: CountryDropdown(
+                          itemHeight: 52,
+                          focusNode: focusNodeCountry,
+                          triggerOnCountrySelectedInitially: false,
+                          selectedItemBuilder: (phoneCountryData) {
+                            return Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                '+${phoneCountryData.phoneCode}',
+                              ),
+                            );
+                          },
+                          listItemBuilder: (phoneCountryData) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding:
+                                  const EdgeInsets.only(right: 10),
+                                  child: CountryFlag(
+                                    countryId:
+                                    phoneCountryData.countryCode!,
+                                  ),
+                                ),
+                                Text(
+                                  phoneCountryData.country ?? '',
+                                  style: AppTextStyles.style17,
+                                  maxLines: 1,
+                                ),
+                              ],
+                            );
+                          },
+                          onCountrySelected: (countryData) {
+                            switch (pageName) {
+                              case '/sign_in_page':
+                                context1
+                                    .read<sign_in.SignInBloc>()
+                                    .add(sign_in.SignInCountryEvent(countryData: countryData));
+                                break;
+                            }
+                          },
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 0),
+                            border:
+                                myInputBorder(color1: AppColors.transparent),
+                            enabledBorder:
+                                myInputBorder(color1: AppColors.transparent),
+                            errorBorder:
+                                myInputBorder(color1: AppColors.transparent),
+                            focusedBorder:
+                                myInputBorder(color1: AppColors.transparent),
+                          ),
+                          style: AppTextStyles.style7,
+                          dropdownColor: AppColors.darker,
+                          iconEnabledColor:
+                              controller.text.isNotEmpty || focus.hasFocus
+                                  ? AppColors.blue
+                                  : AppColors.darkGrey,
+                          initialCountryData: countryData,
+                          filter: PhoneCodes.findCountryDatasByCountryCodes(countryIsoCodes: countryIsoCodes),
+                        ),
+                      )
                     : const SizedBox.shrink(),
               ],
             ),
-
-            labelText: labelTxt,
-            prefixText: icon == Icons.phone ? '+998 ' : null,
-            hintText: hintTxt,
-            hintStyle: AppTextStyles.style6,
-            prefixStyle: AppTextStyles.style7,
-            labelStyle: controller.text.isNotEmpty || focus.hasFocus
-                ? AppTextStyles.style3
-                : AppTextStyles.style6,
-            border: myInputBorder(color1: AppColors.blue),
-            enabledBorder: myInputBorder(
-              color1: AppColors.blue,
-              color2: AppColors.disableBlue,
-              itsColor1: enterStateAndField,
-            ),
-            errorBorder: myInputBorder(color1: AppColors.red),
-            focusedBorder: myInputBorder(color1: AppColors.blue),
           ),
+          suffixIcon: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              // #eye_button
+              icon == Icons.lock && controller.text.isNotEmpty
+                  ? IconButton(
+                      padding: EdgeInsets.zero,
+                      alignment: Alignment.centerRight,
+                      onPressed: () {
+                        switch (pageName) {
+                          case '/sign_in_page':
+                            context1
+                                .read<sign_in.SignInBloc>()
+                                .add(sign_in.EyeEvent());
+                            break;
+                        }
+                      },
+                      icon: Icon(
+                        obscure!
+                            ? CupertinoIcons.eye
+                            : CupertinoIcons.eye_slash,
+                        color: AppColors.blue,
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+
+              // #error_button_and_done
+              controller.text.isNotEmpty || focus.hasFocus
+                  ? IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () => !suffixIc
+                          ? mySnackBar(context: context1, txt: snackBarTxt)
+                          : {},
+                      icon: suffixIc
+                          ? const Icon(Icons.done, color: AppColors.blue)
+                          : const Icon(Icons.error_outline,
+                              color: AppColors.red))
+                  : const SizedBox.shrink(),
+            ],
+          ),
+          labelText: labelTxt,
+          hintText: hintTxt,
+          hintStyle: AppTextStyles.style6,
+          prefixStyle: AppTextStyles.style7,
+          labelStyle: controller.text.isNotEmpty || focus.hasFocus
+              ? AppTextStyles.style3
+              : AppTextStyles.style6,
+          border: myInputBorder(color1: AppColors.blue),
+          enabledBorder: myInputBorder(
+            color1: AppColors.blue,
+            color2: AppColors.disableBlue,
+            itsColor1: enterStateAndField,
+          ),
+          errorBorder: myInputBorder(color1: AppColors.red),
+          focusedBorder: myInputBorder(color1: AppColors.blue),
         ),
       ),
     );

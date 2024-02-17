@@ -25,6 +25,15 @@ class SignInChangeEvent extends SignInEvent {
   List<Object?> get props => [];
 }
 
+class SignInCountryEvent extends SignInEvent {
+  final PhoneCountryData countryData;
+
+  SignInCountryEvent({required this.countryData});
+
+  @override
+  List<Object?> get props => [countryData];
+}
+
 class OnSubmittedEvent extends SignInEvent {
   final bool password;
 
