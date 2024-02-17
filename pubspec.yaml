@@ -1,0 +1,69 @@
+name: i_billing
+description: "Simple contract app"
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # icons
+  cupertino_icons: any
+
+  # network
+  http: any
+  http_interceptor: any
+
+  # ui component
+  flutter_slidable: any
+  animations: any
+  avatar_glow: any
+  mask_text_input_formatter: any
+  scrollable_positioned_list: any
+
+  # state management
+  flutter_bloc: any
+
+  # objects equals
+  equatable: any
+
+  # data base
+  shared_preferences: ^2.0.5
+
+  # sign in
+  google_sign_in: any
+  flutter_login_facebook: any
+
+  # firebase
+  firebase_core: any
+  firebase_auth: any
+
+  # dependency injection
+  get_it: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/fonts/monda/
+    - assets/fonts/poppins/
+    - assets/images/
+    - assets/icons/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/poppins/Poppins-Regular.ttf
+    - family: Monda
+      fonts:
+        - asset: assets/fonts/monda/Monda-Medium.ttf
