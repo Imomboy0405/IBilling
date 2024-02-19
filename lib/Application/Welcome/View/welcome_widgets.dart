@@ -47,8 +47,7 @@ class MyFlagButton extends StatelessWidget {
                 minChildSize: 0.47,
                 maxChildSize: 0.5,
                 expand: true,
-                builder:
-                    (BuildContext cont, ScrollController scrollController) {
+                builder: (BuildContext cont, ScrollController scrollController) {
                   return Container(
                     decoration: const BoxDecoration(
                         color: AppColors.darker,
@@ -87,20 +86,17 @@ class MyFlagButton extends StatelessWidget {
                                   switch (pageName) {
                                     case '/start_page':
                                       pageContext.read<start.StartBloc>().add(
-                                          start.SelectLanguageEvent(
-                                              lang: value as Language));
+                                          start.SelectLanguageEvent(lang: value as Language));
                                       break;
                                     case '/sign_in_page':
                                       pageContext
                                           .read<sign_in.SignInBloc>()
-                                          .add(sign_in.SelectLanguageEvent(
-                                              lang: value as Language));
+                                          .add(sign_in.SelectLanguageEvent(lang: value as Language));
                                       break;
                                     case '/sign_up_page':
                                       pageContext
                                           .read<sign_up.SignUpBloc>()
-                                          .add(sign_up.SelectLanguageEvent(
-                                              lang: value as Language));
+                                          .add(sign_up.SelectLanguageEvent(lang: value as Language));
                                   }
                                   Navigator.pop(cont);
                                 });
@@ -142,7 +138,7 @@ class SelectButton extends StatelessWidget {
     return select
         ? Container(
             height: 44,
-            width: (MediaQuery.of(context).size.width - 105) / 2,
+            width: (MediaQuery.of(context).size.width - 115) / 2,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: AppColors.blue,
@@ -158,7 +154,7 @@ class SelectButton extends StatelessWidget {
             color: AppColors.disableBlue,
             splashColor: AppColors.blue,
             highlightColor: AppColors.disableBlue,
-            minWidth: (MediaQuery.of(context).size.width - 105) / 2,
+            minWidth: (MediaQuery.of(context).size.width - 115) / 2,
             height: 44,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
@@ -167,6 +163,288 @@ class SelectButton extends StatelessWidget {
               style: AppTextStyles.style14,
             ),
           );
+  }
+}
+
+class MyTextField extends StatelessWidget {
+  MyTextField({
+    super.key,
+    required this.pageName,
+    required this.context1,
+    required this.controller,
+    required this.keyboard,
+    required this.focus,
+    required this.errorTxt,
+    required this.errorState,
+    required this.suffixIc,
+    required this.icon,
+    required this.labelTxt,
+    required this.hintTxt,
+    required this.snackBarTxt,
+    this.obscure,
+    this.countryData,
+    this.phoneInputFormatter,
+    this.focusCountry = false,
+  });
+
+  final String pageName;
+  final BuildContext context1;
+  final TextEditingController controller;
+  final TextInputType keyboard;
+  final FocusNode focus;
+  final String errorTxt;
+  final bool errorState;
+  final bool suffixIc;
+  final IconData icon;
+  final String labelTxt;
+  final String hintTxt;
+  final String snackBarTxt;
+  final bool? obscure;
+  final PhoneInputFormatter? phoneInputFormatter;
+  final List<String> countryIsoCodes = [
+    'UZ',
+    'RU',
+    'US',
+    'AF',
+    'KZ',
+    'KG',
+    'TJ',
+    'TM',
+  ];
+  final bool focusCountry;
+  final PhoneCountryData? countryData;
+
+  @override
+  Widget build(BuildContext context) {
+    if (icon == Icons.phone) {
+      PhoneInputFormatter.replacePhoneMask(
+          countryCode: 'UZ', newMask: '+000 (00) 000-00-00');
+    }
+    return SizedBox(
+      height: 44,
+      width: MediaQuery.of(context1).size.width - 60,
+      child: TextField(
+        obscureText: icon == Icons.lock ? obscure! : false,
+        cursorColor: AppColors.blue,
+        controller: controller,
+        style: AppTextStyles.style7,
+        onChanged: (v) {
+          switch (pageName) {
+            case '/sign_in_page':
+              context1
+                  .read<sign_in.SignInBloc>()
+                  .add(sign_in.SignInChangeEvent());
+              break;
+            case '/sign_up_page':
+              context1
+                  .read<sign_up.SignUpBloc>()
+                  .add(sign_up.SignUpChangeEvent());
+              break;
+          }
+        },
+        onTap: () {
+          switch (pageName) {
+            case '/sign_in_page':
+              context1
+                  .read<sign_in.SignInBloc>()
+                  .add(sign_in.SignInChangeEvent());
+              break;
+            case '/sign_up_page':
+              context1
+                  .read<sign_up.SignUpBloc>()
+                  .add(sign_up.SignUpChangeEvent());
+              break;
+          }
+        },
+        onSubmitted: (v) {
+          switch (pageName) {
+            case '/sign_in_page':
+              context1
+                  .read<sign_in.SignInBloc>()
+                  .add(sign_in.OnSubmittedEvent(password: icon == Icons.lock));
+              break;
+            case '/sign_up_page':
+              context1
+                  .read<sign_up.SignUpBloc>()
+                  .add(sign_up.OnSubmittedEvent(password: icon == Icons.lock, fullName: icon == Icons.person));
+              break;
+          }
+        },
+        textInputAction: icon == Icons.lock ? TextInputAction.done : TextInputAction.next,
+        keyboardType: keyboard,
+        focusNode: focus,
+        inputFormatters: icon == Icons.phone
+            ? [phoneInputFormatter!]
+            : null,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+          errorText: errorState ? errorTxt : null,
+          prefixIcon: SizedBox(
+            width: icon == Icons.phone && (controller.text.isNotEmpty || focus.hasFocus || focusCountry) ? 121 : 20,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Icon(icon,
+                      color: controller.text.isNotEmpty || focus.hasFocus
+                          ? AppColors.blue
+                          : AppColors.darkGrey),
+                ),
+                icon == Icons.phone && (controller.text.isNotEmpty || focus.hasFocus || focusCountry)
+
+                // #countryies
+                    ? Expanded(
+                  flex: 3,
+                  child: CountryDropdown(
+                    itemHeight: 52,
+                    triggerOnCountrySelectedInitially: false,
+                    selectedItemBuilder: (phoneCountryData) {
+                      return Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '+${phoneCountryData.phoneCode}',
+                        ),
+                      );
+                    },
+                    listItemBuilder: (phoneCountryData) {
+                      switch (pageName) {
+                        case '/sign_in_page':
+                          context1
+                              .read<sign_in.SignInBloc>()
+                              .add(sign_in.SignInOnTapCountryButtonEvent());
+                          break;
+                        case '/sign_up_page':
+                          context1
+                              .read<sign_up.SignUpBloc>()
+                              .add(sign_up.SignUpOnTapCountryButtonEvent());
+                          break;
+                      }
+                      return PopScope(
+                        canPop: false,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding:
+                              const EdgeInsets.only(right: 10),
+                              child: CountryFlag(
+                                countryId:
+                                phoneCountryData.countryCode!,
+                              ),
+                            ),
+                            Text(
+                              phoneCountryData.country ?? '',
+                              style: AppTextStyles.style17,
+                              maxLines: 1,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    onCountrySelected: (countryData) {
+                      switch (pageName) {
+                        case '/sign_in_page':
+                          context1
+                              .read<sign_in.SignInBloc>()
+                              .add(sign_in.SignInCountryEvent(countryData: countryData));
+                          break;
+                        case '/sign_up_page':
+                          context1
+                              .read<sign_up.SignUpBloc>()
+                              .add(sign_up.SignUpCountryEvent(countryData: countryData));
+                          break;
+                      }
+                    },
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 0),
+                      border: myInputBorder(color1: AppColors.transparent),
+                      enabledBorder: myInputBorder(color1: AppColors.transparent),
+                      errorBorder: myInputBorder(color1: AppColors.transparent),
+                      focusedBorder: myInputBorder(color1: AppColors.transparent),
+                    ),
+                    style: AppTextStyles.style7,
+                    dropdownColor: AppColors.darker,
+                    iconEnabledColor:
+                    controller.text.isNotEmpty || focus.hasFocus
+                        ? AppColors.blue
+                        : AppColors.darkGrey,
+                    initialCountryData: countryData,
+                    filter: PhoneCodes.findCountryDatasByCountryCodes(countryIsoCodes: countryIsoCodes),
+                  ),
+                )
+                    : const SizedBox.shrink(),
+              ],
+            ),
+          ),
+          suffixIcon: SizedBox(
+            width: icon == Icons.lock ? 96 : 5,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+
+                // #eye_button
+                icon == Icons.lock && controller.text.isNotEmpty
+                    ? IconButton(
+                  padding: EdgeInsets.zero,
+                  alignment: Alignment.centerRight,
+                  onPressed: () {
+                    switch (pageName) {
+                      case '/sign_in_page':
+                        context1
+                            .read<sign_in.SignInBloc>()
+                            .add(sign_in.EyeEvent());
+                        break;
+                      case '/sign_up_page':
+                        context1
+                            .read<sign_up.SignUpBloc>()
+                            .add(sign_up.EyeEvent());
+                        break;
+                    }
+                  },
+                  icon: Icon(
+                    obscure!
+                        ? CupertinoIcons.eye
+                        : CupertinoIcons.eye_slash,
+                    color: AppColors.blue,
+                  ),
+                )
+                    : const SizedBox.shrink(),
+
+                // #error_button_and_done
+                controller.text.isNotEmpty || focus.hasFocus
+                    ? IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () => !suffixIc
+                        ? mySnackBar(context: context1, txt: snackBarTxt)
+                        : {},
+                    icon: suffixIc
+                        ? const Icon(Icons.done, color: AppColors.blue)
+                        : const Icon(Icons.error_outline,
+                        color: AppColors.red))
+                    : const SizedBox.shrink(),
+              ],
+            ),
+          ),
+          labelText: labelTxt,
+          hintText: hintTxt,
+          hintStyle: AppTextStyles.style6,
+          labelStyle: controller.text.isNotEmpty || focus.hasFocus
+              ? AppTextStyles.style3
+              : AppTextStyles.style6,
+          border: myInputBorder(color1: AppColors.blue),
+          enabledBorder: myInputBorder(
+            color1: AppColors.blue,
+            color2: AppColors.disableBlue,
+            itsColor1: controller.text.isNotEmpty || focus.hasFocus,
+          ),
+          errorBorder: myInputBorder(color1: AppColors.red),
+          focusedBorder: myInputBorder(color1: AppColors.blue),
+        ),
+      ),
+    );
   }
 }
 
@@ -190,7 +468,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> mySnackBar(
 
 TextButton myTextButton(
     {required BuildContext context,
-    required String assetIc,
+    required String? assetIc,
     required Function() onPressed,
     required String txt}) {
   return TextButton(
@@ -198,275 +476,42 @@ TextButton myTextButton(
     style: ButtonStyle(
       shape: MaterialStateProperty.all(
         RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.circular(10), // Change the border radius as needed
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
       overlayColor: MaterialStateProperty.all(AppColors.disableBlue),
     ),
     child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
-            height: 25,
-            child: Image(image: AssetImage('assets/icons/ic_$assetIc.png'))),
+        assetIc != null
+            ? SizedBox(
+              height: 25,
+              child: Image(image: AssetImage('assets/icons/ic_$assetIc.png')))
+            : const SizedBox.shrink(),
         Text(' $txt', style: AppTextStyles.style9),
       ],
     ),
   );
 }
 
-OutlineInputBorder myInputBorder(
-    {required Color color1, bool itsColor1 = true, Color? color2}) {
+OutlineInputBorder myInputBorder({required Color color1, bool itsColor1 = true, Color? color2}) {
   return OutlineInputBorder(
+    gapPadding: 1,
     borderRadius: BorderRadius.circular(6),
     borderSide: BorderSide(width: 1.2, color: itsColor1 ? color1 : color2!),
   );
 }
 
-class MyTextField extends StatelessWidget {
-  MyTextField({
-    super.key,
-    required this.pageName,
-    required this.context1,
-    required this.controller,
-    required this.keyboard,
-    required this.focus,
-    required this.errorTxt,
-    required this.errorState,
-    required this.suffixIc,
-    required this.enterStateAndField,
-    required this.icon,
-    required this.labelTxt,
-    required this.hintTxt,
-    required this.snackBarTxt,
-    this.obscure,
-    this.countryData,
-    this.phoneInputFormatter,
-  });
-
-  final String pageName;
-  final BuildContext context1;
-  final TextEditingController controller;
-  final TextInputType keyboard;
-  final FocusNode focus;
-  final String errorTxt;
-  final bool errorState;
-  final bool suffixIc;
-  final bool enterStateAndField;
-  final IconData icon;
-  final String labelTxt;
-  final String hintTxt;
-  final String snackBarTxt;
-  final bool? obscure;
-  final PhoneInputFormatter? phoneInputFormatter;
-  final List<String> countryIsoCodes = [
-    'UZ',
-    'RU',
-    'US',
-    'AF',
-    'KZ',
-    'KG',
-    'TJ',
-    'TM',
-  ];
-  final FocusNode? focusNodeCountry = FocusNode();
-  final PhoneCountryData? countryData;
-
-  @override
-  Widget build(BuildContext context) {
-    if (icon == Icons.phone) {
-      PhoneInputFormatter.replacePhoneMask(
-        countryCode: 'UZ', newMask: '+000 (00) 000-00-00');
-      context1.read<sign_in.SignInBloc>().add(sign_in.SignInChangeEvent());
-    }
-    print('aaaaaaaaaaaaaaaaa');
-
-    return SizedBox(
-      height: 44,
-      width: MediaQuery.of(context1).size.width - 60,
-      child: TextField(
-        key: icon == Icons.phone ? Key(phoneInputFormatter!.defaultCountryCode!) : null,
-        obscureText: icon == Icons.lock ? obscure! : false,
-        cursorColor: AppColors.blue,
-        controller: controller,
-        style: AppTextStyles.style7,
-        onChanged: (v) {
-          switch (pageName) {
-            case '/sign_in_page':
-              context1
-                  .read<sign_in.SignInBloc>()
-                  .add(sign_in.SignInChangeEvent());
-              break;
-          }
-        },
-        onTap: () {
-          switch (pageName) {
-            case '/sign_in_page':
-              context1
-                  .read<sign_in.SignInBloc>()
-                  .add(sign_in.SignInChangeEvent());
-              break;
-          }
-        },
-        onSubmitted: (v) {
-          switch (pageName) {
-            case '/sign_in_page':
-              context1
-                  .read<sign_in.SignInBloc>()
-                  .add(sign_in.OnSubmittedEvent());
-              break;
-          }
-        },
-
-        textInputAction: icon == Icons.lock ? TextInputAction.done : TextInputAction.next,
-        keyboardType: keyboard,
-        focusNode: focus,
-        inputFormatters: icon == Icons.phone
-            ? [phoneInputFormatter!]
-            : null,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-          errorText: errorState ? errorTxt : null,
-          prefixIcon: SizedBox(
-            width: icon == Icons.phone && (focus.hasFocus || controller.text.isNotEmpty) ? 121 : 20,
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Icon(icon,
-                      color: enterStateAndField || focus.hasFocus
-                          ? AppColors.blue
-                          : AppColors.darkGrey),
-                ),
-                icon == Icons.phone && (focus.hasFocus || controller.text.isNotEmpty || focusNodeCountry!.hasFocus)
-                    ? Expanded(
-                        flex: 3,
-                        child: CountryDropdown(
-                          itemHeight: 52,
-                          focusNode: focusNodeCountry,
-                          triggerOnCountrySelectedInitially: false,
-                          selectedItemBuilder: (phoneCountryData) {
-                            return Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                '+${phoneCountryData.phoneCode}',
-                              ),
-                            );
-                          },
-                          listItemBuilder: (phoneCountryData) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Padding(
-                                  padding:
-                                  const EdgeInsets.only(right: 10),
-                                  child: CountryFlag(
-                                    countryId:
-                                    phoneCountryData.countryCode!,
-                                  ),
-                                ),
-                                Text(
-                                  phoneCountryData.country ?? '',
-                                  style: AppTextStyles.style17,
-                                  maxLines: 1,
-                                ),
-                              ],
-                            );
-                          },
-                          onCountrySelected: (countryData) {
-                            switch (pageName) {
-                              case '/sign_in_page':
-                                context1
-                                    .read<sign_in.SignInBloc>()
-                                    .add(sign_in.SignInCountryEvent(countryData: countryData));
-                                break;
-                            }
-                          },
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 0, horizontal: 0),
-                            border:
-                                myInputBorder(color1: AppColors.transparent),
-                            enabledBorder:
-                                myInputBorder(color1: AppColors.transparent),
-                            errorBorder:
-                                myInputBorder(color1: AppColors.transparent),
-                            focusedBorder:
-                                myInputBorder(color1: AppColors.transparent),
-                          ),
-                          style: AppTextStyles.style7,
-                          dropdownColor: AppColors.darker,
-                          iconEnabledColor:
-                              controller.text.isNotEmpty || focus.hasFocus
-                                  ? AppColors.blue
-                                  : AppColors.darkGrey,
-                          initialCountryData: countryData,
-                          filter: PhoneCodes.findCountryDatasByCountryCodes(countryIsoCodes: countryIsoCodes),
-                        ),
-                      )
-                    : const SizedBox.shrink(),
-              ],
-            ),
-          ),
-          suffixIcon: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              // #eye_button
-              icon == Icons.lock && controller.text.isNotEmpty
-                  ? IconButton(
-                      padding: EdgeInsets.zero,
-                      alignment: Alignment.centerRight,
-                      onPressed: () {
-                        switch (pageName) {
-                          case '/sign_in_page':
-                            context1
-                                .read<sign_in.SignInBloc>()
-                                .add(sign_in.EyeEvent());
-                            break;
-                        }
-                      },
-                      icon: Icon(
-                        obscure!
-                            ? CupertinoIcons.eye
-                            : CupertinoIcons.eye_slash,
-                        color: AppColors.blue,
-                      ),
-                    )
-                  : const SizedBox.shrink(),
-
-              // #error_button_and_done
-              controller.text.isNotEmpty || focus.hasFocus
-                  ? IconButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () => !suffixIc
-                          ? mySnackBar(context: context1, txt: snackBarTxt)
-                          : {},
-                      icon: suffixIc
-                          ? const Icon(Icons.done, color: AppColors.blue)
-                          : const Icon(Icons.error_outline,
-                              color: AppColors.red))
-                  : const SizedBox.shrink(),
-            ],
-          ),
-          labelText: labelTxt,
-          hintText: hintTxt,
-          hintStyle: AppTextStyles.style6,
-          prefixStyle: AppTextStyles.style7,
-          labelStyle: controller.text.isNotEmpty || focus.hasFocus
-              ? AppTextStyles.style3
-              : AppTextStyles.style6,
-          border: myInputBorder(color1: AppColors.blue),
-          enabledBorder: myInputBorder(
-            color1: AppColors.blue,
-            color2: AppColors.disableBlue,
-            itsColor1: enterStateAndField,
-          ),
-          errorBorder: myInputBorder(color1: AppColors.red),
-          focusedBorder: myInputBorder(color1: AppColors.blue),
-        ),
-      ),
-    );
-  }
+Container myIsLoading(BuildContext context) {
+  return Container(
+    height: MediaQuery.of(context).size.height,
+    width: MediaQuery.of(context).size.width,
+    color: AppColors.transparentBlack,
+    alignment: Alignment.center,
+    child: const CircularProgressIndicator(
+      color: AppColors.blue,
+      backgroundColor: AppColors.disableBlue,
+    ),
+  );
 }

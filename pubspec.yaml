@@ -39,7 +39,7 @@ dependencies:
   flutter_login_facebook: any
 
   # firebase
-  firebase_core: any
+  firebase_core: ^2.25.4
   firebase_auth: any
 
   # dependency injection

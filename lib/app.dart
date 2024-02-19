@@ -31,7 +31,7 @@ class IBilling extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
-      title: 'Contract',
+      title: 'IBilling',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(secondary: AppColors.blue),
       ),

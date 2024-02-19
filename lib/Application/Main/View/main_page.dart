@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,7 +9,7 @@ import '../../Menus/Profile/View/profile_page.dart';
 import '../../Menus/Saved/View/saved_page.dart';
 import '../Bloc/main_bloc.dart';
 
-
+@immutable
 class MainPage extends StatelessWidget {
   MainBloc bloc = MainBloc();
 

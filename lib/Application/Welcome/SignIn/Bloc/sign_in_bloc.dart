@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   bool emailSuffix = false;
   bool passwordSuffix = false;
   bool simple = false;
+  bool country = false;
   int selectButton = 0;
   FocusNode focusPhone = FocusNode();
   FocusNode focusEmail = FocusNode();
@@ -34,8 +36,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     'internalPhoneCode': '998',
     'countryCode': 'UZ',
     'phoneMask': '+000 (00) 000-00-00',
-  },
-  );
+  });
 
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -67,10 +68,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     on<GoogleEvent>(pressGoogle);
     on<SignUpEvent>(pressSignUp);
     on<SignInCountryEvent>(pressCountry);
-  }
-
-  void pressFlagButton(FlagEvent event, Emitter emit) {
-    emit(SignInFlagState());
+    on<SignInOnTapCountryButtonEvent>(pressCountryDropdown);
   }
 
   Future<void> pressLanguageButton(SelectLanguageEvent event, Emitter emit) async {
@@ -92,6 +90,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   }
 
   Future<void> onSubmitted(OnSubmittedEvent event, Emitter<SignInState> emit) async {
+    country = false;
     if(!event.password) {
       focusPhone.unfocus();
       focusEmail.unfocus();
@@ -162,7 +161,15 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   }
 
   Future<void> pressGoogle(GoogleEvent event, Emitter<SignInState> emit) async {
-    final email = await signInWithGoogle();
+    emit(SignInLoadingState(
+      password: passwordSuffix,
+      obscure: obscure,
+      email: emailSuffix,
+      rememberMe: rememberMe,
+    ));
+
+    UserCredential userCredential = await signInWithGoogle();
+    String? email = userCredential.user?.email;
     if (email != null) {
       emailController.text = email;
       emailSuffix = true;
@@ -172,19 +179,20 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
       await scrollController.animateTo(event.width - 60,
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeInOutCubic);
-      emit(SignInEnterState(
-        simple: simple,
-        selectButton: selectButton,
-        phone: phoneNumberController.text.trim().isNotEmpty,
-        email: emailController.text.trim().isNotEmpty,
-        password: passwordController.text.trim().isNotEmpty,
-        obscure: obscure,
-        rememberMe: rememberMe,
-        phoneSuffix: phoneSuffix,
-        emailSuffix: emailSuffix,
-        passwordSuffix: passwordSuffix,
-      ));
     }
+
+    emit(SignInEnterState(
+      simple: simple,
+      selectButton: selectButton,
+      phone: phoneNumberController.text.trim().isNotEmpty,
+      email: emailController.text.trim().isNotEmpty,
+      password: passwordController.text.trim().isNotEmpty,
+      obscure: obscure,
+      rememberMe: rememberMe,
+      phoneSuffix: phoneSuffix,
+      emailSuffix: emailSuffix,
+      passwordSuffix: passwordSuffix,
+    ));
   }
 
   Future<void> pressFacebook(FaceBookEvent event, Emitter<SignInState> emit) async {
@@ -210,6 +218,8 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   }
 
   Future<void> pressCountry(SignInCountryEvent event, Emitter<SignInState> emit) async {
+    country = false;
+    phoneNumberController.text = '';
     countryData = event.countryData;
     phoneInputFormatter = PhoneInputFormatter(defaultCountryCode: event.countryData.countryCode);
     focusPhone.unfocus();
@@ -235,7 +245,28 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     focusPhone.requestFocus();
   }
 
+  void pressFlagButton(FlagEvent event, Emitter emit) {
+    emit(SignInFlagState());
+  }
+
+  void pressCountryDropdown(SignInOnTapCountryButtonEvent event, Emitter<SignInState> emit) {
+    country = true;
+    emit(SignInEnterState(
+        selectButton: selectButton,
+        simple: simple,
+        email: emailController.text.trim().isNotEmpty,
+        password: passwordController.text.trim().isNotEmpty,
+        phone: phoneNumberController.text.isNotEmpty || true,
+        obscure: obscure,
+        rememberMe: rememberMe,
+        phoneSuffix: phoneSuffix,
+        emailSuffix: emailSuffix,
+        passwordSuffix: passwordSuffix));
+  }
+
   void change(SignInChangeEvent event, Emitter<SignInState> emit) {
+    country = false;
+    if (focusPassword.hasFocus) country = false;
     if (phoneNumberController.text.length != countryData.phoneMaskWithoutCountryCode.length) {
       phoneSuffix = false;
     }

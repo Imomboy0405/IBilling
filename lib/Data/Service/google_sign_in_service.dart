@@ -1,18 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-Future<String?> signInWithGoogle() async {
+Future<UserCredential> signInWithGoogle() async {
 
-  // Trigger the authentication flow
-  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
 
-  // Obtain the auth details from the request
-  // final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+  final GoogleSignInAuthentication? gAuth = await gUser?.authentication;
 
-  // Map<String, String?> data = {
-    // "accessToken": googleAuth?.accessToken,
-    // "idToken": googleAuth?.idToken,
-  // };
+  final credential = GoogleAuthProvider.credential(
+    accessToken: gAuth?.accessToken,
+    idToken: gAuth?.idToken,
+  );
 
-  // Once signed in, return the UserCredential
-  return googleUser?.email;
+  return await FirebaseAuth.instance.signInWithCredential(credential);
 }

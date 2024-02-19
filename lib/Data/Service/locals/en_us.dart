@@ -22,7 +22,7 @@ const Map<String, String> enUS = {
   'phone': 'Phone',
   'invalid_email' : 'Invalid email',
   'invalid_phone': 'Invalid phone number',
-  'or': 'Or',
+  'or': 'or',
   'password': 'Password',
   'remember_me': 'Remember me',
   'forgot': 'Forgot the password?',
@@ -30,5 +30,12 @@ const Map<String, String> enUS = {
   'dont_have_an_account': 'Don\'t have an account?  ',
   'sign_up': 'Sign up',
   'snackBar': 'Fill out the form!',
+
+  /// SignUpPage
+  'sign_up_for_free': 'Sign up for free',
+  'invalid_full_name': 'Invalid full name',
+  'example_full_name': 'John Anderson',
+  'full_name': 'Full name',
+  'already_account': 'Already have an account?  ',
 
 };

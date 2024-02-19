@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1075100669403",
+    "firebase_url": "https://ibilling-d45ee-default-rtdb.firebaseio.com",
+    "project_id": "ibilling-d45ee",
+    "storage_bucket": "ibilling-d45ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1075100669403:android:97160985b9332ca8ac43fe",
+        "android_client_info": {
+          "package_name": "com.example.i_billing"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1075100669403-6av2o0hphf4mtr85jmv2bsl9hs4s9213.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.i_billing",
+            "certificate_hash": "8a7b020c8f4e01c2c3bbd64d94db095d6ee8304e"
+          }
+        },
+        {
+          "client_id": "1075100669403-6av2o0hphf4mtr85jmv2bsl9hs4s9213.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxiWlLQvAgrXi4mOBMcC0zwFSHMgdJDF4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1075100669403-e6mh5lk6ednu95juqelriifg4de2i6fl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

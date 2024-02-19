@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_billing/Data/Service/lang_service.dart';
 
 import '../../../../Configuration/app_colors.dart';
 import '../../../../Configuration/app_text_styles.dart';
@@ -19,453 +20,241 @@ class SignUpPage extends StatelessWidget {
       create: (context) => SignUpBloc(),
       child: BlocBuilder<SignUpBloc, SignUpState>(builder: (context, state) {
         SignUpBloc bloc = context.read<SignUpBloc>();
-        return Scaffold(
-          backgroundColor: AppColors.black,
-          body: SingleChildScrollView(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // #xonadon
-                    const Text('Sign up for free', textAlign: TextAlign.center, style: AppTextStyles.style1),
+        return Stack(
+          children: [
+            Scaffold(
+              backgroundColor: AppColors.black,
+              appBar: AppBar(
+                elevation: 0,
+                toolbarHeight: 91,
+                backgroundColor: AppColors.black,
+                surfaceTintColor: AppColors.black,
 
-                    Column(
+                // #flag
+                actions: [
+                  MyFlagButton(
+                      currentLang: bloc.selectedLang,
+                      pageContext: context,
+                      pageName: id)
+                ],
+
+                // #IBilling
+                title: const Text('IBilling', style: AppTextStyles.style0_1),
+                leadingWidth: 60,
+              ),
+              body: SingleChildScrollView(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height - 122,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // #text_fields
-                        SizedBox(
-                          height: 55,
-                          child:
-                          SingleChildScrollView(
-                            controller: bloc.scrollController,
-                            scrollDirection: Axis.horizontal,
-                            physics: const NeverScrollableScrollPhysics(),
-                            child: Row(children: [
-                              // #phone
-                              SizedBox(
-                                height: 55,
-                                width: MediaQuery.of(context).size.width - 60,
-                                child: Align(
-                                  alignment: AlignmentDirectional.bottomEnd,
-                                  child: TextField(
-                                    controller: bloc.phoneNumberController,
-                                    style: AppTextStyles.style7,
-                                    onChanged: (v) => bloc.add(SignUpChangeEvent()),
-                                    onTap: () => bloc.add(SignUpChangeEvent()),
-                                    onSubmitted: (v) => bloc.add(OnSubmittedEvent()),
-                                    textInputAction: TextInputAction.done,
-                                    keyboardType: TextInputType.phone,
-                                    inputFormatters: [bloc.maskFormatter],
-                                    focusNode: bloc.focusPhone,
-                                    decoration: InputDecoration(
-                                      contentPadding:
-                                      const EdgeInsets.symmetric(
-                                          vertical: 0, horizontal: 20),
-                                      errorText: state is SignUpErrorState
-                                          ? 'Invalid phone number'
-                                          : null,
-                                      prefixIcon: Icon(Icons.phone,
-                                          color: state is SignUpEnterState &&
-                                              state.phone ||
-                                              bloc.focusPhone.hasFocus
-                                              ? AppColors.blue
-                                              : AppColors.grey),
-                                      suffixIcon: bloc.phoneNumberController
-                                          .text.isNotEmpty ||
-                                          bloc.focusPhone.hasFocus
-                                          ? bloc.phoneSuffix
-                                          ? const Icon(Icons.done,
-                                          color: AppColors.blue)
-                                          : const Icon(Icons.error_outline,
-                                          color: AppColors.red)
-                                          : null,
-                                      labelText: 'Phone number',
-                                      prefixText: '+998 ',
-                                      hintText: '(00) 000-00-00',
-                                      hintStyle: AppTextStyles.style6,
-                                      prefixStyle: AppTextStyles.style7,
-                                      labelStyle: bloc.phoneNumberController
-                                          .text.isNotEmpty ||
-                                          bloc.focusPhone.hasFocus
-                                          ? AppTextStyles.style3
-                                          : AppTextStyles.style6,
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(30),
-                                        borderSide: const BorderSide(
-                                            width: 2, color: AppColors.blue),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(30),
-                                        borderSide: BorderSide(
-                                            width: 2,
-                                            color: state is SignUpEnterState &&
-                                                state.phone
-                                                ? AppColors.blue
-                                                : AppColors.grey),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(30),
-                                        borderSide: const BorderSide(
-                                            width: 2, color: AppColors.red),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                        // #sign_up_for_free
+                        Text('sign_up_for_free'.tr(),
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.style1),
 
-                              // #email
-                              SizedBox(
-                                height: 55,
-                                width: MediaQuery.of(context).size.width - 60,
-                                child: Align(
-                                  alignment: AlignmentDirectional.bottomEnd,
-                                  child: TextField(
-                                    controller: bloc.emailController,
-                                    style: AppTextStyles.style7,
-                                    onChanged: (v) => bloc.add(SignUpChangeEvent()),
-                                    onTap: () => bloc.add(SignUpChangeEvent()),
-                                    onSubmitted: (v) => bloc.add(OnSubmittedEvent()),
-                                    textInputAction: TextInputAction.done,
-                                    focusNode: bloc.focusEmail,
-                                    keyboardType: TextInputType.emailAddress,
-                                    decoration: InputDecoration(
-                                      // isCollapsed: true
-                                      contentPadding: const EdgeInsets.only(
-                                          top: 0,
-                                          bottom: 0,
-                                          left: 20,
-                                          right: 0),
-                                      suffixIconConstraints:
-                                      const BoxConstraints(maxWidth: 35),
-                                      errorText: state is SignUpErrorState
-                                          ? 'Invalid email'
-                                          : null,
-                                      prefixIcon: Icon(Icons.mail,
-                                          color: state is SignUpEnterState &&
-                                              state.email ||
-                                              bloc.focusEmail.hasFocus
-                                              ? AppColors.blue
-                                              : AppColors.grey),
-                                      suffixIcon: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.start,
-                                        children: [
-                                          bloc.emailController.text
-                                              .isNotEmpty ||
-                                              bloc.focusEmail.hasFocus
-                                              ? bloc.emailSuffix
-                                              ? const Icon(Icons.done,
-                                              color: AppColors.blue)
-                                              : const Icon(
-                                              Icons.error_outline,
-                                              color: AppColors.red)
-                                              : const SizedBox.shrink(),
-                                        ],
-                                      ),
-                                      labelText: 'Email',
-                                      hintText: 'aaabbbccc@dddd.eee',
-                                      labelStyle: bloc.emailController.text
-                                          .isNotEmpty ||
-                                          bloc.focusEmail.hasFocus
-                                          ? AppTextStyles.style3
-                                          : AppTextStyles.style6,
-                                      hintStyle: AppTextStyles.style6,
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(30),
-                                        borderSide: const BorderSide(
-                                            width: 2, color: AppColors.blue),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(30),
-                                        borderSide: BorderSide(
-                                            width: 2,
-                                            color: state is SignUpEnterState &&
-                                                state.email
-                                                ? AppColors.blue
-                                                : AppColors.grey),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(30),
-                                        borderSide: const BorderSide(
-                                            width: 2, color: AppColors.red),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ]),
-                          ),
-                        ),
-
-                        // #select_buttons
-                        Row(
+                        Column(
                           children: [
-                            SelectButton(context: context, function: () => bloc.add(PhoneButtonEvent()), text: 'Phone', select: bloc.selectButton == 0),
-                            const Spacer(),
-                            SelectButton(context: context, function: () => bloc.add(EmailButtonEvent(width: MediaQuery.of(context).size.width)), text: 'Email', select: bloc.selectButton == 1),
-                          ],
-                        ),
-                      ],
-                    ),
+                            // #text_fields
+                            SizedBox(
+                              height: 60,
+                              child: SingleChildScrollView(
+                                controller: bloc.scrollController,
+                                scrollDirection: Axis.horizontal,
+                                physics: const NeverScrollableScrollPhysics(),
+                                child: Row(
+                                    children: [
+                                      // #phone
+                                      MyTextField(
+                                        focusCountry: bloc.country,
+                                        phoneInputFormatter: bloc.phoneInputFormatter,
+                                        countryData: bloc.countryData,
+                                        pageName: id,
+                                        controller: bloc.phoneNumberController,
+                                        errorState: state is SignUpErrorState,
+                                        suffixIc: bloc.phoneSuffix,
+                                        keyboard: TextInputType.phone,
+                                        focus: bloc.focusPhone,
+                                        errorTxt: 'invalid_phone'.tr(),
+                                        context1: context,
+                                        icon: Icons.phone,
+                                        hintTxt: bloc.countryData.phoneMaskWithoutCountryCode,
+                                        labelTxt: 'phone_num'.tr(),
+                                        snackBarTxt: 'snackBar'.tr(),
+                                  ),
 
-                    // #username
-                    SizedBox(
-                      height: 55,
-                      width: MediaQuery.of(context).size.width - 60,
-                      child: Align(
-                        alignment: AlignmentDirectional.bottomEnd,
-                        child: TextField(
-                          controller: bloc.usernameController,
-                          style: AppTextStyles.style7,
-                          onChanged: (v) => bloc.add(SignUpChangeEvent()),
-                          onTap: () => bloc.add(SignUpChangeEvent()),
-                          onSubmitted: (v) => bloc.add(OnSubmittedEvent(username: true)),
-                          textInputAction: TextInputAction.next,
-                          focusNode: bloc.focusUsername,
-                          keyboardType: TextInputType.name,
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.only(
-                                top: 0,
-                                bottom: 0,
-                                left: 20,
-                                right: 0),
-                            suffixIconConstraints:
-                            const BoxConstraints(maxWidth: 35),
-                            errorText: state is SignUpErrorState
-                                ? 'Invalid username'
-                                : null,
-                            prefixIcon: Icon(Icons.person,
-                                color: state is SignUpEnterState &&
-                                    state.username ||
-                                    bloc.focusUsername.hasFocus
-                                    ? AppColors.blue
-                                    : AppColors.grey),
-                            suffixIcon: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment:
-                              MainAxisAlignment.start,
+                                      // #email
+                                      MyTextField(
+                                        pageName: id,
+                                        controller: bloc.emailController,
+                                        errorState: state is SignUpErrorState,
+                                        suffixIc: bloc.emailSuffix,
+                                        keyboard: TextInputType.emailAddress,
+                                        focus: bloc.focusEmail,
+                                        errorTxt: 'invalid_email'.tr(),
+                                        context1: context,
+                                        icon: Icons.mail,
+                                        hintTxt: 'aaabbbccc@dddd.eee',
+                                        labelTxt: 'email_address'.tr(),
+                                        snackBarTxt: 'snackBar'.tr(),
+                                  ),
+                                ]),
+                              ),
+                            ),
+
+                            // #select_buttons
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                bloc.usernameController.text
-                                    .isNotEmpty ||
-                                    bloc.focusUsername.hasFocus
-                                    ? bloc.usernameSuffix
-                                    ? const Icon(Icons.done,
-                                    color: AppColors.blue)
-                                    : const Icon(
-                                    Icons.error_outline,
-                                    color: AppColors.red)
-                                    : const SizedBox.shrink(),
+                                // #phone
+                                SelectButton(
+                                  context: context,
+                                  function: () => bloc.add(PhoneButtonEvent()),
+                                  text: 'phone'.tr(),
+                                  select: bloc.selectButton == 0,
+                                ),
+
+                                // #or
+                                Text('or'.tr(), style: AppTextStyles.style2),
+
+                                // #email
+                                SelectButton(
+                                  context: context,
+                                  function: () => bloc.add(EmailButtonEvent(width: MediaQuery.of(context).size.width)),
+                                  text: 'email'.tr(),
+                                  select: bloc.selectButton == 1,
+                                ),
                               ],
                             ),
-                            labelText: 'Username',
-                            hintText: 'abcde',
-                            labelStyle: bloc.usernameController.text
-                                .isNotEmpty ||
-                                bloc.focusUsername.hasFocus
-                                ? AppTextStyles.style3
-                                : AppTextStyles.style6,
-                            hintStyle: AppTextStyles.style6,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: const BorderSide(
-                                  width: 2, color: AppColors.blue),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: BorderSide(
-                                  width: 2,
-                                  color: state is SignUpEnterState &&
-                                      state.username
-                                      ? AppColors.blue
-                                      : AppColors.grey),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: const BorderSide(
-                                  width: 2, color: AppColors.red),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    // #password
-                    TextField(
-                      controller: bloc.passwordController,
-                      style: AppTextStyles.style7,
-                      obscureText: bloc.obscure,
-                      onChanged: (v) => bloc.add(SignUpChangeEvent()),
-                      onTap: () => bloc.add(SignUpChangeEvent()),
-                      onSubmitted: (v) => bloc.add(SignUpChangeEvent()),
-                      focusNode: bloc.focusPassword,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(left: 20),
-                        prefixIcon: Icon(Icons.lock, color: state is SignUpEnterState && state.password || bloc.focusPassword.hasFocus ? AppColors.blue : AppColors.grey),
-                        suffixIcon: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            bloc.passwordController.text.trim().isNotEmpty
-                                ? IconButton(
-                              onPressed: () => bloc.add(EyeEvent()),
-                              icon: Icon(
-                                bloc.obscure
-                                    ? CupertinoIcons.eye
-                                    : CupertinoIcons.eye_slash,
-                                color: AppColors.blue,
-                              ),
-                            )
-                                : const SizedBox.shrink(),
-                            bloc.passwordController.text.isNotEmpty || bloc.focusPassword.hasFocus
-                                ? bloc.passwordSuffix
-                                ? const Icon(Icons.done, color: AppColors.blue)
-                                : const Icon(Icons.error_outline,
-                                color: AppColors.red)
-                                : const SizedBox.shrink(),
-                            const SizedBox(width: 12),
                           ],
                         ),
-                        labelText: 'Password',
-                        hintText: '123abc',
-                        labelStyle: bloc.passwordController.text.isNotEmpty || bloc.focusPassword.hasFocus ? AppTextStyles.style3 : AppTextStyles.style6,
-                        hintStyle: AppTextStyles.style6,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide:
-                          const BorderSide(width: 2, color: AppColors.blue),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide(width: 2, color: state is SignUpEnterState && state.password ? AppColors.blue : AppColors.grey),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide:
-                          const BorderSide(width: 2, color: AppColors.red),
-                        ),
-                      ),
-                    ),
 
-                    // #buttons
-                    Column(
-                      children: [
-                        // #remember_me
-                        Row(
+                        // #full_name
+                        MyTextField(
+                          pageName: id,
+                          controller: bloc.fullNameController,
+                          errorState: state is SignUpErrorState,
+                          suffixIc: bloc.fullNameSuffix,
+                          keyboard: TextInputType.text,
+                          focus: bloc.focusFullName,
+                          errorTxt: 'invalid_full_name'.tr(),
+                          context1: context,
+                          icon: Icons.person,
+                          hintTxt: 'example_full_name'.tr(),
+                          labelTxt: 'full_name'.tr(),
+                          snackBarTxt: 'snackBar'.tr(),
+                        ),
+
+                        // #password
+                        MyTextField(
+                          pageName: id,
+                          controller: bloc.passwordController,
+                          errorState: state is SignUpErrorState,
+                          suffixIc: bloc.passwordSuffix,
+                          keyboard: TextInputType.text,
+                          focus: bloc.focusPassword,
+                          errorTxt: 'invalid_password'.tr(),
+                          context1: context,
+                          icon: Icons.lock,
+                          hintTxt: '123abc',
+                          labelTxt: 'password'.tr(),
+                          snackBarTxt: 'snackBar'.tr(),
+                          obscure: bloc.obscure,
+                        ),
+
+                        // #buttons
+                        Column(
                           children: [
-                            Checkbox(
-                              onChanged: (v) => context
-                                  .read<SignUpBloc>()
-                                  .add(RememberMeEvent()),
-                              value: bloc.rememberMe,
-                              shape: const StadiumBorder(
-                                  side: BorderSide(color: AppColors.blue)),
-                            ),
-                            TextButton(
-                                onPressed: () => context
-                                    .read<SignUpBloc>()
-                                    .add(RememberMeEvent()),
-                                child: const Text('Remember me',
-                                    style: AppTextStyles.style9)),
+                            // #sign_up
+                            (bloc.emailSuffix || bloc.phoneSuffix) &&
+                                    bloc.passwordSuffix &&
+                                    bloc.fullNameSuffix
+                                ? MaterialButton(
+                                    onPressed: () => context.read<SignUpBloc>().add(SignUpButtonEvent()),
+                                    color: AppColors.blue,
+                                    minWidth: double.infinity,
+                                    height: 48,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                    child: Text('sign_up'.tr(), style: AppTextStyles.style4),
+                                  )
+                                : Container(
+                                    height: 48,
+                                    width: double.infinity,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.disableBlue,
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Text('sign_up'.tr(), style: AppTextStyles.style5),
+                                  ),
+                          ],
+                        ),
+
+                        // #or_continue_with
+                        Text(
+                          'or_continue_with'.tr(),
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.style2,
+                        ),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            // #facebook
+                            myTextButton(
+                                onPressed: () =>
+                                    context.read<SignUpBloc>().add(FaceBookEvent()),
+                                context: context,
+                                assetIc: 'facebook',
+                                txt: 'Facebook'),
+
+                            // #google
+                            myTextButton(
+                                onPressed: () => context.read<SignUpBloc>().add(
+                                    GoogleEvent(
+                                        width: MediaQuery.of(context).size.width)),
+                                context: context,
+                                assetIc: 'google',
+                                txt: 'Google'),
                           ],
                         ),
 
                         // #sing_in
-                        (bloc.emailSuffix || bloc.phoneSuffix) &&
-                                bloc.passwordSuffix &&
-                                bloc.usernameSuffix
-                            ? MaterialButton(
-                                onPressed: () => context
-                                    .read<SignUpBloc>()
-                                    .add(SignUpButtonEvent()),
-                                color: AppColors.blue,
-                                minWidth: double.infinity,
-                                height: 50,
-                                shape: const StadiumBorder(),
-                                child: const Text(
-                                  'Sign up',
-                                  style: AppTextStyles.style4,
-                                ),
-                              )
-                            : Container(
-                                height: 50,
-                                width: double.infinity,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: AppColors.disableBlue,
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                child: const Text(
-                                  'Sign up',
-                                  style: AppTextStyles.style4,
-                                ),
-                              ),
-                      ],
-                    ),
-
-                    // #or_continue_width
-                    const Text('or continue width', textAlign: TextAlign.center, style: AppTextStyles.style2),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        // #facebook
-                        TextButton(
-                          onPressed: () => context.read<SignUpBloc>().add(FaceBookEvent()),
-                          child: const Row(
-                            children: [
-                              SizedBox(height: 25, child: Image(image: AssetImage('assets/icons/ic_facebook.png'))),
-                              Text(' Facebook', style: AppTextStyles.style9),
-                            ],
-                          ),
-                        ),
-
-                        // #google
-                        TextButton(
-                          onPressed: () => context.read<SignUpBloc>().add(GoogleEvent(width: MediaQuery.of(context).size.width)),
-                          child: const Row(
-                            children: [
-                              SizedBox(height: 25, child: Image(image: AssetImage('assets/icons/ic_google.png'))),
-                              Text(' Google', style: AppTextStyles.style9),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    // #sing_up
-                    RichText(
-                      text: TextSpan(
-                          children: [
-                            const TextSpan(
-                              text: 'Already have an account?  ',
+                        RichText(
+                          text: TextSpan(children: [
+                            TextSpan(
+                              text: 'already_account'.tr(),
                               style: AppTextStyles.style2,
                             ),
                             TextSpan(
-                              text: 'Sign in',
+                              text: 'log_in'.tr(),
                               style: AppTextStyles.style9,
-                              recognizer: TapGestureRecognizer()..onTap = () => bloc.add(SignInEvent(context: context)),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () => context
+                                    .read<SignUpBloc>()
+                                    .add(SignInEvent(context: context)),
                             ),
-                          ]
-                      ),
-                    )
-                  ],
+                          ]),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
+
+            // #is_loading
+            if (state is SignUpLoadingState)
+              myIsLoading(context),
+          ],
         );
       }),
     );
   }
 }
-
-
 
 // final kFirebaseAnalytics = FirebaseAnalytics.instance;
 //

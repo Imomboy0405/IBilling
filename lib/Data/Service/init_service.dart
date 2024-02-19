@@ -10,9 +10,6 @@ class Init {
   }
 
   static _loading() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-    await setupLocator();
     await LangService.currentLanguage();
     await Future.delayed(const Duration(seconds: 1));
   }

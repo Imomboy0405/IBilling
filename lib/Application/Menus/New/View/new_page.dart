@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class NewPage extends StatelessWidget {
   static const id = '/new_page';
 
-  const NewPage({Key? key}) : super(key: key);
+  const NewPage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -22,7 +22,7 @@ const Map<String, String> ruRU = {
   'phone': 'Телефон',
   'invalid_email': 'Неверная почта',
   'invalid_phone': 'Неправильный номер телефона',
-  'or': 'Или',
+  'or': 'или',
   'password': 'Пароль',
   'remember_me': 'Запомни меня',
   'forgot': 'Забыл пароль?',

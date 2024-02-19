@@ -34,6 +34,11 @@ class SignInCountryEvent extends SignInEvent {
   List<Object?> get props => [countryData];
 }
 
+class SignInOnTapCountryButtonEvent extends SignInEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 class OnSubmittedEvent extends SignInEvent {
   final bool password;
 

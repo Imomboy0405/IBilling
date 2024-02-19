@@ -22,7 +22,7 @@ const Map<String, String> uzUZ = {
   'phone': 'Telefon',
   'invalid_email' : 'Noto\'g\'ri pochta',
   'invalid_phone': 'Noto\'g\'ri telefon raqami',
-  'or': 'Yoki',
+  'or': 'yoki',
   'password': 'Parol',
   'remember_me': 'Meni eslab qolish',
   'forgot': 'Parolni unutdingizmi?',

@@ -17,12 +17,13 @@ class SignUpChangeEvent extends SignUpEvent {
 }
 
 class OnSubmittedEvent extends SignUpEvent {
-  final bool username;
+  final bool password;
+  final bool fullName;
 
-  OnSubmittedEvent({this.username = false});
+  OnSubmittedEvent({this.password = false, this.fullName = false});
 
   @override
-  List<Object?> get props => [username];
+  List<Object?> get props => [password];
 }
 
 class SignUpButtonEvent extends SignUpEvent {
@@ -76,3 +77,18 @@ class EyeEvent extends SignUpEvent {
   @override
   List<Object?> get props => [];
 }
+
+class SignUpCountryEvent extends SignUpEvent {
+  final PhoneCountryData countryData;
+
+  SignUpCountryEvent({required this.countryData});
+
+  @override
+  List<Object?> get props => [countryData];
+}
+
+class SignUpOnTapCountryButtonEvent extends SignUpEvent {
+  @override
+  List<Object?> get props => [];
+}
+

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SavedPage extends StatelessWidget {
   static const id = '/saved_page';
 
-  const SavedPage({Key? key}) : super(key: key);
+  const SavedPage({super.key});
 
   @override
   Widget build(BuildContext context) {
