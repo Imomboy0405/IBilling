@@ -101,7 +101,7 @@ class StartPage extends StatelessWidget {
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () => context
                                       .read<StartBloc>()
-                                      .add(FlagEvent(context: context)),
+                                      .add(TermsEvent()),
                               ),
                               TextSpan(
                                 text: 'and'.tr(),
@@ -115,7 +115,7 @@ class StartPage extends StatelessWidget {
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () => context
                                       .read<StartBloc>()
-                                      .add(FlagEvent(context: context)),
+                                      .add(TermsEvent(policy: true)),
                               ),
                             ],
                           ),

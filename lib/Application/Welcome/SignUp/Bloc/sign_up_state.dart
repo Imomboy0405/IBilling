@@ -52,3 +52,9 @@ class SignUpFlagState extends SignUpState {
   @override
   List<Object?> get props => [];
 }
+
+class SignUpVerifyPhoneState extends SignUpState {
+  @override
+  List<Object?> get props => [];
+}
+

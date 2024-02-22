@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http_interceptor/http/intercepted_http.dart';
 import 'interceptor_service.dart';
 import 'log_service.dart';
@@ -38,25 +39,22 @@ class NetworkService {
   static Map<String, dynamic> paramsEmpty() => <String, dynamic>{};
 
   // methods
-  static Future<String?> GET(String api, Map<String, dynamic> params) async {
-    Uri url = Uri.https(BASEURL, api, params);
-    final response = await http.get(url, headers: headers);
-
-    if (response.statusCode == 200) {
-      return response.body;
+  static Future<Map<String, dynamic>> GET(String api, String uId) async {
+    Map<String, dynamic> response = {};
+    try {
+      await FirebaseFirestore.instance.collection(api).doc(uId).get().then((value) => response = value.data()!);
+      return response;
+    } catch (e) {
+      return {'error': e.toString()};
     }
-    return null;
   }
 
-  static Future<String?> POST(String api, Map<String, dynamic> params, Map<String, dynamic> body) async {
-    Uri url = Uri.https(BASEURL, api);
-    print(url);
-    final response = await http.post(url,
-        headers: headers, body: jsonEncode(body), params: params);
-
-    LogService.o(response.statusCode.toString());
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return response.body;
+  static Future<String?> POST(String api, String uId, Map<String, dynamic> body) async {
+    try {
+      final response = FirebaseFirestore.instance.collection('users');
+      await response.add({'fullName': 'Imomboy'});
+    } catch (e) {
+      return e.toString();
     }
     return null;
   }

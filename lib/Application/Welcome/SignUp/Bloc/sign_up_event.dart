@@ -46,8 +46,12 @@ class EmailButtonEvent extends SignUpEvent {
 }
 
 class FaceBookEvent extends SignUpEvent {
+  final double width;
+
+  FaceBookEvent({required this.width});
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [width];
 }
 
 class GoogleEvent extends SignUpEvent {
@@ -90,5 +94,14 @@ class SignUpCountryEvent extends SignUpEvent {
 class SignUpOnTapCountryButtonEvent extends SignUpEvent {
   @override
   List<Object?> get props => [];
+}
+
+class SignUpConfirmEvent extends SignUpEvent {
+  final BuildContext context;
+
+  SignUpConfirmEvent({required this.context});
+
+  @override
+  List<Object?> get props => [context];
 }
 

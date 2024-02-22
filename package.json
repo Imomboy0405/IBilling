@@ -1,0 +1,23 @@
+{
+  "name": "package.json",
+  "version": "1.0.0",
+  "description": "Simple contract app",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Imomboy0405/IBilling.git"
+  },
+  "author": "Imomboy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Imomboy0405/IBilling/issues"
+  },
+  "homepage": "https://github.com/Imomboy0405/IBilling#readme"
+}

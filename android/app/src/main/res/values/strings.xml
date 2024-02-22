@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">IBilling</string>
+    <string name="facebook_app_id">1227933684848881</string>
+    <string name="fb_login_protocol_scheme">fb1227933684848881</string>
+    <string name="facebook_client_token">acf509cdb779f04b67eda7ba2fa36826</string>
+</resources>

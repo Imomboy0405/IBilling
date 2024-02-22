@@ -30,3 +30,13 @@ class SelectLanguageEvent extends StartEvent {
   List<Object?> get props => [lang];
 
 }
+
+class TermsEvent extends StartEvent {
+  final bool policy;
+
+  TermsEvent({this.policy = false});
+
+  @override
+  List<Object?> get props => [policy];
+
+}

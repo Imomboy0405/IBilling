@@ -37,5 +37,8 @@ const Map<String, String> enUS = {
   'example_full_name': 'John Anderson',
   'full_name': 'Full name',
   'already_account': 'Already have an account?  ',
+  'enter_sms_code': 'Enter the code received by SMS',
+  'confirm': 'Confirm',
+  'verify_email': 'A message has been sent to your email, please confirm the link in the message',
 
 };

@@ -1,15 +1,16 @@
-import 'dart:convert';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_multi_formatter/formatters/phone_input_formatter.dart';
+import 'package:i_billing/Application/Menus/Contracts/View/contracts_page.dart';
+import 'package:i_billing/Application/Welcome/View/welcome_widgets.dart';
+import 'package:i_billing/Data/Model/user_model.dart';
+import 'package:i_billing/Data/Service/network_service.dart';
 
-import '../../../../Data/Model/login_model.dart';
-import '../../../../Data/Service/google_sign_in_service.dart';
+import '../../../../Data/Service/auth_service.dart';
 import '../../../../Data/Service/lang_service.dart';
-import '../../../../Data/Service/network_service.dart';
 import '../../SignIn/View/sign_in_page.dart';
 
 part 'sign_up_event.dart';
@@ -23,12 +24,15 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   bool emailSuffix = false;
   bool passwordSuffix = false;
   bool fullNameSuffix = false;
+  bool smsSuffix = false;
   bool simple = false;
   bool country = false;
+  bool sms = false;
   FocusNode focusPhone = FocusNode();
   FocusNode focusEmail = FocusNode();
   FocusNode focusPassword = FocusNode();
   FocusNode focusFullName = FocusNode();
+  FocusNode focusSms = FocusNode();
   int selectButton = 0;
   PhoneInputFormatter phoneInputFormatter = PhoneInputFormatter(
     defaultCountryCode: 'UZ',
@@ -45,6 +49,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController fullNameController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController smsCodeController = TextEditingController();
   ScrollController scrollController = ScrollController();
 
   SignUpBloc()
@@ -68,6 +73,43 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     on<SelectLanguageEvent>(pressLanguageButton);
     on<SignUpOnTapCountryButtonEvent>(pressCountryDropdown);
     on<SignUpCountryEvent>(pressCountry);
+    on<SignUpConfirmEvent>(pressConfirm);
+  }
+
+  Future<void> pressConfirm(SignUpConfirmEvent event, Emitter emit) async {
+    bool result = false;
+    emit(SignUpLoadingState(
+      email: emailSuffix,
+      obscure: obscure,
+      password: passwordSuffix,
+      fullName: fullNameSuffix,
+    ));
+
+    if (selectButton == 0) {
+      result = await AuthService.verifyOTP(smsCodeController.text.trim());
+    } else {
+      result = await AuthService.verifyEmailLink();
+    }
+
+    if (result) {
+      UserModel userModel = UserModel(
+        fullName: fullNameController.text.trim(),
+        password: passwordController.text.trim(),
+        email: emailController.text.trim(),
+        phoneNumber: phoneNumberController.text.trim(),
+        uId: FirebaseAuth.instance.currentUser!.uid,
+      );
+      String? error = await NetworkService.POST('users', userModel.uId!, userModel.toJson());
+      if (error == null) {
+        Navigator.pushNamedAndRemoveUntil(event.context, ContractsPage.id, (route) => false);
+      } else {
+        print('error=============$error');
+        mySnackBar(txt: error, context: event.context);
+      }
+    } else {
+      FirebaseAuth.instance.currentUser!.delete();
+      emit(SignUpErrorState(obscure: obscure));
+    }
   }
 
   Future<void> pressLanguageButton(SelectLanguageEvent event, Emitter emit) async {
@@ -166,39 +208,29 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   }
 
   Future<void> pressSignUp(SignUpButtonEvent event, Emitter<SignUpState> emit) async {
-    Map<String, dynamic> body = {
-      "firstName": 'Example',
-      "lastName": null,
-      "email": emailController.text,
-      "username": fullNameController.text,
-      "password": passwordController.text,
-      "phoneNumber":
-          "+998${phoneNumberController.text.replaceAll('(', '').replaceAll(')', '').replaceAll('-', '').replaceAll(' ', '')}",
-      "shortInfo": null,
-      "latitude": null,
-      "longitude": null,
-      "language": null,
-      "sendOtp": true,
-    };
-
-    String? response = await NetworkService.POST(
-        NetworkService.API_SIGN_UP, NetworkService.paramsEmpty(), body);
-
-    if (response != null) {
-      Login login = Login.fromJson(jsonDecode(response));
-      if (login.success!) {
-        print('succes true');
-        if (login.result!.mailHasBeenSent!) {
-          print('email true');
-        } else {
-          print('email false');
-        }
-      } else {
-        print(login.error.toString());
-      }
-    } else {
-      print('network error');
+    emit(SignUpLoadingState(
+      email: emailSuffix,
+      obscure: obscure,
+      password: passwordSuffix,
+      fullName: fullNameSuffix,
+    ));
+    if(selectButton == 1) {
+      await FirebaseAuth.instance.signOut(); // todo olib tashla
+      await FirebaseAuth.instance.setLanguageCode(selectedLang.name);
+      // await AuthService().verifyEmail(emailController.text.trim());
+      debugPrint('==========emailga ketti');
+      await AuthService.createUser(emailController.text.trim(), passwordController.text.trim());
+      debugPrint('create user auth qildi=========');
+      await AuthService.verifyEmail(emailController.text.trim());
     }
+
+    // print('==============================authga ketti');
+    // print('+${countryData.phoneCode! + RegExp(r'\d+').allMatches(phoneNumberController.text).map((s) => s.group(0)).join('')}');
+    // await AuthService().verifyPhoneNumber(
+    //     '+${countryData.phoneCode! + RegExp(r'\d+').allMatches(phoneNumberController.text).map((s) => s.group(0)).join('')}');
+    //
+    emit(SignUpVerifyPhoneState());
+    // sms = true;
   }
 
   Future<void> pressGoogle(GoogleEvent event, Emitter<SignUpState> emit) async {
@@ -209,7 +241,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       email: emailSuffix,
     ));
 
-    UserCredential userCredential = await signInWithGoogle();
+    UserCredential userCredential = await AuthService.signInWithGoogle();
     String? email = userCredential.user?.email;
     String? fullName = userCredential.user?.displayName;
     if (email != null) {
@@ -238,7 +270,40 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   }
 
   Future<void> pressFacebook(FaceBookEvent event, Emitter<SignUpState> emit) async {
-    // todo code
+    emit(SignUpLoadingState(
+      fullName: fullNameSuffix,
+      password: passwordSuffix,
+      obscure: obscure,
+      email: emailSuffix,
+    ));
+
+    UserCredential userCredential = await AuthService.signInWithFacebook();
+    String? email = userCredential.user?.email;
+    String? fullName = userCredential.user?.displayName;
+    if (email != null) {
+      emailController.text = email;
+      emailSuffix = true;
+      selectButton = 1;
+      focusPhone.unfocus();
+      await Future.delayed(const Duration(milliseconds: 30));
+      await scrollController.animateTo(event.width - 60,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOutCubic);
+
+      if (fullName != null) {
+        fullNameController.text = fullName;
+        fullNameSuffix = true;
+      }
+    }
+
+    emit(SignUpEnterState(
+        simple: simple,
+        phone: phoneSuffix,
+        email: true,
+        password: passwordSuffix,
+        obscure: obscure,
+        fullName: fullNameSuffix));
+
   }
 
   void pressCountryDropdown(SignUpOnTapCountryButtonEvent event, Emitter<SignUpState> emit) {
@@ -250,21 +315,27 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         password: passwordController.text.trim().isNotEmpty,
         obscure: obscure,
         fullName: fullNameController.text.trim().isNotEmpty));
-
   }
 
   void change(SignUpChangeEvent event, Emitter<SignUpState> emit) {
     if (focusPassword.hasFocus) country = false;
-    if (phoneNumberController.text.length != countryData.phoneMaskWithoutCountryCode.length) {
+    if (phoneNumberController.text.length !=
+        countryData.phoneMaskWithoutCountryCode.length) {
       phoneSuffix = false;
     }
-    if (!phoneSuffix && phoneNumberController.text.length == countryData.phoneMaskWithoutCountryCode.length) {
+    if (!phoneSuffix &&
+        phoneNumberController.text.length ==
+            countryData.phoneMaskWithoutCountryCode.length) {
       phoneSuffix = true;
     }
 
-    if (fullNameController.text.replaceAll(' ', '').length > 5
-        && fullNameController.text.trim().substring(0, fullNameController.text.trim().indexOf(' ')).length > 2
-        && fullNameController.text.trim().substring(fullNameController.text.trim().lastIndexOf(' '), fullNameController.text.length).length > 3) {
+    if (fullNameController.text.replaceAll(' ', '').length > 5 &&
+        fullNameController.text.trim().contains(' ') &&
+        fullNameController.text.trim()
+                .substring(0, fullNameController.text.trim().indexOf(' ')).length > 2 &&
+        fullNameController.text.trim()
+                .substring(fullNameController.text.trim().lastIndexOf(' '),
+                    fullNameController.text.trim().length).length > 3) {
       fullNameSuffix = true;
     } else {
       fullNameSuffix = false;
@@ -289,6 +360,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     }
 
     if (passwordController.text.length > 5 &&
+        !passwordController.text.contains(' ') &&
         (passwordController.text.contains(RegExp('[a-z]')) ||
             passwordController.text.contains(RegExp('[A-Z]'))) &&
         passwordController.text.contains(RegExp('[0-9]')) &&
@@ -298,6 +370,12 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       passwordSuffix = false;
     }
     simple = !simple;
+    if(fullNameController.text.isNotEmpty) {
+      fullNameController.text = fullNameController.text.replaceAll(RegExp(r'\s+'), ' ');
+    }
+    if (emailController.text.isNotEmpty) {
+      emailController.text = emailController.text.replaceAll(' ', '');
+    }
     emit(SignUpEnterState(
         simple: simple,
         phone: phoneNumberController.text.trim().isNotEmpty,
@@ -310,23 +388,25 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   void pressEye(EyeEvent event, Emitter<SignUpState> emit) {
     obscure = !obscure;
     emit(SignUpEnterState(
-        simple: simple,
-        phone: phoneNumberController.text.trim().isNotEmpty,
-        fullName: fullNameController.text.trim().isNotEmpty,
-        email: emailController.text.trim().isNotEmpty,
-        password: passwordController.text.trim().isNotEmpty,
-        obscure: obscure,));
+      simple: simple,
+      phone: phoneNumberController.text.trim().isNotEmpty,
+      fullName: fullNameController.text.trim().isNotEmpty,
+      email: emailController.text.trim().isNotEmpty,
+      password: passwordController.text.trim().isNotEmpty,
+      obscure: obscure,
+    ));
   }
 
   void pressRememberMe(RememberMeEvent event, Emitter<SignUpState> emit) {
     rememberMe = !rememberMe;
     emit(SignUpEnterState(
-        simple: simple,
-        phone: phoneNumberController.text.trim().isNotEmpty,
-        fullName: fullNameController.text.trim().isNotEmpty,
-        email: emailController.text.trim().isNotEmpty,
-        password: passwordController.text.trim().isNotEmpty,
-        obscure: obscure,));
+      simple: simple,
+      phone: phoneNumberController.text.trim().isNotEmpty,
+      fullName: fullNameController.text.trim().isNotEmpty,
+      email: emailController.text.trim().isNotEmpty,
+      password: passwordController.text.trim().isNotEmpty,
+      obscure: obscure,
+    ));
   }
 
   void pressSignIn(SignInEvent event, Emitter<SignUpState> emit) {

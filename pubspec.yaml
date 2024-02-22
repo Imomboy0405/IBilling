@@ -20,10 +20,9 @@ dependencies:
   # ui component
   flutter_slidable: any
   animations: any
-  avatar_glow: any
-  mask_text_input_formatter: any
   scrollable_positioned_list: any
   flutter_multi_formatter: ^2.12.4
+  url_launcher: ^6.2.4
 
   # state management
   flutter_bloc: any
@@ -36,11 +35,13 @@ dependencies:
 
   # sign in
   google_sign_in: any
-  flutter_login_facebook: any
+  flutter_facebook_auth: any
 
   # firebase
   firebase_core: ^2.25.4
   firebase_auth: any
+  firebase_dynamic_links: ^5.4.14
+  cloud_firestore: any
 
   # dependency injection
   get_it: any

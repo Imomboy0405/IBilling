@@ -3,11 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:flutter_multi_formatter/formatters/phone_input_formatter.dart';
 
-import '../../../../Data/Service/google_sign_in_service.dart';
+import '../../../../Data/Service/auth_service.dart';
 import '../../../../Data/Service/lang_service.dart';
 import '../../SignUp/View/sign_up_page.dart';
 part 'sign_in_event.dart';
@@ -168,7 +167,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
       rememberMe: rememberMe,
     ));
 
-    UserCredential userCredential = await signInWithGoogle();
+    UserCredential userCredential = await AuthService.signInWithGoogle();
     String? email = userCredential.user?.email;
     if (email != null) {
       emailController.text = email;
@@ -196,25 +195,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   }
 
   Future<void> pressFacebook(FaceBookEvent event, Emitter<SignInState> emit) async {
-    print('facebook');
-    final fbLogin = FacebookLogin();
-    // final FacebookLoginResult result = await fbLogin.logIn(customPermissions: ["email"]);
-    // final String? token = result.accessToken?.token;
-    // final response = await http.get('https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=$token');
-    // final profile = jsonDecode(response.body);
-    // print(profile);
-
-    // Create an instance of FacebookLogin
-    // final fb = FacebookLogin();
-
-// Log in
-//     final res = await fb.logIn(permissions: [
-//       FacebookPermission.publicProfile,
-//       FacebookPermission.email,
-//     ]);
-
-    String? email = await fbLogin.getUserEmail();
-    print(email);
+    // todo code
   }
 
   Future<void> pressCountry(SignInCountryEvent event, Emitter<SignInState> emit) async {
