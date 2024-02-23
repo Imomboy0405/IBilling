@@ -10,9 +10,9 @@ const Map<String, String> ruRU = {
   'and': ' и ',
   'policy': 'политика конфиденциальности',
   'choose_lang': 'Выберите язык',
-  'button_1': 'O\'zbek (lotin)',
-  'button_2': 'Pусский язык',
-  'button_3': 'English (USA)',
+  'button_0': 'O\'zbek (Lotin)',
+  'button_1': 'Pусский',
+  'button_2': 'English (USA)',
 
   /// SignInPage
   'log_to_acc': 'Войдите в аккаунт',
@@ -31,5 +31,26 @@ const Map<String, String> ruRU = {
   'sign_up': 'Зарегистрироваться',
   'snackBar': 'Заполните форму!',
 
+  /// SignUpPage
+  'sign_up_for_free': 'Бесплатно зарегестрироваться',
+  'invalid_full_name': 'Неверное полное имя',
+  'example_full_name': 'Иван Васильевич',
+  'full_name': 'Полное имя',
+  'already_account': 'У вас уже есть аккаунт?  ',
+  'enter_sms_code': 'Введите код, полученный в СМС',
+  'confirm': 'Подтвердить',
+  'verify_email': 'На вашу электронную почту отправлено сообщение, пожалуйста, подтвердите ссылку в сообщении',
+
+  /// ProfilePage
+  'profile': 'Профиль',
+  'current_lang': 'Pусский',
+  'cancel': 'Отмена',
+  'done': 'Выполнен',
+
+
+  'contracts': 'Соглашения',
+  'history': 'История',
+  'new': 'Новый',
+  'saved': 'Сохранено',
 
 };

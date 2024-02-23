@@ -20,3 +20,15 @@ class MainChangeEvent extends MainEvent {
   @override
   List<Object?> get props => [index];
 }
+
+class MainHideBottomNavigationBarEvent extends MainEvent {
+
+  @override
+  List<Object?> get props => [];
+}
+
+class MainLanguageEvent extends MainEvent {
+
+  @override
+  List<Object?> get props => [];
+}

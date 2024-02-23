@@ -59,6 +59,7 @@ flutter:
   assets:
     - assets/fonts/monda/
     - assets/fonts/poppins/
+    - assets/fonts/ubuntu/
     - assets/images/
     - assets/icons/
 
@@ -69,3 +70,7 @@ flutter:
     - family: Monda
       fonts:
         - asset: assets/fonts/monda/Monda-Medium.ttf
+    - family: Ubuntu
+      fonts:
+        - asset: assets/fonts/ubuntu/Ubuntu-Regular.ttf
+        - asset: assets/fonts/ubuntu/Ubuntu-Medium.ttf

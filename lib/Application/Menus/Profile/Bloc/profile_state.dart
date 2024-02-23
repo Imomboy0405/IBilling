@@ -3,31 +3,24 @@ part of 'profile_bloc.dart';
 abstract class ProfileState extends Equatable {}
 
 class ProfileInitialState extends ProfileState {
+  final bool darkMode;
+  ProfileInitialState({required this.darkMode});
+
+  @override
+  List<Object?> get props => [darkMode];
+}
+
+class ProfileLangState extends ProfileState {
+  final Language lang;
+
+  ProfileLangState({required this.lang});
+
+  @override
+  List<Object?> get props => [lang];
+}
+
+class ProfileSignOutState extends ProfileState {
   @override
   List<Object?> get props => [];
 }
 
-class ProfileEditProfileState extends ProfileState {
-  @override
-  List<Object?> get props => [];
-}
-
-class ProfileNotificationState extends ProfileState {
-  @override
-  List<Object?> get props => [];
-}
-
-class ProfileSecurityState extends ProfileState {
-  @override
-  List<Object?> get props => [];
-}
-
-class ProfileAppearanceState extends ProfileState {
-  @override
-  List<Object?> get props => [];
-}
-
-class LogoutState extends ProfileState {
-  @override
-  List<Object?> get props => [];
-}

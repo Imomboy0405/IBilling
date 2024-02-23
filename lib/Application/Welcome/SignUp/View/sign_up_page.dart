@@ -176,32 +176,13 @@ class SignUpPage extends StatelessWidget {
                             ),
 
                             // #sign_up
-                            (bloc.emailSuffix || bloc.phoneSuffix) &&
-                                    bloc.passwordSuffix &&
-                                    bloc.fullNameSuffix
-                                ? MaterialButton(
-                                    onPressed: () => context
-                                        .read<SignUpBloc>()
-                                        .add(SignUpButtonEvent()),
-                                    color: AppColors.blue,
-                                    minWidth: double.infinity,
-                                    height: 48,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(6)),
-                                    child: Text('sign_up'.tr(),
-                                        style: AppTextStyles.style4),
-                                  )
-                                : Container(
-                                    height: 48,
-                                    width: double.infinity,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.disableBlue,
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Text('sign_up'.tr(),
-                                        style: AppTextStyles.style5),
-                                  ),
+                            MyButton(
+                              text: 'sign_up'.tr(),
+                              enable: (bloc.emailSuffix || bloc.phoneSuffix)
+                                  && bloc.passwordSuffix
+                                  && bloc.fullNameSuffix,
+                              function: () => context.read<SignUpBloc>().add(SignUpButtonEvent()),
+                            ),
 
                             // #or_continue_with
                             Text(

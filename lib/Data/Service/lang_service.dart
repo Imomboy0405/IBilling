@@ -36,14 +36,14 @@ abstract class LangService {
 }
 
 extension Translation on String {
-  String tr() {
-    switch (LangService.getLanguage) {
+  String tr({Language? language}) {
+    switch (language ?? LangService.getLanguage) {
       case Language.en:
-        return enUS[this] ?? 'NULL';
+        return enUS[this] ?? 'EN_NULL';
       case Language.ru:
-        return ruRU[this] ?? 'NULL';
+        return ruRU[this] ?? 'RU_NULL';
       case Language.uz:
-        return uzUZ[this] ?? 'NULL';
+        return uzUZ[this] ?? 'UZ_NULL';
     }
   }
 }

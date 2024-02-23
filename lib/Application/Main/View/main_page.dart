@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_billing/Application/Menus/View/menus_widgets.dart';
 
 import '../../../Configuration/app_colors.dart';
 import '../../Menus/Contracts/View/contracts_page.dart';
@@ -9,28 +10,9 @@ import '../../Menus/Profile/View/profile_page.dart';
 import '../../Menus/Saved/View/saved_page.dart';
 import '../Bloc/main_bloc.dart';
 
-@immutable
 class MainPage extends StatelessWidget {
-  MainBloc bloc = MainBloc();
 
-  MainPage({super.key});
-
-  void listen() async {
-    if (bloc.controller.page! <= 0.001) {
-      bloc.controller.jumpToPage(4);
-    } else if (bloc.controller.page! >= 4.999) {
-      bloc.controller.jumpToPage(1);
-    }
-
-    if (bloc.controller.page! - bloc.controller.page!.truncate() < 1){
-      bloc.currentScreen = bloc.controller.page!.round();
-    }
-
-    if (bloc.currentScreen != bloc.oldScreen) {
-      bloc.oldScreen = bloc.currentScreen;
-      bloc.add(MainMenuEvent(index: bloc.currentScreen));
-    }
-  }
+  const MainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,83 +21,36 @@ class MainPage extends StatelessWidget {
       create: (context) => MainBloc(),
       child: BlocBuilder<MainBloc, MainState>(
         builder: (context, state) {
-          bloc = context.read<MainBloc>();
-          bloc.controller.addListener(() => listen());
+          MainBloc bloc = context.read<MainBloc>();
+          bloc.controller.addListener(() => bloc.listen());
           return Scaffold(
+            backgroundColor: AppColors.black,
             body: Stack(
               alignment: Alignment.bottomCenter,
               children: [
+                Container(
+                  width: 200,
+                  height: 83,
+                  color: AppColors.dark,
+                ),
+                MyBottomNavigationBar(screenWidth: screenWidth, bloc: bloc),
+
                 PageView(
                   controller: bloc.controller,
-                  children: const [
-                    ProfilePage(),
-                    ContractsPage(),
-                    HistoryPage(),
-                    NewPage(),
-                    SavedPage(),
-                    ProfilePage(),
-                    ContractsPage(),
+                  pageSnapping: true,
+                  children: [
+                    ProfilePage(mainBloc: bloc),
+                    const ContractsPage(),
+                    const HistoryPage(),
+                    const NewPage(),
+                    const SavedPage(),
+                    ProfilePage(mainBloc: bloc),
+                    const ContractsPage(),
                   ],
                 ),
-                Container(
-                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                  height: screenWidth * .155,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.black.withOpacity(.15),
-                        blurRadius: 30,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  child: ListView.builder(
-                    itemCount: 4,
-                    scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.symmetric(horizontal: screenWidth * .024),
-                    itemBuilder: (context, index) => InkWell(
-                      onTap: () => bloc.add(MainChangeEvent(index: index)),
-                      splashColor: AppColors.transparentBlue,
-                      highlightColor: AppColors.transparentBlue,
-                      child: Stack(
-                        children: [
-                          SizedBox(
-                            width: screenWidth * .2125,
-                            child: Center(
-                              child: AnimatedContainer(
-                                duration: const Duration(seconds: 1),
-                                curve: Curves.fastLinearToSlowEaseIn,
-                                height:
-                                index+1 == bloc.currentScreen ? screenWidth * .12 : 0,
-                                width:
-                                index+1 == bloc.currentScreen ? screenWidth * .2125 : 0,
-                                decoration: BoxDecoration(
-                                  color: index+1 == bloc.currentScreen
-                                      ? Colors.blueAccent.withOpacity(.2)
-                                      : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: screenWidth * .2125,
-                            alignment: Alignment.center,
-                            child: Icon(
-                              bloc.listOfIcons[index],
-                              size: screenWidth * .076,
-                              color: index+1 == bloc.currentScreen
-                                  ? Colors.blueAccent
-                                  : Colors.black26,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+
+                if(state is! MainHideBottomNavigationBarState)
+                  MyBottomNavigationBar(screenWidth: screenWidth, bloc: bloc),
               ],
             ),
 

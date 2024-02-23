@@ -173,34 +173,11 @@ class SignInPage extends StatelessWidget {
                             ),
 
                             // #log_in
-                            (bloc.emailSuffix || bloc.phoneSuffix) &&
-                                    bloc.passwordSuffix
-                                ? MaterialButton(
-                                    onPressed: () => context
-                                        .read<SignInBloc>()
-                                        .add(SignInButtonEvent()),
-                                    color: AppColors.blue,
-                                    minWidth: double.infinity,
-                                    height: 48,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                                    child: Text(
-                                      'log_in'.tr(),
-                                      style: AppTextStyles.style4,
-                                    ),
-                                  )
-                                : Container(
-                                    height: 48,
-                                    width: double.infinity,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.disableBlue,
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Text(
-                                      'log_in'.tr(),
-                                      style: AppTextStyles.style5,
-                                    ),
-                                  ),
+                            MyButton(
+                              function: () => context.read<SignInBloc>().add(SignInButtonEvent()),
+                              enable: (bloc.emailSuffix || bloc.phoneSuffix) && bloc.passwordSuffix,
+                              text: 'log_in'.tr(),
+                            ),
 
                             // #forgot_the_password
                             myTextButton(

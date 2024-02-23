@@ -10,9 +10,9 @@ const Map<String, String> enUS = {
   'and': ' and ',
   'policy': 'Privacy Policy',
   'choose_lang': 'Choose language',
-  'button_1': 'O\'zbek (lotin)',
-  'button_2': 'Pусский язык',
-  'button_3': 'English (USA)',
+  'button_0': 'O\'zbek (Lotin)',
+  'button_1': 'Pусский',
+  'button_2': 'English (USA)',
 
   /// SignInPage
   'log_to_acc': 'Log in to account',
@@ -41,4 +41,20 @@ const Map<String, String> enUS = {
   'confirm': 'Confirm',
   'verify_email': 'A message has been sent to your email, please confirm the link in the message',
 
+  /// ProfilePage
+  'profile': 'Profile',
+  'i_billing_user': 'User of IBilling',
+  'date_sign': 'Date of sign up',
+  'current_lang': 'English (USA)',
+  'cancel': 'Cancel',
+  'done': 'Done',
+  'theme': 'Theme',
+  'sign_out': 'Sign out',
+  'confirm_sign_out': 'Confirm that you really want to log out of your account',
+
+
+  'contracts': 'Contracts',
+  'history': 'History',
+  'new': 'New',
+  'saved': 'Saved',
 };

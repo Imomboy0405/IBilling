@@ -77,7 +77,7 @@ class MyFlagButton extends StatelessWidget {
                                   height: 28,
                                   fit: BoxFit.fill,
                                 ),
-                                title: Text('button_$index'.tr(),
+                                title: Text('button_$index - 1'.tr(),
                                     style: AppTextStyles.style15),
                                 selected: lang[index - 1] == currentLang,
                                 value: lang[index - 1],
@@ -120,49 +120,42 @@ class MyFlagButton extends StatelessWidget {
 }
 
 class SelectButton extends StatelessWidget {
+  final BuildContext context;
+  final Function function;
+  final String text;
+  final bool select;
+  final bool selectFunctionOn;
+
   const SelectButton({
     super.key,
     required this.context,
     required this.function,
     required this.text,
     required this.select,
+    this.selectFunctionOn = false,
   });
 
-  final BuildContext context;
-  final Function function;
-  final String text;
-  final bool select;
 
   @override
   Widget build(BuildContext context) {
-    return select
-        ? Container(
-            height: 44,
-            width: (MediaQuery.of(context).size.width - 115) / 2,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: AppColors.blue,
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Text(
-              text,
-              style: AppTextStyles.style13,
-            ),
-          )
-        : MaterialButton(
-            onPressed: () => function(),
-            color: AppColors.disableBlue,
-            splashColor: AppColors.blue,
-            highlightColor: AppColors.disableBlue,
-            minWidth: (MediaQuery.of(context).size.width - 115) / 2,
-            height: 44,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-            child: Text(
-              text,
-              style: AppTextStyles.style14,
-            ),
-          );
+    return MaterialButton(
+      onPressed: () => select
+          ? selectFunctionOn
+            ? function()
+            : () {}
+          : function(),
+      color: select ? AppColors.blue : AppColors.disableBlue,
+      splashColor: AppColors.blue,
+      elevation: 0,
+      highlightColor: AppColors.disableBlue,
+      minWidth: (MediaQuery.of(context).size.width - 130) / 2,
+      height: 37,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+      child: Text(
+        text,
+        style: select ? AppTextStyles.style13 : AppTextStyles.style14,
+      ),
+    );
   }
 }
 
@@ -514,4 +507,30 @@ Container myIsLoading(BuildContext context) {
       backgroundColor: AppColors.disableBlue,
     ),
   );
+}
+
+class MyButton extends StatelessWidget {
+  final bool enable;
+  final String text;
+  final Function function;
+
+  const MyButton({
+    super.key,
+    required this.enable,
+    required this.text,
+    required this.function,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialButton(
+      onPressed: () => enable ? function() : (),
+      color: enable ? AppColors.blue : AppColors.disableBlue,
+      minWidth: double.infinity,
+      height: 48,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(6)),
+      child: Text(text, style: enable ?  AppTextStyles.style4 : AppTextStyles.style5),
+    );
+  }
 }

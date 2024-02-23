@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'Application/Main/View/main_page.dart';
-import 'Application/Menus/Profile/View/profile_page.dart';
 import 'Application/Welcome/SignIn/View/sign_in_page.dart';
 import 'Application/Welcome/SignUp/View/sign_up_page.dart';
 import 'Application/Welcome/Splash/splash_page.dart';
@@ -19,7 +18,7 @@ class IBilling extends StatelessWidget {
     return FutureBuilder(
       future: DBService.loadData(StorageKey.user),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
+        if (true) {
           return MainPage();
         } else {
           return const StartPage();
@@ -50,7 +49,6 @@ class IBilling extends StatelessWidget {
         StartPage.id: (context) => const StartPage(),
         SignInPage.id: (context) => const SignInPage(),
         SignUpPage.id: (context) => const SignUpPage(),
-        ProfilePage.id: (context) => const ProfilePage(),
       },
     );
   }
