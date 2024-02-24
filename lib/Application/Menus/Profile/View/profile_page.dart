@@ -1,14 +1,12 @@
-import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_billing/Application/Main/Bloc/main_bloc.dart';
 import 'package:i_billing/Application/Menus/Profile/Bloc/profile_bloc.dart';
+import 'package:i_billing/Application/Menus/View/menus_widgets.dart';
 import 'package:i_billing/Configuration/app_colors.dart';
 import 'package:i_billing/Configuration/app_text_styles.dart';
 import 'package:i_billing/Data/Service/lang_service.dart';
-
-import '../../../Welcome/View/welcome_widgets.dart';
 
 class ProfilePage extends StatelessWidget {
   static const id = '/profile_page';
@@ -26,27 +24,8 @@ class ProfilePage extends StatelessWidget {
           children: [
             Scaffold(
               backgroundColor: AppColors.transparent,
-              appBar: AppBar(
-                elevation: 0,
-                backgroundColor: AppColors.darker,
-                surfaceTintColor: AppColors.darker,
-                titleSpacing: 20,
-                title: Row(
-                  children: [
-                    // #color_image
-                    const Image(
-                      image: AssetImage('assets/icons/ic_color.png'),
-                      width: 24,
-                      height: 24,
-                      fit: BoxFit.fill,
-                    ),
-                    const SizedBox(width: 12),
 
-                    // #profile_text
-                    Text('profile'.tr(), style: AppTextStyles.style18),
-                  ],
-                ),
-              ),
+              appBar: MyAppBar(titleText: 'profile'.tr()),
 
               body: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -63,6 +42,7 @@ class ProfilePage extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+
                             // #full_name
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,7 +92,6 @@ class ProfilePage extends StatelessWidget {
 
                       // #theme
                       MyProfileButton(
-                        bloc: bloc,
                         text: 'theme'.tr(),
                         function: () => context.read<ProfileBloc>().add(DarkModeEvent(darkMode: !bloc.darkMode)),
                         endElement: SizedBox(
@@ -139,7 +118,6 @@ class ProfilePage extends StatelessWidget {
 
                       // #language
                       MyProfileButton(
-                        bloc: bloc,
                         text: 'current_lang'.tr(),
                         function: () => context.read<ProfileBloc>().add(LanguageEvent()),
                         endElement: Image(
@@ -153,10 +131,17 @@ class ProfilePage extends StatelessWidget {
 
                       // #sign_out
                       MyProfileButton(
-                        bloc: bloc,
                         text: 'sign_out'.tr(),
                         function: () => context.read<ProfileBloc>().add(SignOutEvent()),
                         endElement: const Icon(CupertinoIcons.square_arrow_right, size: 24, color: AppColors.red),
+                      ),
+                      const SizedBox(height: 10),
+
+                      // #sign_out
+                      MyProfileButton(
+                        text: 'info'.tr(),
+                        function: () => context.read<ProfileBloc>().add(InfoEvent()),
+                        endElement: const Icon(CupertinoIcons.info, size: 24, color: AppColors.white),
                       ),
                     ],
                   ),
@@ -166,6 +151,7 @@ class ProfilePage extends StatelessWidget {
             // #choose_language_screen
             if (state is ProfileLangState)
               MyProfileScreen(
+                doneButton: true,
                 bloc: bloc,
                 textTitle: 'choose_lang'.tr(language: bloc.selectedLang),
                 textCancel: 'cancel'.tr(language: bloc.selectedLang),
@@ -207,6 +193,7 @@ class ProfilePage extends StatelessWidget {
             // #sign_out_screen
             if (state is ProfileSignOutState)
               MyProfileScreen(
+                doneButton: true,
                 bloc: bloc,
                 textTitle: 'sign_out'.tr(),
                 textCancel: 'cancel'.tr(),
@@ -218,6 +205,20 @@ class ProfilePage extends StatelessWidget {
                   child: Text('confirm_sign_out'.tr(), style: AppTextStyles.style23),
                 ),
               ),
+
+
+            // #info_screen
+            if (state is ProfileInfoState)
+              MyProfileScreen(
+                bloc: bloc,
+                textTitle: 'info'.tr(),
+                textCancel: 'back'.tr(),
+                functionCancel: () => context.read<ProfileBloc>().add(CancelEvent()),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Text('info_text'.tr(), style: AppTextStyles.style23),
+                ),
+              ),
           ],
         );
       }),
@@ -225,116 +226,3 @@ class ProfilePage extends StatelessWidget {
   }
 }
 
-class MyProfileScreen extends StatelessWidget {
-  const MyProfileScreen({
-    super.key,
-    required this.bloc,
-    required this.textTitle,
-    required this.textCancel,
-    required this.textDone,
-    required this.functionCancel,
-    required this.functionDone,
-    required this.child,
-  });
-
-  final ProfileBloc bloc;
-  final String textTitle;
-  final String textCancel;
-  final String textDone;
-  final Function functionCancel;
-  final Function functionDone;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-
-        // #backgoround
-        InkWell(
-          onTap: () => functionCancel(),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-            child: Container(
-              color: AppColors.transparentBlack,
-            ),
-          ),
-        ),
-
-        Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            padding: const EdgeInsets.fromLTRB(24, 18, 24, 20),
-            decoration: BoxDecoration(
-              color: AppColors.dark,
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(textTitle, style: AppTextStyles.style20),
-                const SizedBox(height: 16),
-                child,
-                // #cancel_done_button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SelectButton(
-                      context: context,
-                      text: textCancel,
-                      function: () => functionCancel(),
-                      select: false,
-                    ),
-
-                    SelectButton(
-                      context: context,
-                      text: textDone,
-                      function: () => functionDone(),
-                      select: true,
-                      selectFunctionOn: true,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-        ),
-      ],
-    );
-  }
-}
-
-class MyProfileButton extends StatelessWidget {
-  final ProfileBloc bloc;
-  final Function function;
-  final String text;
-  final Widget endElement;
-
-  const MyProfileButton({
-    super.key,
-    required this.bloc,
-    required this.text,
-    required this.function,
-    required this.endElement,
-  });
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialButton(
-      onPressed: () => function(),
-      height: 44,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-      color: AppColors.dark,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(text, style: AppTextStyles.style19),
-          endElement,
-        ],
-      ),
-    );
-  }
-}

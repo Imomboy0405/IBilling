@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:flutter_multi_formatter/formatters/phone_input_formatter.dart';
+import 'package:i_billing/Data/Service/logic_service.dart';
 
 import '../../../../Data/Service/auth_service.dart';
 import '../../../../Data/Service/lang_service.dart';
@@ -255,33 +256,9 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
       phoneSuffix = true;
     }
 
-    if (emailController.text.contains('@') &&
-        emailController.text.contains('.') &&
-        emailController.text
-            .substring(0, emailController.text.indexOf('@'))
-            .isNotEmpty &&
-        emailController.text
-            .substring(emailController.text.indexOf('@') + 1,
-                emailController.text.indexOf('.'))
-            .isNotEmpty &&
-        emailController.text
-            .substring(emailController.text.indexOf('.') + 1,
-                emailController.text.length)
-            .isNotEmpty) {
-      emailSuffix = true;
-    } else {
-      emailSuffix = false;
-    }
+    passwordSuffix = LogicService.checkPassword(passwordController.text);
+    emailSuffix = LogicService.checkEmail(emailController.text);
 
-    if (passwordController.text.trim().length > 5 &&
-        (passwordController.text.contains(RegExp('[a-z]')) ||
-            passwordController.text.contains(RegExp('[A-Z]'))) &&
-        passwordController.text.contains(RegExp('[0-9]')) &&
-        !passwordController.text.trim().contains(' ')) {
-      passwordSuffix = true;
-    } else {
-      passwordSuffix = false;
-    }
     simple = !simple;
     emit(SignInEnterState(
         selectButton: selectButton,

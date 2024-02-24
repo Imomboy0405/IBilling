@@ -24,3 +24,8 @@ class ProfileSignOutState extends ProfileState {
   List<Object?> get props => [];
 }
 
+class ProfileInfoState extends ProfileState {
+  @override
+  List<Object?> get props => [];
+}
+

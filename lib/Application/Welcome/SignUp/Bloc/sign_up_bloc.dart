@@ -7,6 +7,7 @@ import 'package:flutter_multi_formatter/formatters/phone_input_formatter.dart';
 import 'package:i_billing/Application/Menus/Contracts/View/contracts_page.dart';
 import 'package:i_billing/Application/Welcome/View/welcome_widgets.dart';
 import 'package:i_billing/Data/Model/user_model.dart';
+import 'package:i_billing/Data/Service/logic_service.dart';
 import 'package:i_billing/Data/Service/network_service.dart';
 
 import '../../../../Data/Service/auth_service.dart';
@@ -126,6 +127,9 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   }
 
   Future<void> onSubmitted(OnSubmittedEvent event, Emitter<SignUpState> emit) async {
+    if(fullNameController.text.isNotEmpty) {
+      fullNameController.text = fullNameController.text.replaceAll(RegExp(r'\s+'), ' ');
+    }
     if (event.password) {
       focusPassword.unfocus();
     } else {
@@ -323,56 +327,16 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         countryData.phoneMaskWithoutCountryCode.length) {
       phoneSuffix = false;
     }
-    if (!phoneSuffix &&
-        phoneNumberController.text.length ==
-            countryData.phoneMaskWithoutCountryCode.length) {
+    if (!phoneSuffix && phoneNumberController.text.length == countryData.phoneMaskWithoutCountryCode.length) {
       phoneSuffix = true;
     }
 
-    if (fullNameController.text.replaceAll(' ', '').length > 5 &&
-        fullNameController.text.trim().contains(' ') &&
-        fullNameController.text.trim()
-                .substring(0, fullNameController.text.trim().indexOf(' ')).length > 2 &&
-        fullNameController.text.trim()
-                .substring(fullNameController.text.trim().lastIndexOf(' '),
-                    fullNameController.text.trim().length).length > 3) {
-      fullNameSuffix = true;
-    } else {
-      fullNameSuffix = false;
-    }
+    fullNameSuffix = LogicService.checkFullName(fullNameController.text);
+    emailSuffix = LogicService.checkEmail(emailController.text);
+    passwordSuffix = LogicService.checkPassword(passwordController.text);
 
-    if (emailController.text.contains('@') &&
-        emailController.text.contains('.') &&
-        emailController.text
-            .substring(0, emailController.text.indexOf('@'))
-            .isNotEmpty &&
-        emailController.text
-            .substring(emailController.text.indexOf('@') + 1,
-                emailController.text.indexOf('.'))
-            .isNotEmpty &&
-        emailController.text
-            .substring(emailController.text.indexOf('.') + 1,
-                emailController.text.length)
-            .isNotEmpty) {
-      emailSuffix = true;
-    } else {
-      emailSuffix = false;
-    }
-
-    if (passwordController.text.length > 5 &&
-        !passwordController.text.contains(' ') &&
-        (passwordController.text.contains(RegExp('[a-z]')) ||
-            passwordController.text.contains(RegExp('[A-Z]'))) &&
-        passwordController.text.contains(RegExp('[0-9]')) &&
-        !passwordController.text.trim().contains(' ')) {
-      passwordSuffix = true;
-    } else {
-      passwordSuffix = false;
-    }
     simple = !simple;
-    if(fullNameController.text.isNotEmpty) {
-      fullNameController.text = fullNameController.text.replaceAll(RegExp(r'\s+'), ' ');
-    }
+
     if (emailController.text.isNotEmpty) {
       emailController.text = emailController.text.replaceAll(' ', '');
     }

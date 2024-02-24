@@ -30,6 +30,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<DarkModeEvent>(pressDarkMode);
     on<SignOutEvent>(pressSignOut);
     on<ConfirmEvent>(pressConfirm);
+    on<InfoEvent>(pressInfo);
   }
 
   void pressLanguage(LanguageEvent event, Emitter<ProfileState> emit) {
@@ -54,7 +55,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(ProfileInitialState(darkMode: darkMode));
   }
 
-  void pressDarkMode(DarkModeEvent event, Emitter<ProfileState> emit) async {
+  Future<void> pressDarkMode(DarkModeEvent event, Emitter<ProfileState> emit) async {
     darkMode = event.darkMode;
     await ThemeService.theme(darkMode ? ThemeMode.dark : ThemeMode.light);
     emit(ProfileInitialState(darkMode: darkMode));
@@ -67,5 +68,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   void pressConfirm(ConfirmEvent event, Emitter<ProfileState> emit) {
     // todo sign out code
+  }
+
+  void pressInfo(InfoEvent event, Emitter<ProfileState> emit) {
+    mainBloc.add(MainHideBottomNavigationBarEvent());
+    emit(ProfileInfoState());
   }
 }

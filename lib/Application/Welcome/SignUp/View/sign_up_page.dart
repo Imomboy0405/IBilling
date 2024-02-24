@@ -24,6 +24,7 @@ class SignUpPage extends StatelessWidget {
           children: [
             Scaffold(
               backgroundColor: AppColors.black,
+
               appBar: AppBar(
                 elevation: 0,
                 toolbarHeight: 91,
@@ -42,6 +43,7 @@ class SignUpPage extends StatelessWidget {
                 title: const Text('IBilling', style: AppTextStyles.style0_1),
                 leadingWidth: 60,
               ),
+
               body: SingleChildScrollView(
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height - 122,

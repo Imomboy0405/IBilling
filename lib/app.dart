@@ -19,7 +19,7 @@ class IBilling extends StatelessWidget {
       future: DBService.loadData(StorageKey.user),
       builder: (context, snapshot) {
         if (true) {
-          return MainPage();
+          return const MainPage();
         } else {
           return const StartPage();
         }

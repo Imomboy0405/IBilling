@@ -25,33 +25,42 @@ class MainPage extends StatelessWidget {
           bloc.controller.addListener(() => bloc.listen());
           return Scaffold(
             backgroundColor: AppColors.black,
-            body: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                Container(
-                  width: 200,
-                  height: 83,
-                  color: AppColors.dark,
-                ),
-                MyBottomNavigationBar(screenWidth: screenWidth, bloc: bloc),
-
-                PageView(
-                  controller: bloc.controller,
-                  pageSnapping: true,
+            body: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
                   children: [
-                    ProfilePage(mainBloc: bloc),
-                    const ContractsPage(),
-                    const HistoryPage(),
-                    const NewPage(),
-                    const SavedPage(),
-                    ProfilePage(mainBloc: bloc),
-                    const ContractsPage(),
+                    Container(
+                      width: 200,
+                      height: 83,
+                      color: AppColors.dark,
+                    ),
+                    MyBottomNavigationBar(screenWidth: screenWidth, bloc: bloc),
+
+                    PageView(
+                      physics: state is MainInitialState
+                                 ? const BouncingScrollPhysics()
+                                 : const NeverScrollableScrollPhysics(),
+                      controller: bloc.controller,
+                      pageSnapping: true,
+                      children: [
+                        ProfilePage(mainBloc: bloc),
+                        const ContractsPage(),
+                        const HistoryPage(),
+                        const NewPage(),
+                        const SavedPage(),
+                        ProfilePage(mainBloc: bloc),
+                        const ContractsPage(),
+                      ],
+                    ),
+
+                    if(state is! MainHideBottomNavigationBarState)
+                      MyBottomNavigationBar(screenWidth: screenWidth, bloc: bloc),
                   ],
                 ),
-
-                if(state is! MainHideBottomNavigationBarState)
-                  MyBottomNavigationBar(screenWidth: screenWidth, bloc: bloc),
-              ],
+              ),
             ),
 
           );

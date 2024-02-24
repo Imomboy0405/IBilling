@@ -3,19 +3,19 @@ part of 'main_bloc.dart';
 @immutable
 abstract class MainEvent extends Equatable {}
 
-class MainMenuEvent extends MainEvent {
+class MainScrollMenuEvent extends MainEvent {
   final int index;
 
-  MainMenuEvent({required this.index});
+  MainScrollMenuEvent({required this.index});
 
   @override
   List<Object?> get props => [index];
 }
 
-class MainChangeEvent extends MainEvent {
+class MainMenuButtonEvent extends MainEvent {
   final int index;
 
-  MainChangeEvent({required this.index});
+  MainMenuButtonEvent({required this.index});
 
   @override
   List<Object?> get props => [index];

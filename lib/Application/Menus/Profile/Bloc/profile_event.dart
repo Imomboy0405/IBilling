@@ -49,3 +49,8 @@ class ConfirmEvent extends ProfileEvent {
   List<Object?> get props => [];
 }
 
+class InfoEvent extends ProfileEvent {
+  @override
+  List<Object?> get props => [];
+}
+
