@@ -9,6 +9,7 @@ class UserModel {
   String? phoneNumber;
   String? fullName;
   String? password;
+  String? createdTime;
 
   UserModel({
     required this.uId,
@@ -16,14 +17,16 @@ class UserModel {
     required this.phoneNumber,
     required this.fullName,
     required this.password,
+    required this.createdTime,
   });
 
-  UserModel.fromJson(Map<String, String?> json) {
+  UserModel.fromJson(Map<dynamic, dynamic> json) {
     uId = json['uId'];
     email = json['email'];
     phoneNumber = json['phoneNumber'];
     fullName = json['fullName'];
     password = json['password'];
+    createdTime = json['createdTime'];
   }
 
   Map<String, String?> toJson() {
@@ -33,6 +36,7 @@ class UserModel {
     map['phoneNumber'] = phoneNumber;
     map['fullName'] = fullName;
     map['password'] = password;
+    map['createdTime'] = createdTime;
     return map;
   }
 }

@@ -41,7 +41,7 @@ dependencies:
   firebase_core: ^2.25.4
   firebase_auth: any
   firebase_dynamic_links: ^5.4.14
-  cloud_firestore: any
+  firebase_database: any
 
   # dependency injection
   get_it: any

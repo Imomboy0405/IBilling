@@ -26,6 +26,7 @@ void main() {
       uId: 'my_id',
       password: 'pas',
       fullName: 'Ismim',
+      createdTime: '',
     );
     String? error = await NetworkService.POST('users', userModel.uId!, userModel.toJson());
     print('==========$error');

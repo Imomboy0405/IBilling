@@ -149,6 +149,16 @@ class NewBloc extends Bloc<NewEvent, NewState> {
   }
 
   Future<void> contractSubmitted(ContractSubmitted event, Emitter<NewState> emit) async {
+    if (fullNameController.text.isNotEmpty) {
+      fullNameController.text = fullNameController.text.trim().replaceAll(RegExp(r'\s+'), ' ');
+    }
+    if (addressController.text.isNotEmpty) {
+      addressController.text = addressController.text.trim().replaceAll(RegExp(r'\s+'), ' ');
+    }
+
+    suffixFullName = LogicService.checkFullName(fullNameController.text);
+    suffixAddress = LogicService.checkFullName(addressController.text);
+
     if (event.fullName){
       focusFullName.unfocus();
       await Future.delayed(const Duration(milliseconds: 30));
@@ -163,25 +173,15 @@ class NewBloc extends Bloc<NewEvent, NewState> {
         focusStatus.requestFocus();
     }
 
-    if (fullNameController.text.isNotEmpty) {
-      fullNameController.text = fullNameController.text.trim().replaceAll(RegExp(r'\s+'), ' ');
-    }
-    if (addressController.text.isNotEmpty) {
-      addressController.text = addressController.text.trim().replaceAll(RegExp(r'\s+'), ' ');
-    }
-
-    suffixFullName = LogicService.checkFullName(fullNameController.text);
-    suffixAddress = LogicService.checkFullName(addressController.text);
-
     emit(NewContractState(
       face: face,
       status: status,
       suffixAddress: suffixAddress,
       suffixFullName: suffixFullName,
       suffixTIN: suffixTIN,
-      borderAddress: focusAddress.hasFocus || addressController.text.isNotEmpty,
-      borderFullName: focusFullName.hasFocus || fullNameController.text.isNotEmpty,
-      borderTIN: focusTIN.hasFocus || tINController.text.isNotEmpty,
+      borderAddress: addressController.text.trim().isNotEmpty,
+      borderFullName: fullNameController.text.trim().isNotEmpty,
+      borderTIN: tINController.text.trim().isNotEmpty,
     ));
   }
 

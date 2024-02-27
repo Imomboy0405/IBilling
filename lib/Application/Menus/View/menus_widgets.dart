@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:i_billing/Application/Main/Bloc/main_bloc.dart';
@@ -8,13 +9,16 @@ import 'package:i_billing/Application/Welcome/View/welcome_widgets.dart';
 import 'package:i_billing/Configuration/app_colors.dart';
 import 'package:i_billing/Configuration/app_text_styles.dart';
 import 'package:i_billing/Data/Service/lang_service.dart';
+import 'package:i_billing/Data/Service/util_service.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String titleText;
+  final FilterSearchButtons? filterSearchButtons;
 
   const MyAppBar({
     super.key,
     required this.titleText,
+    this.filterSearchButtons,
   });
 
   @override
@@ -23,10 +27,11 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       backgroundColor: AppColors.darker,
       surfaceTintColor: AppColors.darker,
-      titleSpacing: 20,
+      titleSpacing: 10,
       title: Row(
         children: [
           // #color_image
+          const SizedBox(width: 10),
           const Image(
             image: AssetImage('assets/icons/ic_color.png'),
             width: 24,
@@ -35,8 +40,33 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           const SizedBox(width: 12),
 
-          // #new_text
+          // #title
           Text(titleText, style: AppTextStyles.style18),
+
+          if (filterSearchButtons != null)
+            Flexible(
+              child: Row(
+                children: [
+                  // #filter
+                  const Spacer(),
+                  IconButton(
+                      onPressed: () => filterSearchButtons!.functionFilter(),
+                      highlightColor: AppColors.transparentWhite,
+                      icon: const Image(image: AssetImage('assets/icons/ic_filter.png'), width: 22, height: 22, color: AppColors.white)
+                  ),
+
+                  // #divider_vertical
+                  const SizedBox(width: 10, height: 20, child: Divider(thickness: 20, color: AppColors.white, indent: 4, endIndent: 4)),
+
+                  // #search
+                  IconButton(
+                      onPressed: () => filterSearchButtons!.functionSearch(),
+                      highlightColor: AppColors.transparentWhite,
+                      icon: const Icon(CupertinoIcons.search, color: AppColors.white)
+                  ),
+                ],
+              ),
+            )
         ],
       ),
     );
@@ -310,7 +340,7 @@ class MyNewTextField extends StatelessWidget {
                   ? IconButton(
                       padding: EdgeInsets.zero,
                       onPressed: () => !suffixIconDone
-                        ? mySnackBar(context: context, txt: snackBarText)
+                        ? Utils.mySnackBar(context: context, txt: snackBarText, errorState: true)
                         : {},
                       icon: suffixIconDone
                         ? const Icon(Icons.done, color: AppColors.blue)
@@ -403,4 +433,61 @@ class MyDropdownButton extends StatelessWidget {
       ],
     );
   }
+}
+
+class MyMonthDayButton extends StatelessWidget {
+  const MyMonthDayButton({
+    super.key,
+    required this.onPressed,
+    required this.weedDay,
+    required this.monthDay,
+    this.selected = false,
+  });
+
+  final Function onPressed;
+  final String weedDay;
+  final String monthDay;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: SizedBox(
+        width: 46,
+        child: MaterialButton(
+          padding: EdgeInsets.zero,
+          onPressed: () => onPressed(),
+          height: 72,
+          elevation: 0,
+          color: selected ? AppColors.blue : AppColors.transparent,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // #weed_day
+              Text(weedDay, style: selected ? AppTextStyles.style23_1 : AppTextStyles.style25_1),
+              const SizedBox(height: 4),
+
+              // #month_day
+              Text(monthDay, style: selected ? AppTextStyles.style23_1 : AppTextStyles.style25_1),
+              Divider(
+                height: 10,
+                color: selected ? AppColors.white : AppColors.darkGrey,
+                indent: 14,
+                endIndent: 14,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class FilterSearchButtons {
+  Function functionFilter;
+  Function functionSearch;
+
+  FilterSearchButtons({required this.functionFilter, required this.functionSearch});
 }

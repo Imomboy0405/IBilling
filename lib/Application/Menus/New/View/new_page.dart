@@ -147,7 +147,7 @@ class NewPage extends StatelessWidget {
                             focusNode: bloc.focusAddress,
                             textInputType: TextInputType.name,
                             onChanged: () => context.read<NewBloc>().add(ContractChange()),
-                            onSubmitted: () => context.read<NewBloc>().add(ContractSubmitted(address: true)),
+                              onSubmitted: () => context.read<NewBloc>().add(ContractSubmitted(address: true)),
                             suffixIconDone: bloc.suffixAddress,
                             snackBarText: 'snack_address'.tr(),
                           ),

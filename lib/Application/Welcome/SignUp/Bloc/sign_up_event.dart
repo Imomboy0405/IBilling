@@ -19,16 +19,21 @@ class SignUpChangeEvent extends SignUpEvent {
 class OnSubmittedEvent extends SignUpEvent {
   final bool password;
   final bool fullName;
+  final bool rePassword;
 
-  OnSubmittedEvent({this.password = false, this.fullName = false});
+  OnSubmittedEvent({this.password = false, this.fullName = false, this.rePassword = false});
 
   @override
-  List<Object?> get props => [password];
+  List<Object?> get props => [password, fullName, rePassword];
 }
 
 class SignUpButtonEvent extends SignUpEvent {
+  final BuildContext context;
+
+  SignUpButtonEvent({required this.context});
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [context];
 }
 
 class PhoneButtonEvent extends SignUpEvent {
@@ -47,20 +52,22 @@ class EmailButtonEvent extends SignUpEvent {
 
 class FaceBookEvent extends SignUpEvent {
   final double width;
+  final BuildContext context;
 
-  FaceBookEvent({required this.width});
+  FaceBookEvent({required this.width, required this.context});
 
   @override
-  List<Object?> get props => [width];
+  List<Object?> get props => [width, context];
 }
 
 class GoogleEvent extends SignUpEvent {
   final double width;
+  final BuildContext context;
 
-  GoogleEvent({required this.width});
+  GoogleEvent({required this.width, required this.context});
 
   @override
-  List<Object?> get props => [width];
+  List<Object?> get props => [width, context];
 }
 
 class SignInEvent extends SignUpEvent {
@@ -77,7 +84,12 @@ class RememberMeEvent extends SignUpEvent {
   List<Object?> get props => [];
 }
 
-class EyeEvent extends SignUpEvent {
+class PasswordEyeEvent extends SignUpEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class RePasswordEyeEvent extends SignUpEvent {
   @override
   List<Object?> get props => [];
 }
@@ -103,5 +115,10 @@ class SignUpConfirmEvent extends SignUpEvent {
 
   @override
   List<Object?> get props => [context];
+}
+
+class SignUpCancelEvent extends SignUpEvent {
+  @override
+  List<Object?> get props => [];
 }
 

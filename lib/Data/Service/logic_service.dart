@@ -31,4 +31,8 @@ class LogicService {
     }
     return false;
   }
+
+  static String parseError(String e) {
+    return e.substring(e.indexOf('/')+1, e.indexOf(']'));
+  }
 }

@@ -7,6 +7,7 @@ import 'package:i_billing/Data/Service/lang_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_billing/Data/Service/util_service.dart';
 
 import '../../../Configuration/app_colors.dart';
 import '../../../Configuration/app_text_styles.dart';
@@ -70,7 +71,7 @@ class MyFlagButton extends StatelessWidget {
                                   height: 28,
                                   fit: BoxFit.fill,
                                 ),
-                                title: Text('button_$index - 1'.tr(), style: AppTextStyles.style15),
+                                title: Text('button_${index - 1}'.tr(), style: AppTextStyles.style15),
                                 selected: lang[index - 1] == currentLang,
                                 value: lang[index - 1],
                                 groupValue: currentLang,
@@ -170,6 +171,8 @@ class MyTextField extends StatelessWidget {
     this.countryData,
     this.phoneInputFormatter,
     this.focusCountry = false,
+    this.disabled = false,
+    this.actionDone = false,
   });
 
   final String pageName;
@@ -185,6 +188,8 @@ class MyTextField extends StatelessWidget {
   final String hintTxt;
   final String snackBarTxt;
   final bool? obscure;
+  final bool disabled;
+  final bool actionDone;
   final PhoneInputFormatter? phoneInputFormatter;
   final List<String> countryIsoCodes = [
     'UZ',
@@ -208,10 +213,11 @@ class MyTextField extends StatelessWidget {
       height: 44,
       width: MediaQuery.of(context1).size.width - 60,
       child: TextField(
+        enabled: !disabled,
         obscureText: icon == Icons.lock ? obscure! : false,
         cursorColor: AppColors.blue,
         controller: controller,
-        style: AppTextStyles.style7,
+        style: errorState ? AppTextStyles.style7_1 : AppTextStyles.style7,
         onChanged: (v) {
           switch (pageName) {
             case '/sign_in_page':
@@ -240,28 +246,30 @@ class MyTextField extends StatelessWidget {
             case '/sign_up_page':
               context1
                   .read<sign_up.SignUpBloc>()
-                  .add(sign_up.OnSubmittedEvent(password: icon == Icons.lock, fullName: icon == Icons.person));
+                  .add(sign_up.OnSubmittedEvent(rePassword: actionDone,
+                  fullName: icon == Icons.person, password: !actionDone && icon == Icons.lock));
               break;
           }
         },
-        textInputAction: icon == Icons.lock ? TextInputAction.done : TextInputAction.next,
+        textInputAction: actionDone ? TextInputAction.done : TextInputAction.next,
         keyboardType: keyboard,
         focusNode: focus,
         inputFormatters: icon == Icons.phone ? [phoneInputFormatter!] : null,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-          errorText: errorState ? errorTxt : null,
+          error: errorState ? const SizedBox.shrink() : null,
           prefixIcon: SizedBox(
             width: icon == Icons.phone && (controller.text.isNotEmpty || focus.hasFocus || focusCountry) ? 121 : 20,
             child: Row(
               children: [
                 Expanded(
                   flex: 2,
-                  child: Icon(icon, color: controller.text.isNotEmpty || focus.hasFocus ? AppColors.blue : AppColors.darkGrey),
+                  child: Icon(icon, color: errorState ? AppColors.red
+                      : controller.text.isNotEmpty || focus.hasFocus ? AppColors.blue : AppColors.darkGrey),
                 ),
-                icon == Icons.phone && (controller.text.isNotEmpty || focus.hasFocus || focusCountry)
 
-                    // #countryies
+                // #countryies
+                icon == Icons.phone && (controller.text.isNotEmpty || focus.hasFocus || focusCountry)
                     ? Expanded(
                         flex: 3,
                         child: CountryDropdown(
@@ -322,7 +330,11 @@ class MyTextField extends StatelessWidget {
                             errorBorder: myInputBorder(color1: AppColors.transparent),
                             focusedBorder: myInputBorder(color1: AppColors.transparent),
                           ),
-                          style: AppTextStyles.style7,
+                          style: errorState ? AppTextStyles.style7_1 : AppTextStyles.style7,
+                          icon: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: Icon(Icons.expand_circle_down_outlined, size: 18, color: errorState ? AppColors.red : AppColors.blue),
+                          ),
                           dropdownColor: AppColors.darker,
                           iconEnabledColor: controller.text.isNotEmpty || focus.hasFocus ? AppColors.blue : AppColors.darkGrey,
                           initialCountryData: countryData,
@@ -334,11 +346,13 @@ class MyTextField extends StatelessWidget {
             ),
           ),
           suffixIcon: SizedBox(
-            width: icon == Icons.lock ? 96 : 5,
+            height: 44,
+            width: (controller.text.isNotEmpty || focus.hasFocus) ? icon == Icons.lock ? 96 : 40 : 1,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+
                 // #eye_button
                 icon == Icons.lock && controller.text.isNotEmpty
                     ? IconButton(
@@ -350,13 +364,19 @@ class MyTextField extends StatelessWidget {
                               context1.read<sign_in.SignInBloc>().add(sign_in.EyeEvent());
                               break;
                             case '/sign_up_page':
-                              context1.read<sign_up.SignUpBloc>().add(sign_up.EyeEvent());
-                              break;
+                              {
+                                if (actionDone) {
+                                  context1.read<sign_up.SignUpBloc>().add(sign_up.RePasswordEyeEvent());
+                                } else {
+                                  context1.read<sign_up.SignUpBloc>().add(sign_up.PasswordEyeEvent());
+                                }
+                                break;
+                              }
                           }
                         },
                         icon: Icon(
                           obscure! ? CupertinoIcons.eye : CupertinoIcons.eye_slash,
-                          color: AppColors.blue,
+                          color: errorState ? AppColors.red : AppColors.blue,
                         ),
                       )
                     : const SizedBox.shrink(),
@@ -365,8 +385,8 @@ class MyTextField extends StatelessWidget {
                 controller.text.isNotEmpty || focus.hasFocus
                     ? IconButton(
                         padding: EdgeInsets.zero,
-                        onPressed: () => !suffixIc ? mySnackBar(context: context1, txt: snackBarTxt) : {},
-                        icon: suffixIc
+                        onPressed: () => !suffixIc ? Utils.mySnackBar(context: context1, txt: snackBarTxt, errorState: true) : {},
+                        icon: suffixIc && !errorState
                             ? const Icon(Icons.done, color: AppColors.blue)
                             : const Icon(Icons.error_outline, color: AppColors.red))
                     : const SizedBox.shrink(),
@@ -376,35 +396,20 @@ class MyTextField extends StatelessWidget {
           labelText: labelTxt,
           hintText: hintTxt,
           hintStyle: AppTextStyles.style6,
-          labelStyle: controller.text.isNotEmpty || focus.hasFocus ? AppTextStyles.style3 : AppTextStyles.style6,
+          labelStyle: errorState ? AppTextStyles.style3_1 : controller.text.isNotEmpty || focus.hasFocus ? AppTextStyles.style3 : AppTextStyles.style6,
           border: myInputBorder(color1: AppColors.blue),
           enabledBorder: myInputBorder(
             color1: AppColors.blue,
             color2: AppColors.disableBlue,
             itsColor1: controller.text.isNotEmpty || focus.hasFocus,
           ),
+          disabledBorder: myInputBorder(color1: AppColors.blue),
           errorBorder: myInputBorder(color1: AppColors.red),
           focusedBorder: myInputBorder(color1: AppColors.blue),
         ),
       ),
     );
   }
-}
-
-ScaffoldFeatureController<SnackBar, SnackBarClosedReason> mySnackBar({required String txt, required BuildContext context}) {
-  return ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      backgroundColor: AppColors.transparent,
-      content: Container(
-        width: MediaQuery.of(context).size.width - 100,
-        height: 44,
-        margin: const EdgeInsets.only(bottom: 80),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(color: AppColors.red, borderRadius: BorderRadius.circular(6)),
-        child: Text(txt, style: AppTextStyles.style13, textAlign: TextAlign.center),
-      ),
-    ),
-  );
 }
 
 TextButton myTextButton(
@@ -456,18 +461,28 @@ class MyButton extends StatelessWidget {
   final bool enable;
   final String text;
   final Function function;
+  final DisabledAction? disabledAction;
 
   const MyButton({
     super.key,
     required this.enable,
     required this.text,
     required this.function,
+    this.disabledAction,
   });
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      onPressed: () => enable ? function() : (),
+      onPressed: () {
+        if (enable) {
+          function();
+        } else {
+          if (disabledAction != null) {
+            Utils.mySnackBar(txt: disabledAction!.text, context: disabledAction!.context, errorState: true);
+          }
+        }
+      },
       color: enable ? AppColors.blue : AppColors.disableBlue,
       minWidth: double.infinity,
       height: 48,
@@ -475,4 +490,11 @@ class MyButton extends StatelessWidget {
       child: Text(text, style: enable ? AppTextStyles.style4 : AppTextStyles.style5),
     );
   }
+}
+
+class DisabledAction {
+  final String text;
+  final BuildContext context;
+
+  DisabledAction({required this.text, required this.context});
 }

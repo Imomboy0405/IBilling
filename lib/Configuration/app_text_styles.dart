@@ -17,6 +17,9 @@ abstract class AppTextStyles {
   /// color: blue, size: 18, weight: bold
   static const style3 = TextStyle(color: AppColors.blue, fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Poppins');
 
+  /// color: red, size: 18, weight: bold
+  static const style3_1 = TextStyle(color: AppColors.red, fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Poppins');
+
   /// color: white, size: 18, weight: w500
   static const style4 = TextStyle(color: AppColors.white, fontSize: 18, fontWeight: FontWeight.w500, fontFamily: 'Poppins');
 
@@ -28,6 +31,9 @@ abstract class AppTextStyles {
 
   /// color: blue, size: 18,
   static const style7 = TextStyle(color: AppColors.blue, fontSize: 18, fontFamily: 'Poppins');
+
+  /// color: red, size: 18, font: Poppins
+  static const style7_1 = TextStyle(color: AppColors.red, fontSize: 18, fontFamily: 'Poppins');
 
   /// color: black, size: 14,
   static const style8 = TextStyle(color: AppColors.black, fontSize: 14, fontFamily: 'Poppins');
@@ -62,6 +68,9 @@ abstract class AppTextStyles {
   /// color: white, size: 18, weight: 500, font: Ubuntu
   static const style18 = TextStyle(color: AppColors.white, fontSize: 18, fontFamily: 'Ubuntu', fontWeight: FontWeight.w500);
 
+  /// color: white, size: 18, weight: 700, font: Ubuntu
+  static const style18_1 = TextStyle(color: AppColors.white, fontSize: 18, fontFamily: 'Ubuntu', fontWeight: FontWeight.w700);
+
   /// color: white, size: 14, weight: 500, font: Ubuntu
   static const style19 = TextStyle(color: AppColors.white, fontSize: 14, fontFamily: 'Ubuntu', fontWeight: FontWeight.w500);
 
@@ -77,14 +86,18 @@ abstract class AppTextStyles {
   /// color: white, size: 14, weight: 400, font: Ubuntu
   static const style23 = TextStyle(color: AppColors.white, fontSize: 14, fontFamily: 'Ubuntu', fontWeight: FontWeight.w400);
 
+  /// color: white, size: 14, weight: 700, font: Ubuntu
+  static const style23_1 = TextStyle(color: AppColors.white, fontSize: 14, fontFamily: 'Ubuntu', fontWeight: FontWeight.w700);
+
   /// color: white, size: 16, weight: 500, font: Ubuntu
   static const style24 = TextStyle(color: AppColors.white, fontSize: 16, fontFamily: 'Ubuntu', fontWeight: FontWeight.w500);
 
   /// color: gray, size: 14, weight: 400, font: Ubuntu
   static const style25 = TextStyle(color: AppColors.gray, fontSize: 14, fontFamily: 'Ubuntu', fontWeight: FontWeight.w400);
 
+  /// color: darkGray, size: 14, weight: 700, font: Ubuntu
+  static const style25_1 = TextStyle(color: AppColors.darkGrey, fontSize: 14, fontFamily: 'Ubuntu', fontWeight: FontWeight.w700);
 
   /// color: blue, size: 14, weight: 400, font: Ubuntu
   static const style26 = TextStyle(color: AppColors.blue, fontSize: 14, fontFamily: 'Ubuntu', fontWeight: FontWeight.w400);
-
 }

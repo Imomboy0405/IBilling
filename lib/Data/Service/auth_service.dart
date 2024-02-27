@@ -37,30 +37,27 @@ class AuthService {
     );
   }
 
-  static Future<void> verifyPhoneNumber(String phoneNumber) async {
+  static Future<String> verifyPhoneNumber(String phoneNumber) async {
+    String result = 'send';
     await _auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       verificationCompleted: (credentials) async {
         await _auth.signInWithCredential(credentials);
       },
       verificationFailed: (e) {
-        if(e.code == 'invalid-phone-number') {
-          // todo error msg
-        } else {
-          // todo try msg
-          print('==========================errorku');
-          print(e.code);
-        }
+        throw Exception(e);
       },
       codeSent: (vId, resendToken) {
         verificationId = vId;
         print('===========================sms sent');
+        result = 'send';
       },
       codeAutoRetrievalTimeout: (vId) {
         verificationId = vId;
       },
       timeout: const Duration(seconds: 120),
     );
+    return result;
   }
 
   static Future<bool> verifyOTP(String otp) async {
@@ -74,7 +71,6 @@ class AuthService {
 
   static Future<void> verifyEmail(String email) async {
     await _auth.currentUser?.sendEmailVerification();
-    print('email=${_auth.currentUser?.email}');
 
     // await _auth.sendSignInLinkToEmail(
     //     email: email,
@@ -83,6 +79,8 @@ class AuthService {
     //       androidInstallApp: true,
     //       handleCodeInApp: true,
     // ));
+    print('email=${_auth.currentUser?.email}');
+
   }
 
   static Future<bool> verifyEmailLink() async {

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,12 +31,7 @@ class SignUpPage extends StatelessWidget {
                 surfaceTintColor: AppColors.black,
 
                 // #flag
-                actions: [
-                  MyFlagButton(
-                      currentLang: bloc.selectedLang,
-                      pageContext: context,
-                      pageName: id)
-                ],
+                actions: [MyFlagButton(currentLang: bloc.selectedLang, pageContext: context, pageName: id)],
 
                 // #IBilling
                 title: const Text('IBilling', style: AppTextStyles.style0_1),
@@ -45,6 +39,7 @@ class SignUpPage extends StatelessWidget {
               ),
 
               body: SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height - 122,
                   child: Padding(
@@ -56,9 +51,7 @@ class SignUpPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             // #sign_up_for_free
-                            Text('sign_up_for_free'.tr(),
-                                textAlign: TextAlign.center,
-                                style: AppTextStyles.style1),
+                            Text('sign_up_for_free'.tr(), textAlign: TextAlign.center, style: AppTextStyles.style1),
 
                             Column(
                               children: [
@@ -68,14 +61,12 @@ class SignUpPage extends StatelessWidget {
                                   child: SingleChildScrollView(
                                     controller: bloc.scrollController,
                                     scrollDirection: Axis.horizontal,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
+                                    physics: const NeverScrollableScrollPhysics(),
                                     child: Row(children: [
                                       // #phone
                                       MyTextField(
                                         focusCountry: bloc.country,
-                                        phoneInputFormatter:
-                                            bloc.phoneInputFormatter,
+                                        phoneInputFormatter: bloc.phoneInputFormatter,
                                         countryData: bloc.countryData,
                                         pageName: id,
                                         controller: bloc.phoneNumberController,
@@ -86,14 +77,14 @@ class SignUpPage extends StatelessWidget {
                                         errorTxt: 'invalid_phone'.tr(),
                                         context1: context,
                                         icon: Icons.phone,
-                                        hintTxt: bloc.countryData
-                                            .phoneMaskWithoutCountryCode,
+                                        hintTxt: bloc.countryData.phoneMaskWithoutCountryCode,
                                         labelTxt: 'phone_num'.tr(),
-                                        snackBarTxt: 'snackBar'.tr(),
+                                        snackBarTxt: 'fill_phone'.tr(),
                                       ),
 
                                       // #email
                                       MyTextField(
+                                        disabled: bloc.googleOrFacebook,
                                         pageName: id,
                                         controller: bloc.emailController,
                                         errorState: state is SignUpErrorState,
@@ -105,7 +96,7 @@ class SignUpPage extends StatelessWidget {
                                         icon: Icons.mail,
                                         hintTxt: 'aaabbbccc@dddd.eee',
                                         labelTxt: 'email_address'.tr(),
-                                        snackBarTxt: 'snackBar'.tr(),
+                                        snackBarTxt: 'fill_email'.tr(),
                                       ),
                                     ]),
                                   ),
@@ -113,29 +104,23 @@ class SignUpPage extends StatelessWidget {
 
                                 // #select_buttons
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     // #phone
                                     SelectButton(
                                       context: context,
-                                      function: () =>
-                                          bloc.add(PhoneButtonEvent()),
+                                      function: () => bloc.add(PhoneButtonEvent()),
                                       text: 'phone'.tr(),
                                       select: bloc.selectButton == 0,
                                     ),
 
                                     // #or
-                                    Text('or'.tr(),
-                                        style: AppTextStyles.style2),
+                                    Text('or'.tr(), style: AppTextStyles.style2),
 
                                     // #email
                                     SelectButton(
                                       context: context,
-                                      function: () => bloc.add(EmailButtonEvent(
-                                          width: MediaQuery.of(context)
-                                              .size
-                                              .width)),
+                                      function: () => bloc.add(EmailButtonEvent(width: MediaQuery.of(context).size.width)),
                                       text: 'email'.tr(),
                                       select: bloc.selectButton == 1,
                                     ),
@@ -157,7 +142,7 @@ class SignUpPage extends StatelessWidget {
                               icon: Icons.person,
                               hintTxt: 'example_full_name'.tr(),
                               labelTxt: 'full_name'.tr(),
-                              snackBarTxt: 'snackBar'.tr(),
+                              snackBarTxt: 'fill_full_name'.tr(),
                             ),
 
                             // #password
@@ -173,17 +158,35 @@ class SignUpPage extends StatelessWidget {
                               icon: Icons.lock,
                               hintTxt: '123abc',
                               labelTxt: 'password'.tr(),
-                              snackBarTxt: 'snackBar'.tr(),
-                              obscure: bloc.obscure,
+                              snackBarTxt: 'fill_password'.tr(),
+                              obscure: bloc.obscurePassword,
+                            ),
+
+                            // #repeat_password
+                            MyTextField(
+                              pageName: id,
+                              controller: bloc.rePasswordController,
+                              errorState: state is SignUpErrorState,
+                              suffixIc: bloc.rePasswordSuffix,
+                              keyboard: TextInputType.visiblePassword,
+                              focus: bloc.focusRePassword,
+                              errorTxt: 'invalid_password'.tr(),
+                              context1: context,
+                              icon: Icons.lock,
+                              hintTxt: '123abc',
+                              labelTxt: 're_password'.tr(),
+                              snackBarTxt: 'fill_re_password'.tr(),
+                              obscure: bloc.obscureRePassword,
+                              actionDone: true,
                             ),
 
                             // #sign_up
                             MyButton(
+                              disabledAction: DisabledAction(context: context, text: 'fill_all_forms'.tr()),
                               text: 'sign_up'.tr(),
-                              enable: (bloc.emailSuffix || bloc.phoneSuffix)
-                                  && bloc.passwordSuffix
-                                  && bloc.fullNameSuffix,
-                              function: () => context.read<SignUpBloc>().add(SignUpButtonEvent()),
+                              enable: (bloc.emailSuffix || bloc.phoneSuffix) && bloc.fullNameSuffix
+                                  && bloc.passwordSuffix && bloc.rePasswordSuffix,
+                              function: () => context.read<SignUpBloc>().add(SignUpButtonEvent(context: context)),
                             ),
 
                             // #or_continue_with
@@ -198,21 +201,24 @@ class SignUpPage extends StatelessWidget {
                               children: [
                                 // #facebook
                                 myTextButton(
-                                    onPressed: () => context
-                                        .read<SignUpBloc>()
-                                        .add(FaceBookEvent(width: MediaQuery.of(context).size.width)),
+                                    onPressed: () => context.read<SignUpBloc>()
+                                            .add(FaceBookEvent(width: MediaQuery.of(context).size.width, context: context)),
                                     context: context,
                                     assetIc: 'facebook',
-                                    txt: 'Facebook'),
+                                    txt: 'Facebook',
+                                ),
+
+                                // #or
+                                Text('or'.tr(), style: AppTextStyles.style2),
 
                                 // #google
                                 myTextButton(
-                                    onPressed: () => context
-                                        .read<SignUpBloc>()
-                                        .add(GoogleEvent(width: MediaQuery.of(context).size.width)),
+                                    onPressed: () => context.read<SignUpBloc>()
+                                        .add(GoogleEvent(width: MediaQuery.of(context).size.width, context: context)),
                                     context: context,
                                     assetIc: 'google',
-                                    txt: 'Google'),
+                                    txt: 'Google',
+                                ),
                               ],
                             ),
 
@@ -227,9 +233,7 @@ class SignUpPage extends StatelessWidget {
                                   text: 'log_in'.tr(),
                                   style: AppTextStyles.style9,
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () => context
-                                        .read<SignUpBloc>()
-                                        .add(SignInEvent(context: context)),
+                                    ..onTap = () => context.read<SignUpBloc>().add(SignInEvent(context: context)),
                                 ),
                               ]),
                             ),
@@ -237,7 +241,7 @@ class SignUpPage extends StatelessWidget {
                         ),
 
                         // #verify_phone
-                        if (state is SignUpVerifyPhoneState || bloc.sms)
+                        if (state is SignUpVerifyPhoneState || bloc.sms || bloc.email)
                           Container(
                             alignment: Alignment.center,
                             color: AppColors.black,
@@ -245,61 +249,48 @@ class SignUpPage extends StatelessWidget {
                               children: [
                                 const SizedBox(height: 100),
                                 // #sign_up_for_free
-                                Text(bloc.selectButton == 0
-                                    ? 'enter_sms_code'.tr()
-                                    : 'verify_email'.tr(),
-                                    textAlign: TextAlign.center,
-                                    style: AppTextStyles.style1),
+                                Text(bloc.selectButton == 0 ? 'enter_sms_code'.tr() : 'verify_email'.tr(),
+                                    textAlign: TextAlign.center, style: AppTextStyles.style1),
                                 const SizedBox(height: 50),
 
                                 // #sms_code
                                 if (bloc.selectButton == 0)
-                                Row(
-                                  children: [
-                                    MyTextField(
-                                      pageName: id,
-                                      controller: bloc.smsCodeController,
-                                      errorState: state is SignUpErrorState,
-                                      suffixIc: bloc.smsSuffix,
-                                      keyboard: TextInputType.number,
-                                      focus: bloc.focusSms,
-                                      errorTxt: 'invalid_full_name'.tr(),
-                                      context1: context,
-                                      icon: Icons.sms,
-                                      hintTxt: '000000',
-                                      labelTxt: 'SMS code',
-                                      snackBarTxt: 'snackBar'.tr(),
-                                    ),
-                                    const SizedBox(height: 50),
-                                  ],
-                                ),
+                                  Column(
+                                    children: [
+                                      MyTextField(
+                                        pageName: id,
+                                        controller: bloc.smsCodeController,
+                                        errorState: state is SignUpErrorState,
+                                        suffixIc: bloc.smsSuffix,
+                                        keyboard: TextInputType.number,
+                                        focus: bloc.focusSms,
+                                        errorTxt: 'invalid_full_name'.tr(),
+                                        context1: context,
+                                        icon: Icons.sms,
+                                        hintTxt: '000000',
+                                        labelTxt: 'SMS code',
+                                        snackBarTxt: 'snackBar'.tr(),
+                                      ),
+                                      const SizedBox(height: 40),
+                                    ],
+                                  ),
 
                                 // #confirm
-                                bloc.smsSuffix || bloc.selectButton == 1
-                                    ? MaterialButton(
-                                        onPressed: () => context
-                                            .read<SignUpBloc>()
-                                            .add(SignUpConfirmEvent(context: context)),
-                                        color: AppColors.blue,
-                                        minWidth: double.infinity,
-                                        height: 48,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(6)),
-                                        child: Text('confirm'.tr(),
-                                            style: AppTextStyles.style4),
-                                      )
-                                    : Container(
-                                        height: 48,
-                                        width: double.infinity,
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          color: AppColors.disableBlue,
-                                          borderRadius: BorderRadius.circular(6),
-                                        ),
-                                        child: Text('confirm'.tr(),
-                                            style: AppTextStyles.style5),
-                                      ),
+                                MyButton(
+                                  disabledAction: DisabledAction(text: 'fill_sms'.tr(), context: context),
+                                    enable: bloc.smsSuffix || bloc.selectButton == 1,
+                                    text: 'confirm'.tr(),
+                                    function: () => context.read<SignUpBloc>().add(SignUpConfirmEvent(context: context)),
+                                ),
+                                const SizedBox(height: 20),
+
+                                // #cancel
+                                MyButton(
+                                    enable: true,
+                                    text: 'cancel'.tr(),
+                                    function: () => context.read<SignUpBloc>().add(SignUpCancelEvent()),
+                                ),
+
                               ],
                             ),
                           )

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http_interceptor/http/intercepted_http.dart';
 import 'interceptor_service.dart';
 import 'log_service.dart';
@@ -41,21 +40,22 @@ class NetworkService {
   // methods
   static Future<Map<String, dynamic>> GET(String api, String uId) async {
     Map<String, dynamic> response = {};
-    try {
-      await FirebaseFirestore.instance.collection(api).doc(uId).get().then((value) => response = value.data()!);
-      return response;
-    } catch (e) {
-      return {'error': e.toString()};
-    }
+    // try {
+    //   await FirebaseFirestore.instance.collection(api).doc(uId).get().then((value) => response = value.data()!);
+    //   return response;
+    // } catch (e) {
+    //   return {'error': e.toString()};
+    // }
+    return response;
   }
 
   static Future<String?> POST(String api, String uId, Map<String, dynamic> body) async {
-    try {
-      final response = FirebaseFirestore.instance.collection('users');
-      await response.add({'fullName': 'Imomboy'});
-    } catch (e) {
-      return e.toString();
-    }
+    // try {
+    //   final response = FirebaseFirestore.instance.collection('users').doc(uId);
+    //   response.set(body);
+    // } catch (e) {
+    //   return e.toString();
+    // }
     return null;
   }
 

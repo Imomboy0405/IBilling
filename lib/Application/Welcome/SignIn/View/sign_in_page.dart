@@ -174,6 +174,7 @@ class SignInPage extends StatelessWidget {
 
                             // #log_in
                             MyButton(
+                              disabledAction: DisabledAction(context: context, text: 'fill_all_forms'.tr()),
                               function: () => context.read<SignInBloc>().add(SignInButtonEvent()),
                               enable: (bloc.emailSuffix || bloc.phoneSuffix) && bloc.passwordSuffix,
                               text: 'log_in'.tr(),
@@ -204,6 +205,9 @@ class SignInPage extends StatelessWidget {
                                 context: context,
                                 assetIc: 'facebook',
                                 txt: 'Facebook'),
+
+                            // #or
+                            Text('or'.tr(), style: AppTextStyles.style2),
 
                             // #google
                             myTextButton(
