@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:i_billing/Data/Model/user_model.dart';
+import 'package:i_billing/Data/Service/db_service.dart';
+import 'package:i_billing/Data/Service/rtdb_service.dart';
 
 class AuthService {
   static final _auth = FirebaseAuth.instance;
@@ -27,6 +30,31 @@ class AuthService {
 
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+  }
+
+  static Future<String?> signInWithEmail(String email, String password) async {
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      UserModel? userModel = await RTDBService.loadUser(_auth.currentUser!.uid);
+      await DBService.saveUser(userModel!);
+      return null;
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  static Future<String?> signInWithPhone(String phoneNumber) async {
+    try {
+      await _auth.signInWithPhoneNumber(phoneNumber);
+      UserModel? userModel = await RTDBService.loadUser(_auth.currentUser!.uid);
+      await DBService.saveUser(userModel!);
+      return null;
+    } catch (e) {
+      return e.toString();
+    }
   }
 
   static Future<UserCredential> createUser(String email, String password) async {

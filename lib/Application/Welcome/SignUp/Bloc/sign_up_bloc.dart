@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_multi_formatter/formatters/phone_input_formatter.dart';
 import 'package:i_billing/Data/Model/user_model.dart';
-import 'package:i_billing/Data/Service/db_service.dart';
 import 'package:i_billing/Data/Service/logic_service.dart';
 import 'package:i_billing/Data/Service/rtdb_service.dart';
 import 'package:i_billing/Data/Service/util_service.dart';
@@ -128,7 +127,6 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         );
         try {
           await RTDBService.storeUser(userModel);
-          await DBService.saveUser(userModel.uId!);
           if (event.context.mounted) {
             Utils.mySnackBar(txt: 'account_created'.tr(), context: event.context);
             Navigator.pushReplacementNamed(event.context, SignInPage.id);
@@ -157,7 +155,6 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         );
         try {
           await RTDBService.storeUser(userModel);
-          await DBService.saveUser(userModel.uId!);
           if (event.context.mounted) {
             Utils.mySnackBar(txt: 'account_created'.tr(), context: event.context);
             Navigator.pushReplacementNamed(event.context, SignInPage.id);
@@ -306,7 +303,6 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
 
       try {
         await RTDBService.storeUser(userModel);
-        await DBService.saveUser(userModel.uId!);
         if (event.context.mounted) {
           Utils.mySnackBar(txt: 'account_created'.tr(), context: event.context);
           Navigator.pushReplacementNamed(event.context, SignInPage.id);
@@ -508,12 +504,17 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   }
 
   Future<void> checkAuthCredential({required UserCredential userCredential, required BuildContext context, required double width}) async {
+    String? uId = userCredential.user?.uid;
     String? email = userCredential.user?.email;
     String? fullName = userCredential.user?.displayName;
 
-    if (email != null) {
+    if (uId != null) {
       googleOrFacebook = true;
-      emailController.text = email;
+      if(email != null) {
+        emailController.text = email;
+      } else {
+        emailController.text = '';
+      }
       emailSuffix = true;
       selectButton = 1;
       focusPhone.unfocus();
@@ -521,7 +522,6 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       await scrollController.animateTo(width - 60,
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeInOutCubic);
-
       if (fullName != null) {
         fullNameController.text = fullName;
         fullNameSuffix = true;
@@ -541,7 +541,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
 
     } else {
       if (context.mounted) {
-        Utils.mySnackBar(txt: 'error_facebook'.tr(), context: context, errorState: true);
+        Utils.mySnackBar(txt: 'error_cloud_data'.tr(), context: context, errorState: true);
       }
     }
   }

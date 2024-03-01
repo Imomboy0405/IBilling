@@ -1,8 +1,12 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:i_billing/Data/Model/history_model.dart';
+import 'package:i_billing/Data/Model/contract_model.dart';
+import 'package:i_billing/Data/Model/invoice_model.dart';
 import 'package:i_billing/Data/Model/user_model.dart';
 
 class RTDBService {
   static final database = FirebaseDatabase.instance.ref();
+
 
   static Future<Stream<DatabaseEvent>> storeUser(UserModel userModel) async {
     await database.child('users').child(userModel.uId!).set(userModel.toJson());
@@ -23,48 +27,91 @@ class RTDBService {
   }
 
 
-/*
-
-  static Future<ObservableList<Note>> loadNotes(String userId) async {
-    ObservableList<Note> notes = ObservableList.of([]);
-    Query query = database.child('notes').child('user:$userId');
-    var event = await query.once();
-    notes = parseSnapshot(event);
-    return notes;
+  static Future<Stream<DatabaseEvent>> storeHistory(HistoryModel historyModel) async {
+    await database
+        .child('histories')
+        .child('${historyModel.uId}')
+        .set(historyModel.toJson());
+    return database.onChildAdded;
   }
 
-  static ObservableList<Note> parseSnapshot(DatabaseEvent event) {
-    ObservableList<Note> items = ObservableList.of([]);
+  static Future<Stream<DatabaseEvent>> deleteHistory(HistoryModel historyModel) async {
+    await database.child('histories').child(historyModel.uId!).remove();
+    return database.onChildAdded;
+  }
+
+  static Future<HistoryModel> loadHistory(String uId) async {
+    HistoryModel historyModel = HistoryModel(uId: uId, history: []);
+    Query query = database.child('histories').child(uId);
+    DatabaseEvent event = await query.once();
+    var result = event.snapshot.children;
+    for (DataSnapshot item in result) {
+      if (item.value != null) {
+        historyModel = HistoryModel.fromJson(Map<String, dynamic>.from(item.value as Map));
+      }
+    }
+    return historyModel;
+  }
+
+
+  static Future<Stream<DatabaseEvent>> storeContract(ContractModel contractModel) async {
+    await database.child('contracts').child(contractModel.uId!).child(contractModel.key!).set(contractModel.toJson());
+    return database.onChildAdded;
+  }
+
+  static Future<Stream<DatabaseEvent>> deleteContract(ContractModel contractModel) async {
+    await database.child('contracts').child(contractModel.uId!).child(contractModel.key!).remove();
+    return database.onChildAdded;
+  }
+
+  static Future<List<ContractModel>> loadContracts(String uId) async {
+    List<ContractModel> contracts = [];
+    Query query = database.child('contracts').child(uId);
+    var event = await query.once();
+    contracts = parseSnapshotContracts(event);
+    return contracts;
+  }
+
+  static List<ContractModel> parseSnapshotContracts(DatabaseEvent event) {
+    List<ContractModel> items = [];
     var result = event.snapshot.children;
 
     for (DataSnapshot item in result) {
       if (item.value != null) {
-        items.add(Note.fromJson(Map<String, dynamic>.from(item.value as Map)));
+        items.add(ContractModel.fromJson(Map<String, dynamic>.from(item.value as Map)));
       }
     }
     return items;
   }
 
-  static Future<Stream<DatabaseEvent>> storeHistory(History history) async {
-    await database
-        .child('history')
-        .child('user:${history.userId}')
-        .child('history')
-        .set(history.toJson());
+
+  static Future<Stream<DatabaseEvent>> storeInvoice(InvoiceModel invoiceModel) async {
+    await database.child('invoices').child(invoiceModel.uId!).child(invoiceModel.key!).set(invoiceModel.toJson());
     return database.onChildAdded;
   }
 
-  static Future<History> loadHistory(String userId) async {
-    History history = History(userId: userId, noteKeys: [], first: null);
-    Query query = database.child('history').child('user:$userId');
-    DatabaseEvent event = await query.once();
+  static Future<Stream<DatabaseEvent>> deleteInvoice(InvoiceModel invoiceModel) async {
+    await database.child('invoices').child(invoiceModel.uId!).child(invoiceModel.key!).remove();
+    return database.onChildAdded;
+  }
+
+  static Future<List<InvoiceModel>> loadInvoices(String uId) async {
+    List<InvoiceModel> invoices = [];
+    Query query = database.child('invoices').child(uId);
+    var event = await query.once();
+    invoices = parseSnapshotInvoices(event);
+    return invoices;
+  }
+
+  static List<InvoiceModel> parseSnapshotInvoices(DatabaseEvent event) {
+    List<InvoiceModel> items = [];
     var result = event.snapshot.children;
+
     for (DataSnapshot item in result) {
       if (item.value != null) {
-        history =
-            History.fromJson(Map<String, dynamic>.from(item.value as Map));
+        items.add(InvoiceModel.fromJson(Map<String, dynamic>.from(item.value as Map)));
       }
     }
-    return history;
-  }*/
+    return items;
+  }
 }

@@ -1,34 +1,45 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_billing/Application/Main/Bloc/main_bloc.dart';
 import 'package:i_billing/Configuration/app_data_time.dart';
+import 'package:i_billing/Data/Model/invoice_model.dart';
+import 'package:i_billing/Data/Model/user_model.dart';
+import 'package:i_billing/Data/Service/db_service.dart';
+import 'package:i_billing/Data/Service/rtdb_service.dart';
 
 part 'contracts_event.dart';
 part 'contracts_state.dart';
 
 class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
+  final MainBloc mainBloc;
   bool initialDayFirst = true;
   int selectedYear = DateTime.now().year;
   int selectedMonth = DateTime.now().month;
   int selectedDay = DateTime.now().day;
   List<String> monthNames = AppDateTime.monthNames;
-  List<String> weekDaysName = AppDateTime.weekDaysShort;
   List<int> monthDays = AppDateTime.monthDays;
 
+  ScrollController invoiceController = ScrollController();
   ScrollController dayController = ScrollController();
+  ScrollController dayController2 = ScrollController();
+
   bool dayControllerLeftDone = true;
   bool dayControllerRightDone = true;
 
-  ContractsBloc() : super(ContractsInitialState(day: DateTime.now().day, month: DateTime.now().month,)) {
+  ContractsBloc({required this.mainBloc}) : super(ContractsInitialState(day: DateTime.now().day, month: DateTime.now().month,)) {
     on<InitialDayControllerEvent> (initialDayButtonController);
+    on<InitialDay2ControllerEvent> (initialDay2ButtonController);
     on<ListenEvent> (listerDayButtonsController);
     on<FilterEvent> (pressFilter);
     on<SearchEvent> (pressSearch);
     on<MonthButtonEvent> (pressMonthButton);
     on<DayButtonEvent> (pressDayButton);
+    on<OnReorderEvent> (onReorder);
+    on<GetInvoicesEvent> (getInvoices);
   }
 
-  void initialDayButtonController (InitialDayControllerEvent event, Emitter<ContractsState> emit) {
+  Future<void> initialDayButtonController (InitialDayControllerEvent event, Emitter<ContractsState> emit) async {
     if (initialDayFirst) {
       initialDayFirst = false;
       int currentMonthDayMax = AppDateTime.monthDays[DateTime.now().month - 1] == 28 && DateTime.now().year == 2024
@@ -40,6 +51,20 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
           : (selectedDay.toDouble() - 1) * 62;
       dayController.animateTo(position, duration: const Duration(milliseconds: 250), curve: Curves.easeOut);
     }
+  }
+
+  void initialDay2ButtonController (InitialDay2ControllerEvent event, Emitter<ContractsState> emit) {
+    dayController2.jumpTo(event.position);
+  }
+
+  Future <void> getInvoices(GetInvoicesEvent event, Emitter<ContractsState> emit) async {
+    emit(ContractsLoadingState());
+
+    String? json = await DBService.loadData(StorageKey.user);
+    UserModel user = userFromJson(json!);
+    mainBloc.invoices = await RTDBService.loadInvoices(user.uId!);
+
+    emit(ContractsInitialState(month: selectedMonth, day: selectedDay));
   }
 
   void pressFilter(FilterEvent event, Emitter<ContractsState> emit) {
@@ -70,15 +95,22 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
       selectedDay = 1;
       dayController.jumpTo(0);
     }
+    mainBloc.selectedDay = selectedDay;
+    mainBloc.selectedMonth = selectedMonth;
+    mainBloc.selectedYear = selectedYear;
+    mainBloc.dayControllerPixels = dayController.position.pixels;
+
     emit(ContractsInitialState(month: selectedMonth, day: selectedDay));
   }
 
   void pressDayButton(DayButtonEvent event, Emitter<ContractsState> emit) {
     selectedDay = event.selectedDay;
+    mainBloc.selectedDay = selectedDay;
     emit(ContractsInitialState(month: selectedMonth, day: selectedDay));
   }
 
   void listerDayButtonsController(ListenEvent event, Emitter<ContractsState> emit) async {
+
     if (dayController.position.pixels >= 0) {
       dayControllerLeftDone = true;
     }
@@ -114,5 +146,17 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
       emit(ContractsInitialState(month: selectedMonth, day: selectedDay));
       dayController.jumpTo(-109);
     }
+    mainBloc.selectedDay = selectedDay;
+    mainBloc.selectedMonth = selectedMonth;
+    mainBloc.selectedYear = selectedYear;
+    mainBloc.dayControllerPixels = dayController.position.pixels;
+  }
+
+  void onReorder(OnReorderEvent event, Emitter<ContractsState> emit) {
+    final newIdx = event.newIndex > event.oldIndex ? event.newIndex - 1 : event.newIndex;
+    final item = mainBloc.invoices.removeAt(event.oldIndex);
+    mainBloc.invoices.insert(newIdx, item);
+
+    emit(ContractsInitialState(month: selectedMonth, day: selectedDay));
   }
 }

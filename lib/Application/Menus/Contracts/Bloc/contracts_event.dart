@@ -50,4 +50,28 @@ class InitialDayControllerEvent extends ContractsEvent {
   List<Object?> get props => [width];
 }
 
+class InitialDay2ControllerEvent extends ContractsEvent {
+  final double position;
+
+  InitialDay2ControllerEvent({required this.position});
+  @override
+  List<Object?> get props => [position];
+}
+
+class GetInvoicesEvent extends ContractsEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class OnReorderEvent extends ContractsEvent {
+  final int newIndex;
+  final int oldIndex;
+
+  OnReorderEvent({required this.newIndex, required this.oldIndex});
+
+  @override
+  List<Object?> get props => [newIndex, oldIndex];
+
+}
+
 

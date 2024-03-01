@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:i_billing/Application/Main/Bloc/main_bloc.dart';
-import 'package:i_billing/Application/Menus/Profile/Bloc/profile_bloc.dart';
 import 'package:i_billing/Application/Welcome/View/welcome_widgets.dart';
 import 'package:i_billing/Configuration/app_colors.dart';
 import 'package:i_billing/Configuration/app_text_styles.dart';
@@ -25,8 +25,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      backgroundColor: AppColors.darker,
-      surfaceTintColor: AppColors.darker,
+      backgroundColor: AppColors.black,
+      surfaceTintColor: AppColors.black,
       titleSpacing: 10,
       title: Row(
         children: [
@@ -137,7 +137,6 @@ class MyBottomNavigationBar extends StatelessWidget {
 class MyProfileScreen extends StatelessWidget {
   const MyProfileScreen({
     super.key,
-    required this.bloc,
     required this.textTitle,
     required this.textCancel,
     this.textDone,
@@ -147,7 +146,6 @@ class MyProfileScreen extends StatelessWidget {
     this.doneButton = false,
   });
 
-  final ProfileBloc bloc;
   final String textTitle;
   final String textCancel;
   final String? textDone;
@@ -326,7 +324,7 @@ class MyNewTextField extends StatelessWidget {
                 ? [
                   isMoney
                       ? CurrencyInputFormatter(
-                          trailingSymbol: 'sum'.tr(),
+                          trailingSymbol: 'uzs'.tr(),
                           useSymbolPadding: true,
                           mantissaLength: 0,
                           thousandSeparator:
@@ -451,7 +449,8 @@ class MyMonthDayButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      color: AppColors.darker,
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: SizedBox(
         width: 46,
@@ -490,4 +489,128 @@ class FilterSearchButtons {
   Function functionSearch;
 
   FilterSearchButtons({required this.functionFilter, required this.functionSearch});
+}
+
+class MyInvoiceContainer extends StatelessWidget {
+  final int index;
+  final int number;
+  final String status;
+  final String fullName;
+  final String amount;
+  final String lastInvoice;
+  final String numberOfInvoices;
+  final String createdDate;
+  final Function onPressed;
+  final bool animatedDisabled;
+
+  const MyInvoiceContainer({
+    super.key,
+    required this.index,
+    required this.number,
+    required this.status,
+    required this.fullName,
+    required this.amount,
+    required this.lastInvoice,
+    required this.numberOfInvoices,
+    required this.createdDate,
+    required this.onPressed,
+    required this.animatedDisabled,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimationConfiguration.staggeredList(
+      position: index,
+      delay: Duration(milliseconds: animatedDisabled ? 0 : 50),
+      child: SlideAnimation(
+        duration: Duration(milliseconds: animatedDisabled ? 0 : 2000),
+        curve: Curves.fastLinearToSlowEaseIn,
+        horizontalOffset: 0,
+        verticalOffset: 300.0,
+        child: FlipAnimation(
+          duration: Duration(milliseconds: animatedDisabled ? 0 : 1000),
+          curve: Curves.fastLinearToSlowEaseIn,
+          flipAxis: FlipAxis.y,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            child: MaterialButton(
+              onPressed: () => onPressed(),
+              height: 150,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              color: AppColors.dark,
+              child: SizedBox(
+                height: 136,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+
+                    // #number_status
+                    Row(
+                      children: [
+                        const Image(
+                          image: AssetImage('assets/icons/ic_new_contract.png'),
+                          height: 18,
+                          width: 18,
+                        ),
+                        Text(' № $number', style: AppTextStyles.style23_1),
+                        const Spacer(),
+
+                        Container(
+                          height: 21,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: AppColors.disableBlue,
+                              borderRadius: BorderRadius.circular(8)
+                          ),
+                          child: Text(status, style: AppTextStyles.style27),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+
+                    // #fishers_full_name
+                    Row(
+                      children: [
+                        Text('${'fishers_full_name'.tr()}:  ', style: AppTextStyles.style19),
+                        Text(fullName, style: AppTextStyles.style23),
+                      ],
+                    ),
+
+                    // #amount
+                    Row(
+                      children: [
+                        Text('${'amount'.tr()}:  ', style: AppTextStyles.style19),
+                        Text('$amount ${'uzs'.tr()}', style: AppTextStyles.style23),
+                      ],
+                    ),
+
+                    // #number
+                    Row(
+                      children: [
+                        Text('${'last_invoice'.tr()}:  ', style: AppTextStyles.style19),
+                        Text('№ $lastInvoice', style: AppTextStyles.style23),
+                      ],
+                    ),
+
+                    // #number_created_time
+                    Row(
+                      children: [
+                        Text('${'number_invoice'.tr()}:  ', style: AppTextStyles.style19),
+                        Text(numberOfInvoices, style: AppTextStyles.style23),
+
+                        const Spacer(),
+                        Text(createdDate, style: AppTextStyles.style25_2),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

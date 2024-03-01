@@ -33,6 +33,7 @@ class IBilling extends StatelessWidget {
       title: 'IBilling',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(secondary: AppColors.blue),
+        canvasColor: AppColors.transparentGray,
       ),
       debugShowCheckedModeBanner: false,
       home: FutureBuilder(
@@ -49,6 +50,7 @@ class IBilling extends StatelessWidget {
         StartPage.id: (context) => const StartPage(),
         SignInPage.id: (context) => const SignInPage(),
         SignUpPage.id: (context) => const SignUpPage(),
+        MainPage.id: (context) => const MainPage(),
       },
     );
   }

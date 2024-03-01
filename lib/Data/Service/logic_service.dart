@@ -1,3 +1,6 @@
+import 'package:i_billing/Configuration/app_data_time.dart';
+import 'package:intl/intl.dart';
+
 class LogicService {
 
   static bool checkFullName(String fullName) {
@@ -34,5 +37,10 @@ class LogicService {
 
   static String parseError(String e) {
     return e.substring(e.indexOf('/')+1, e.indexOf(']'));
+  }
+
+  static String weekDayName({required int day, required int month, required int year}) {
+    DateTime date = DateTime(year, month, day);
+    return DateFormat('EEEE').format(date).substring(0,2);
   }
 }

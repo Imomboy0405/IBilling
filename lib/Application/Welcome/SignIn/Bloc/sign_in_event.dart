@@ -49,8 +49,12 @@ class OnSubmittedEvent extends SignInEvent {
 }
 
 class SignInButtonEvent extends SignInEvent {
+  final BuildContext context;
+
+  SignInButtonEvent({required this.context});
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [context];
 }
 
 class PhoneButtonEvent extends SignInEvent {
@@ -75,17 +79,22 @@ class ForgotPasswordEvent extends SignInEvent {
 }
 
 class FaceBookEvent extends SignInEvent {
+  final BuildContext context;
+
+  FaceBookEvent({required this.context});
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [context];
 }
 
 class GoogleEvent extends SignInEvent {
   final double width;
+  final BuildContext context;
 
-  GoogleEvent({required this.width});
+  GoogleEvent({required this.width, required this.context});
 
   @override
-  List<Object?> get props => [width];
+  List<Object?> get props => [width, context];
 }
 
 class SignUpEvent extends SignInEvent {

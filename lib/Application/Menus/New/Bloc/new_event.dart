@@ -37,13 +37,21 @@ class InvoiceStatus extends NewEvent {
 }
 
 class InvoiceSave extends NewEvent {
+  final BuildContext context;
+
+  InvoiceSave({required this.context});
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [context];
 }
 
 class ContractSave extends NewEvent {
+  final BuildContext context;
+
+  ContractSave({required this.context});
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [context];
 }
 
 class ContractFaceStatus extends NewEvent {

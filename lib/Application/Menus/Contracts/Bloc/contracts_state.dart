@@ -11,3 +11,8 @@ class ContractsInitialState extends ContractsState {
   @override
   List<Object> get props => [day, month];
 }
+
+class ContractsLoadingState extends ContractsState {
+    @override
+  List<Object> get props => [];
+}

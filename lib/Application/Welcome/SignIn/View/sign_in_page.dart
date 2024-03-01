@@ -41,6 +41,7 @@ class SignInPage extends StatelessWidget {
               ),
 
               body: SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height - 122,
                   child: Padding(
@@ -133,6 +134,7 @@ class SignInPage extends StatelessWidget {
 
                         // #password
                         MyTextField(
+                          actionDone: true,
                           pageName: id,
                           controller: bloc.passwordController,
                           errorState: state is SignInErrorState,
@@ -159,7 +161,7 @@ class SignInPage extends StatelessWidget {
                                   onChanged: (v) => context.read<SignInBloc>().add(RememberMeEvent()),
                                   fillColor: MaterialStateProperty.all(AppColors.blue),
                                   value: bloc.rememberMe,
-                                  shape: const StadiumBorder(side: BorderSide(color: AppColors.blue)),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                                 ),
                                 myTextButton(
                                   context: context,
@@ -175,7 +177,7 @@ class SignInPage extends StatelessWidget {
                             // #log_in
                             MyButton(
                               disabledAction: DisabledAction(context: context, text: 'fill_all_forms'.tr()),
-                              function: () => context.read<SignInBloc>().add(SignInButtonEvent()),
+                              function: () => context.read<SignInBloc>().add(SignInButtonEvent(context: context)),
                               enable: (bloc.emailSuffix || bloc.phoneSuffix) && bloc.passwordSuffix,
                               text: 'log_in'.tr(),
                             ),
@@ -201,7 +203,7 @@ class SignInPage extends StatelessWidget {
 
                             // #facebook
                             myTextButton(
-                                onPressed: () => context.read<SignInBloc>().add(FaceBookEvent()),
+                                onPressed: () => context.read<SignInBloc>().add(FaceBookEvent(context: context)),
                                 context: context,
                                 assetIc: 'facebook',
                                 txt: 'Facebook'),
@@ -211,7 +213,8 @@ class SignInPage extends StatelessWidget {
 
                             // #google
                             myTextButton(
-                                onPressed: () => context.read<SignInBloc>().add(GoogleEvent(width: MediaQuery.of(context).size.width)),
+                                onPressed: () => context.read<SignInBloc>()
+                                    .add(GoogleEvent(width: MediaQuery.of(context).size.width, context: context)),
                                 context: context,
                                 assetIc: 'google',
                                 txt: 'Google'),

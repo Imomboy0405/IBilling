@@ -27,163 +27,173 @@ class NewPage extends StatelessWidget {
                       ? 'new_contract'.tr()
                       : 'a_new'.tr()),
           body: state is NewInitialState
-              ? Stack(
-                  children: [
-                    Center(
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(20, 0, 20, 83),
-                        padding: const EdgeInsets.fromLTRB(24, 18, 24, 20),
-                        decoration: BoxDecoration(
-                          color: AppColors.dark,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('what_create'.tr(), style: AppTextStyles.style20),
-                            const SizedBox(height: 30),
+                // #initial_screen
+              ? Center(
+                child: Container(
+                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 83),
+                  padding: const EdgeInsets.fromLTRB(24, 18, 24, 20),
+                  decoration: BoxDecoration(
+                    color: AppColors.dark,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('what_create'.tr(), style: AppTextStyles.style20),
+                      const SizedBox(height: 30),
 
-                            // #contract_button
-                            myNewInitialButton(
-                              text: 'contract'.tr(),
-                              ic: 'ic_new_contract',
-                              function: () => context.read<NewBloc>().add(ContractEvent()),
-                            ),
-                            const SizedBox(height: 15),
-
-                            // #invoice_button
-                            myNewInitialButton(
-                              text: 'invoice'.tr(),
-                              ic: 'ic_new_invoice',
-                              function: () => context.read<NewBloc>().add(InvoiceEvent()),
-                            ),
-                          ],
-                        ),
+                      // #contract_button
+                      myNewInitialButton(
+                        text: 'contract'.tr(),
+                        ic: 'ic_new_contract',
+                        function: () => context.read<NewBloc>().add(ContractEvent()),
                       ),
-                    ),
-                  ],
-                )
-              : state is NewInvoiceState
+                      const SizedBox(height: 15),
+
+                      // #invoice_button
+                      myNewInitialButton(
+                        text: 'invoice'.tr(),
+                        ic: 'ic_new_invoice',
+                        function: () => context.read<NewBloc>().add(InvoiceEvent()),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+              : state is NewInvoiceState || state is NewInvoiceLoadingState
                   // #invoice_screen
-                  ? Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // #service_name
-                          MyNewTextField(
-                            title: 'service_name'.tr(),
-                            controller: bloc.serviceNameController,
-                            focusNode: bloc.focusService,
-                            textInputType: TextInputType.name,
-                            onChanged: () => context.read<NewBloc>().add(InvoiceChange()),
-                            onSubmitted: () => context.read<NewBloc>().add(InvoiceSubmitted(service: true)),
-                            suffixIconDone: bloc.suffixServiceName,
-                            snackBarText: 'snack_service'.tr(),
-                          ),
+                  ? Stack(
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // #service_name
+                              MyNewTextField(
+                                title: 'service_name'.tr(),
+                                controller: bloc.serviceNameController,
+                                focusNode: bloc.focusService,
+                                textInputType: TextInputType.name,
+                                onChanged: () => context.read<NewBloc>().add(InvoiceChange()),
+                                onSubmitted: () => context.read<NewBloc>().add(InvoiceSubmitted(service: true)),
+                                suffixIconDone: bloc.suffixServiceName,
+                                snackBarText: 'snack_service'.tr(),
+                              ),
 
-                          // #invoice_amount
-                          MyNewTextField(
-                            title: 'invoice_amount'.tr(),
-                            controller: bloc.invoiceAmountController,
-                            focusNode: bloc.focusInvoice,
-                            textInputType: TextInputType.number,
-                            onChanged: () => context.read<NewBloc>().add(InvoiceChange()),
-                            onSubmitted: () => context.read<NewBloc>().add(InvoiceSubmitted(context: context)),
-                            suffixIconDone: bloc.suffixInvoiceAmount,
-                            snackBarText: 'snack_invoice'.tr(),
-                          ),
+                              // #invoice_amount
+                              MyNewTextField(
+                                title: 'invoice_amount'.tr(),
+                                controller: bloc.invoiceAmountController,
+                                focusNode: bloc.focusInvoice,
+                                textInputType: TextInputType.number,
+                                onChanged: () => context.read<NewBloc>().add(InvoiceChange()),
+                                onSubmitted: () => context.read<NewBloc>().add(InvoiceSubmitted(context: context)),
+                                suffixIconDone: bloc.suffixInvoiceAmount,
+                                snackBarText: 'snack_invoice'.tr(),
+                              ),
 
-                          // #status_of_the_invoice
-                          MyDropdownButton(
-                            titleText: 'status_invoice'.tr(),
-                            focusNode: bloc.focusStatus,
-                            status: bloc.status,
-                            statusList: bloc.statusList,
-                            onChanged: (status) => context.read<NewBloc>().add(InvoiceStatus(status: status)),
-                          ),
-                          const SizedBox(height: 10),
+                              // #status_of_the_invoice
+                              MyDropdownButton(
+                                titleText: 'status_invoice'.tr(),
+                                focusNode: bloc.focusStatus,
+                                status: bloc.status,
+                                statusList: bloc.statusList,
+                                onChanged: (status) => context.read<NewBloc>().add(InvoiceStatus(status: status)),
+                              ),
+                              const SizedBox(height: 10),
 
-                          MyButton(
-                            text: 'save_invoice'.tr(),
-                            function: () => context.read<NewBloc>().add(InvoiceSave()),
-                            enable: bloc.suffixInvoiceAmount && bloc.suffixServiceName && bloc.status != null,
-                          )
-                        ],
-                      ),
-                    )
+                              MyButton(
+                                text: 'save_invoice'.tr(),
+                                function: () => context.read<NewBloc>().add(InvoiceSave(context: context)),
+                                enable: bloc.suffixInvoiceAmount && bloc.suffixServiceName && bloc.status != null,
+                              )
+                            ],
+                          ),
+                        ),
+
+                      if (state is NewInvoiceLoadingState)
+                        myIsLoading(context),
+                    ],
+                  )
 
                   // #contract_screen
-                  : Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // #face
-                          MyDropdownButton(
-                            titleText: 'face'.tr(),
-                            focusNode: bloc.focusFace,
-                            status: bloc.face,
-                            statusList: bloc.faceStatusList,
-                            onChanged: (status) => context.read<NewBloc>().add(ContractFaceStatus(status: status)),
+                  : Stack(
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // #face
+                              MyDropdownButton(
+                                titleText: 'face'.tr(),
+                                focusNode: bloc.focusFace,
+                                status: bloc.face,
+                                statusList: bloc.faceStatusList,
+                                onChanged: (status) => context.read<NewBloc>().add(ContractFaceStatus(status: status)),
+                              ),
+
+                              // #fisher_full_name
+                              MyNewTextField(
+                                title: 'fisher_full_name'.tr(),
+                                controller: bloc.fullNameController,
+                                focusNode: bloc.focusFullName,
+                                textInputType: TextInputType.name,
+                                onChanged: () => context.read<NewBloc>().add(ContractChange()),
+                                onSubmitted: () => context.read<NewBloc>().add(ContractSubmitted(fullName: true)),
+                                suffixIconDone: bloc.suffixFullName,
+                                snackBarText: 'snack_full_name'.tr(),
+                              ),
+
+                              // #address_organization
+                              MyNewTextField(
+                                title: 'address_organization'.tr(),
+                                controller: bloc.addressController,
+                                focusNode: bloc.focusAddress,
+                                textInputType: TextInputType.name,
+                                onChanged: () => context.read<NewBloc>().add(ContractChange()),
+                                  onSubmitted: () => context.read<NewBloc>().add(ContractSubmitted(address: true)),
+                                suffixIconDone: bloc.suffixAddress,
+                                snackBarText: 'snack_address'.tr(),
+                              ),
+
+                              // #tin
+                              MyNewTextField(
+                                title: 'tin'.tr(),
+                                controller: bloc.tINController,
+                                focusNode: bloc.focusTIN,
+                                textInputType: TextInputType.number,
+                                onChanged: () => context.read<NewBloc>().add(ContractChange()),
+                                onSubmitted: () => context.read<NewBloc>().add(ContractSubmitted(context: context)),
+                                suffixIconDone: bloc.suffixTIN,
+                                snackBarText: 'snack_tin'.tr(),
+                                isMoney: false,
+                              ),
+
+                              // #status_of_the_contract
+                              MyDropdownButton(
+                                titleText: 'status_contract'.tr(),
+                                focusNode: bloc.focusStatus,
+                                status: bloc.status,
+                                statusList: bloc.statusList,
+                                onChanged: (status) => context.read<NewBloc>().add(ContractStatus(status: status)),
+                              ),
+                              const SizedBox(height: 10),
+
+                              MyButton(
+                                text: 'save_contract'.tr(),
+                                function: () => context.read<NewBloc>().add(ContractSave(context: context)),
+                                enable: bloc.suffixFullName && bloc.suffixAddress && bloc.suffixTIN
+                                    && bloc.face != null && bloc.status != null,
+                              )
+                            ],
                           ),
-
-                          // #fisher_full_name
-                          MyNewTextField(
-                            title: 'fisher_full_name'.tr(),
-                            controller: bloc.fullNameController,
-                            focusNode: bloc.focusFullName,
-                            textInputType: TextInputType.name,
-                            onChanged: () => context.read<NewBloc>().add(ContractChange()),
-                            onSubmitted: () => context.read<NewBloc>().add(ContractSubmitted(fullName: true)),
-                            suffixIconDone: bloc.suffixFullName,
-                            snackBarText: 'snack_full_name'.tr(),
-                          ),
-
-                          // #address_organization
-                          MyNewTextField(
-                            title: 'address_organization'.tr(),
-                            controller: bloc.addressController,
-                            focusNode: bloc.focusAddress,
-                            textInputType: TextInputType.name,
-                            onChanged: () => context.read<NewBloc>().add(ContractChange()),
-                              onSubmitted: () => context.read<NewBloc>().add(ContractSubmitted(address: true)),
-                            suffixIconDone: bloc.suffixAddress,
-                            snackBarText: 'snack_address'.tr(),
-                          ),
-
-                          // #tin
-                          MyNewTextField(
-                            title: 'tin'.tr(),
-                            controller: bloc.tINController,
-                            focusNode: bloc.focusTIN,
-                            textInputType: TextInputType.number,
-                            onChanged: () => context.read<NewBloc>().add(ContractChange()),
-                            onSubmitted: () => context.read<NewBloc>().add(ContractSubmitted(context: context)),
-                            suffixIconDone: bloc.suffixTIN,
-                            snackBarText: 'snack_tin'.tr(),
-                            isMoney: false,
-                          ),
-
-                          // #status_of_the_contract
-
-                          MyDropdownButton(
-                            titleText: 'status_contract'.tr(),
-                            focusNode: bloc.focusStatus,
-                            status: bloc.status,
-                            statusList: bloc.statusList,
-                            onChanged: (status) => context.read<NewBloc>().add(ContractStatus(status: status)),
-                          ),
-                          const SizedBox(height: 10),
-
-                          MyButton(
-                            text: 'save_contract'.tr(),
-                            function: () => context.read<NewBloc>().add(ContractSave()),
-                            enable: bloc.suffixFullName && bloc.suffixAddress && bloc.suffixTIN
-                                && bloc.face != null && bloc.status != null,
-                          )
-                        ],
                       ),
+
+                      if (state is NewContractLoadingState)
+                        myIsLoading(context),
+                    ],
                   ),
         );
       }),

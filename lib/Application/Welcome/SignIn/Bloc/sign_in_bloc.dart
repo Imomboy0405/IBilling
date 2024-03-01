@@ -5,7 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:flutter_multi_formatter/formatters/phone_input_formatter.dart';
+import 'package:i_billing/Application/Main/View/main_page.dart';
+import 'package:i_billing/Data/Model/user_model.dart';
+import 'package:i_billing/Data/Service/db_service.dart';
 import 'package:i_billing/Data/Service/logic_service.dart';
+import 'package:i_billing/Data/Service/rtdb_service.dart';
+import 'package:i_billing/Data/Service/util_service.dart';
 
 import '../../../../Data/Service/auth_service.dart';
 import '../../../../Data/Service/lang_service.dart';
@@ -153,7 +158,42 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   }
 
   Future<void> pressSignIn(SignInButtonEvent event, Emitter<SignInState> emit) async {
-    // todo code
+    emit(SignInLoadingState(
+      password: passwordSuffix,
+      obscure: obscure,
+      email: emailSuffix,
+      rememberMe: rememberMe,
+    ));
+
+    String? error;
+    try {
+      if (selectButton == 1) {
+        error = await AuthService.signInWithEmail(
+          emailController.text.trim(),
+          passwordController.text.trim(),
+        );
+      } else {
+        error = await AuthService.signInWithPhone(phoneNumberController.text.trim());
+      }
+      if (error == null) {
+        String? json = await DBService.loadData(StorageKey.user);
+        UserModel userModel = userFromJson(json!);
+        if (event.context.mounted) {
+          Utils.mySnackBar(txt: 'welcome_user'.tr() + userModel.fullName!, context: event.context);
+          Navigator.pushReplacementNamed(event.context, MainPage.id);
+        }
+      } else {
+        if (event.context.mounted) {
+          Utils.mySnackBar(txt: LogicService.parseError(error.toString()).tr(), context: event.context, errorState: true);
+        }
+        emit(SignInErrorState(obscure: obscure, rememberMe: rememberMe));
+      }
+    } catch (e) {
+      if (event.context.mounted) {
+        Utils.mySnackBar(txt: e.toString(), context: event.context, errorState: true);
+      }
+      emit(SignInErrorState(obscure: obscure, rememberMe: rememberMe));
+    }
   }
 
   Future<void> pressForgotPassword(ForgotPasswordEvent event, Emitter<SignInState> emit) async {
@@ -168,35 +208,38 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
       rememberMe: rememberMe,
     ));
 
-    UserCredential userCredential = await AuthService.signInWithGoogle();
-    String? email = userCredential.user?.email;
-    if (email != null) {
-      emailController.text = email;
-      emailSuffix = true;
-      selectButton = 1;
-      focusPhone.unfocus();
-      await Future.delayed(const Duration(milliseconds: 30));
-      await scrollController.animateTo(event.width - 60,
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeInOutCubic);
+    try {
+      UserCredential userCredential = await AuthService.signInWithGoogle();
+      if (event.context.mounted) {
+        await checkAuthCredential(userCredential: userCredential, context: event.context);
+      }
+    } catch (e) {
+      if (event.context.mounted) {
+        Utils.mySnackBar(txt: e.toString(), context: event.context, errorState: true);
+      }
     }
-
-    emit(SignInEnterState(
-      simple: simple,
-      selectButton: selectButton,
-      phone: phoneNumberController.text.trim().isNotEmpty,
-      email: emailController.text.trim().isNotEmpty,
-      password: passwordController.text.trim().isNotEmpty,
-      obscure: obscure,
-      rememberMe: rememberMe,
-      phoneSuffix: phoneSuffix,
-      emailSuffix: emailSuffix,
-      passwordSuffix: passwordSuffix,
-    ));
+    emit(SignInErrorState(obscure: obscure, rememberMe: rememberMe));
   }
 
   Future<void> pressFacebook(FaceBookEvent event, Emitter<SignInState> emit) async {
-    // todo code
+    emit(SignInLoadingState(
+      password: passwordSuffix,
+      obscure: obscure,
+      email: emailSuffix,
+      rememberMe: rememberMe,
+    ));
+
+    try {
+      UserCredential userCredential = await AuthService.signInWithFacebook();
+      if (event.context.mounted) {
+        await checkAuthCredential(userCredential: userCredential, context: event.context);
+      }
+    } catch (e) {
+      if (event.context.mounted) {
+        Utils.mySnackBar(txt: e.toString(), context: event.context, errorState: true);
+      }
+    }
+    emit(SignInErrorState(obscure: obscure, rememberMe: rememberMe));
   }
 
   Future<void> pressCountry(SignInCountryEvent event, Emitter<SignInState> emit) async {
@@ -305,5 +348,29 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
   void pressSignUp(SignUpEvent event, Emitter<SignInState> emit) {
     Navigator.pushReplacementNamed(event.context, SignUpPage.id);
+  }
+
+  Future<void> checkAuthCredential({required UserCredential userCredential, required BuildContext context}) async {
+    String? uId = userCredential.user?.uid;
+    String? email = userCredential.user?.email;
+    if (uId != null) {
+      UserModel? userModel = await RTDBService.loadUser(FirebaseAuth.instance.currentUser!.uid);
+      if (userModel != null) {
+        await DBService.saveUser(userModel);
+        if (context.mounted) {
+          Utils.mySnackBar(txt: 'welcome_user'.tr() + userModel.fullName!, context: context);
+          Navigator.pushReplacementNamed(context, MainPage.id);
+        }
+      } else {
+        FirebaseAuth.instance.currentUser!.delete();
+        if (context.mounted) {
+          Utils.mySnackBar(txt: 'email_not'.tr(), context: context, errorState: true);
+        }
+      }
+    } else {
+      if (context.mounted) {
+        Utils.mySnackBar(txt: 'error_cloud_data'.tr(), context: context, errorState: true);
+      }
+    }
   }
 }

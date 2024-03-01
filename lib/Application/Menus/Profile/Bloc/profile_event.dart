@@ -2,6 +2,11 @@ part of 'profile_bloc.dart';
 
 abstract class ProfileEvent extends Equatable {}
 
+class InitialUserEvent extends ProfileEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 class LanguageEvent extends ProfileEvent {
   @override
   List<Object?> get props => [];
@@ -45,8 +50,12 @@ class SignOutEvent extends ProfileEvent {
 }
 
 class ConfirmEvent extends ProfileEvent {
+  final BuildContext context;
+
+  ConfirmEvent({required this.context});
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [context];
 }
 
 class InfoEvent extends ProfileEvent {

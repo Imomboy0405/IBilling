@@ -11,6 +11,7 @@ import '../../Menus/Saved/View/saved_page.dart';
 import '../Bloc/main_bloc.dart';
 
 class MainPage extends StatelessWidget {
+  static const id = '/main_page';
 
   const MainPage({super.key});
 
@@ -45,19 +46,20 @@ class MainPage extends StatelessWidget {
                                  : const NeverScrollableScrollPhysics(),
                       controller: bloc.controller,
                       pageSnapping: true,
-                      children: [
-                        ProfilePage(mainBloc: bloc),
-                        const ContractsPage(),
-                        const HistoryPage(),
-                        const NewPage(),
-                        const SavedPage(),
-                        ProfilePage(mainBloc: bloc),
-                        const ContractsPage(),
+                      children: const [
+                        ProfilePage(),
+                        ContractsPage(key: Key('1')),
+                        HistoryPage(),
+                        NewPage(),
+                        SavedPage(),
+                        ProfilePage(),
+                        ContractsPage(key: Key('2')),
                       ],
                     ),
 
                     if(state is! MainHideBottomNavigationBarState)
                       MyBottomNavigationBar(screenWidth: screenWidth, bloc: bloc),
+
                   ],
                 ),
               ),

@@ -23,6 +23,10 @@ dependencies:
   scrollable_positioned_list: any
   flutter_multi_formatter: ^2.12.4
   url_launcher: ^6.2.4
+  lottie: any
+  intl: ^0.17.0
+  flutter_staggered_animations: any
+
 
   # state management
   flutter_bloc: any
@@ -62,6 +66,7 @@ flutter:
     - assets/fonts/ubuntu/
     - assets/images/
     - assets/icons/
+    - assets/animations/
 
   fonts:
     - family: Poppins

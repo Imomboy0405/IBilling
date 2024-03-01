@@ -32,3 +32,19 @@ class MainLanguageEvent extends MainEvent {
   @override
   List<Object?> get props => [];
 }
+
+class MainExitEvent extends MainEvent {
+
+  @override
+  List<Object?> get props => [];
+}
+
+class MainCancelEvent extends MainEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class MainDoneEvent extends MainEvent {
+  @override
+  List<Object?> get props => [];
+}

@@ -29,6 +29,9 @@ const Map<String, String> enUS = {
   'dont_have_an_account': 'Don\'t have an account?  ',
   'sign_up': 'Sign up',
   'fill_all_forms': 'Fill out all the forms',
+  'welcome_user': 'Welcome ',
+  'email_not': 'This email is not registered',
+  'invalid-credential': 'Invalid password, try again',
 
   /// SignUpPage
   'sign_up_for_free': 'Sign up for free',
@@ -45,8 +48,7 @@ const Map<String, String> enUS = {
   'enter_fullName': 'Please enter a full name',
   'enter_password': 'Please enter a password',
   'enter_re_password': 'Please enter a repeat password',
-  'error_google': 'Could not load data from Google',
-  'error_facebook': 'Could not load data from Facebook',
+  'error_cloud_data': 'Could not load data',
   'fill_phone': 'Fill in the phone number in the format shown',
   'fill_email': 'Enter the email in the correct format',
   'fill_full_name': 'Full name must be at least 2 words and words must be at least 3 letters',
@@ -72,7 +74,8 @@ const Map<String, String> enUS = {
   'confirm_sign_out': 'Confirm that you really want to log out of your account',
   'info': 'Information',
   'info_text': 'Application version:  1.0.0\nCreated time:  01.03.2024\nAuthor:  Imomboy Mirislomov\nEmail:  imomboymirislomov@gmail.com',
-
+  'email_not_set': 'Email is not set',
+  'phone_not_set': 'Phone number is not set',
 
   /// NewPage
   'contract': 'Contract',
@@ -85,7 +88,7 @@ const Map<String, String> enUS = {
   'snack_service': 'The service name must contain\nat least 3 letters',
   'invoice_amount': 'Invoice amount',
   'snack_invoice': 'The invoice amount must be at least 100 000',
-  'sum': 'SUM',
+  'uzs': 'UZS',
   'status_invoice': 'Status of the invoice',
   'invoice_status_1': 'Paid',
   'invoice_status_2': 'In process',
@@ -103,6 +106,7 @@ const Map<String, String> enUS = {
   'snack_address': 'Address yoz',
   'fisher_full_name': 'Fisher’s full name',
   'snack_full_name': 'Full name yoz',
+  'invoice_saved': 'Your invoice has been successfully saved',
 
   /// ContractsPage
   'contracts': 'Contracts',
@@ -118,13 +122,25 @@ const Map<String, String> enUS = {
   'october' : 'October',
   'november' : 'November',
   'december' : 'December',
-  'mo' : 'Mo',
-  'tu' : 'Tu',
-  'we' : 'We',
-  'th' : 'Th',
-  'fr' : 'Fr',
-  'sa' : 'Sa',
-  'su' : 'Su',
+  'Mo' : 'Mo',
+  'Tu' : 'Tu',
+  'We' : 'We',
+  'Th' : 'Th',
+  'Fr' : 'Fr',
+  'Sa' : 'Sa',
+  'Su' : 'Su',
+  'fishers_full_name' : 'Fisher\'s full name',
+  'amount' : 'Amount',
+  'last_invoice' : 'Last invoice',
+  'number_invoice' : 'Number of invoice',
+  'Paid': 'Paid',
+  'In process': 'In process',
+  'Rejected by Payme': 'Rejected by Payme',
+  'Rejected by IQ': 'Rejected by IQ',
+
+  /// MainPage
+  'exit': 'Exit',
+  'confirm_exit': 'Confirm that you really want to exit of IBilling',
 
 
   'history': 'History',

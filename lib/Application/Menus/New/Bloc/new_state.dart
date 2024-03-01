@@ -7,7 +7,12 @@ class NewInitialState extends NewState {
   List<Object> get props => [];
 }
 
-class NewLoadingState extends NewState {
+class NewContractLoadingState extends NewState {
+  @override
+  List<Object> get props => [];
+}
+
+class NewInvoiceLoadingState extends NewState {
   @override
   List<Object> get props => [];
 }

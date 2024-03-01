@@ -98,6 +98,12 @@ abstract class AppTextStyles {
   /// color: darkGray, size: 14, weight: 700, font: Ubuntu
   static const style25_1 = TextStyle(color: AppColors.darkGrey, fontSize: 14, fontFamily: 'Ubuntu', fontWeight: FontWeight.w700);
 
+  /// color: lightGrey, size: 14, weight: 700, font: Ubuntu
+  static const style25_2 = TextStyle(color: AppColors.lightGrey, fontSize: 14, fontFamily: 'Ubuntu', fontWeight: FontWeight.w700);
+
   /// color: blue, size: 14, weight: 400, font: Ubuntu
   static const style26 = TextStyle(color: AppColors.blue, fontSize: 14, fontFamily: 'Ubuntu', fontWeight: FontWeight.w400);
+
+  /// color: blue, size: 12, weight: 500, font: Ubuntu
+  static const style27 = TextStyle(color: AppColors.blue, fontSize: 12, fontFamily: 'Ubuntu', fontWeight: FontWeight.w500);
 }

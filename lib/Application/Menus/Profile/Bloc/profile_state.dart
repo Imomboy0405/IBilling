@@ -4,10 +4,17 @@ abstract class ProfileState extends Equatable {}
 
 class ProfileInitialState extends ProfileState {
   final bool darkMode;
-  ProfileInitialState({required this.darkMode});
+  final String? phone;
+  final String? email;
+  ProfileInitialState({required this.darkMode, required this.email, required this.phone});
 
   @override
-  List<Object?> get props => [darkMode];
+  List<Object?> get props => [darkMode, email, phone];
+}
+
+class ProfileLoadingState extends ProfileState {
+  @override
+  List<Object?> get props => [];
 }
 
 class ProfileLangState extends ProfileState {

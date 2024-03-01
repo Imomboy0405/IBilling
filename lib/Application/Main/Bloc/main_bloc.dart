@@ -1,12 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:i_billing/Data/Model/invoice_model.dart';
 import 'package:i_billing/Data/Service/lang_service.dart';
+import 'package:i_billing/Data/Service/theme_service.dart' as theme;
 
 part 'main_event.dart';
 part 'main_state.dart';
 
 class MainBloc extends Bloc<MainEvent, MainState> {
+  bool darkMode = theme.ThemeService.getTheme == theme.ThemeMode.dark;
+  Language language = LangService.getLanguage;
+
   int currentScreen = 1;
   int oldScreen = 1;
   bool menuButtonPressed = false;
@@ -32,11 +37,39 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   ];
   PageController controller = PageController(keepPage: true, initialPage: 1);
 
-  MainBloc() : super(MainInitialState(1, LangService.getLanguage)) {
+  int selectedDay = DateTime.now().day;
+  int selectedYear = DateTime.now().year;
+  int selectedMonth = DateTime.now().month;
+  double dayControllerPixels = 0;
+  List<InvoiceModel> invoices = [];
+  //
+  // ScrollController invoiceController = ScrollController();
+
+  MainBloc() : super(MainInitialState(
+    screen: 1,
+    lang: LangService.getLanguage,
+    darkMode: theme.ThemeService.getTheme == theme.ThemeMode.dark,
+    selectedDay: DateTime.now().day,
+    selectedMonth: DateTime.now().month,
+    selectedYear: DateTime.now().year,
+    dayControllerPixels: 0,
+  )) {
     on<MainScrollMenuEvent>(scrollMenu);
     on<MainMenuButtonEvent>(pressMenuButton);
     on<MainHideBottomNavigationBarEvent>(hideBottomNavigationBar);
     on<MainLanguageEvent>(languageUpdate);
+  }
+
+  void emitComfort(Emitter<MainState> emit) {
+    emit(MainInitialState(
+      screen: currentScreen,
+      lang: language,
+      darkMode: darkMode,
+      selectedDay: selectedDay,
+      selectedMonth: selectedMonth,
+      selectedYear: selectedYear,
+      dayControllerPixels: dayControllerPixels,
+    ));
   }
 
   void listen() {
@@ -66,7 +99,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
           currentScreen,
           duration: Duration(milliseconds: (currentScreen - oldScreen)  * 50 + 200),
           curve: Curves.linear);
-      emit(MainInitialState(currentScreen, LangService.getLanguage));
+      emitComfort(emit);
     }
     else if(event.index + 1 < oldScreen) {
       currentScreen = event.index + 1;
@@ -74,7 +107,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
           currentScreen,
           duration: Duration(milliseconds: (oldScreen - currentScreen)  * 50 + 150),
           curve: Curves.linear);
-      emit(MainInitialState(--currentScreen, LangService.getLanguage));
+      emitComfort(emit);
     }
     oldScreen = currentScreen;
     menuButtonPressed = false;
@@ -82,7 +115,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
 
   Future<void> scrollMenu(MainScrollMenuEvent event, Emitter<MainState> emit) async {
     await controller.animateToPage(currentScreen, duration: const Duration(milliseconds: 150), curve: Curves.easeOut);
-    emit(MainInitialState(currentScreen, LangService.getLanguage));
+    emitComfort(emit);
   }
 
   void hideBottomNavigationBar(MainHideBottomNavigationBarEvent event, Emitter<MainState> emit) {
@@ -90,6 +123,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   }
 
   void languageUpdate(MainLanguageEvent event, Emitter<MainState> emit) {
-    emit(MainInitialState(currentScreen, LangService.getLanguage));
+    language = LangService.getLanguage;
+    emitComfort(emit);
   }
 }

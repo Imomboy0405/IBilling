@@ -184,7 +184,7 @@ class SignUpPage extends StatelessWidget {
                             MyButton(
                               disabledAction: DisabledAction(context: context, text: 'fill_all_forms'.tr()),
                               text: 'sign_up'.tr(),
-                              enable: (bloc.emailSuffix || bloc.phoneSuffix) && bloc.fullNameSuffix
+                              enable: (bloc.emailSuffix || bloc.phoneSuffix || bloc.googleOrFacebook) && bloc.fullNameSuffix
                                   && bloc.passwordSuffix && bloc.rePasswordSuffix,
                               function: () => context.read<SignUpBloc>().add(SignUpButtonEvent(context: context)),
                             ),
