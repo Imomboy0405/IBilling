@@ -36,7 +36,7 @@ class SignInPage extends StatelessWidget {
                       pageName: id)],
 
                 // #IBilling
-                title: const Text('IBilling', style: AppTextStyles.style0_1),
+                title: Text('IBilling', style: AppTextStyles.style0_1(context)),
                 leadingWidth: 60,
               ),
 
@@ -54,7 +54,7 @@ class SignInPage extends StatelessWidget {
                         Text(
                           'log_to_acc'.tr(),
                           textAlign: TextAlign.center,
-                          style: AppTextStyles.style16,
+                          style: AppTextStyles.style16(context),
                         ),
 
                         Column(
@@ -118,7 +118,7 @@ class SignInPage extends StatelessWidget {
                                 ),
 
                                 // #or
-                                Text('or'.tr(), style: AppTextStyles.style2),
+                                Text('or'.tr(), style: AppTextStyles.style2(context)),
 
                                 // #email
                                 SelectButton(
@@ -195,7 +195,7 @@ class SignInPage extends StatelessWidget {
                         // #or_continue_with
                         Text('or_continue_with'.tr(),
                             textAlign: TextAlign.center,
-                            style: AppTextStyles.style2),
+                            style: AppTextStyles.style2(context)),
 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -209,12 +209,11 @@ class SignInPage extends StatelessWidget {
                                 txt: 'Facebook'),
 
                             // #or
-                            Text('or'.tr(), style: AppTextStyles.style2),
+                            Text('or'.tr(), style: AppTextStyles.style2(context)),
 
                             // #google
                             myTextButton(
-                                onPressed: () => context.read<SignInBloc>()
-                                    .add(GoogleEvent(width: MediaQuery.of(context).size.width, context: context)),
+                                onPressed: () => context.read<SignInBloc>().add(GoogleEvent(width: MediaQuery.of(context).size.width, context: context)),
                                 context: context,
                                 assetIc: 'google',
                                 txt: 'Google'),
@@ -226,11 +225,11 @@ class SignInPage extends StatelessWidget {
                           text: TextSpan(children: [
                             TextSpan(
                               text: 'dont_have_an_account'.tr(),
-                              style: AppTextStyles.style2,
+                              style: AppTextStyles.style2(context),
                             ),
                             TextSpan(
                               text: 'sign_up'.tr(),
-                              style: AppTextStyles.style9,
+                              style: AppTextStyles.style9(context),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () => context
                                     .read<SignInBloc>()

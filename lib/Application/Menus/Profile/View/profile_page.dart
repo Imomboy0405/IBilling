@@ -45,6 +45,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
+                        // #profil
                         Container(
                           height: 188,
                           margin: const EdgeInsets.only(top: 20, bottom: 10),
@@ -52,6 +53,14 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                           decoration: BoxDecoration(
                             color: AppColors.dark,
                             borderRadius: BorderRadius.circular(6),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                spreadRadius: 0.5,
+                                blurRadius: 1,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -61,13 +70,13 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Icon(Icons.account_circle_rounded, color: AppColors.blue, size: 48),
+                                  Icon(Icons.account_circle_rounded, color: AppColors.blue, size: 48),
                                   const SizedBox(width: 10),
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(bloc.fullName, style: AppTextStyles.style3),
-                                      Text('i_billing_user'.tr(), style: AppTextStyles.style19),
+                                      Text(bloc.fullName, style: AppTextStyles.style3(context)),
+                                      Text('i_billing_user'.tr(), style: AppTextStyles.style19(context)),
                                     ],
                                   ),
 
@@ -77,27 +86,27 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                               // #date_of_sign_up
                               Row(
                                 children: [
-                                  Text("${'date_sign'.tr()}:", style: AppTextStyles.style19),
+                                  Text("${'date_sign'.tr()}:", style: AppTextStyles.style19(context)),
                                   const SizedBox(width: 10),
-                                  Text(bloc.dateSign, style: AppTextStyles.style23),
+                                  Text(bloc.dateSign, style: AppTextStyles.style23(context)),
                                 ],
                               ),
 
                               // #phone_number
                               Row(
                                 children: [
-                                  Text("${'phone_num'.tr()}:", style: AppTextStyles.style19),
+                                  Text("${'phone_num'.tr()}:", style: AppTextStyles.style19(context)),
                                   const SizedBox(width: 10),
-                                  Text(bloc.phoneNumber == null ? 'phone_not_set'.tr() : bloc.phoneNumber!, style: AppTextStyles.style23),
+                                  Text(bloc.phoneNumber == null ? 'phone_not_set'.tr() : bloc.phoneNumber!, style: AppTextStyles.style23(context)),
                                 ],
                               ),
 
                               // #email
                               Row(
                                 children: [
-                                  Text("${'email'.tr()}:", style: AppTextStyles.style19),
+                                  Text("${'email'.tr()}:", style: AppTextStyles.style19(context)),
                                   const SizedBox(width: 10),
-                                  Text(bloc.email == null ? 'email_not_set'.tr() : bloc.email!, style: AppTextStyles.style23),
+                                  Text(bloc.email == null ? 'email_not_set'.tr() : bloc.email!, style: AppTextStyles.style23(context)),
                                 ],
                               ),
                             ],
@@ -111,7 +120,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                           endElement: SizedBox(
                             height: 30,
                             child: ToggleButtons(
-                              selectedColor: AppColors.white,
+                              selectedColor: Colors.white,
                               color: AppColors.darkGrey,
                               fillColor: AppColors.blue,
                               hoverColor: AppColors.red,
@@ -151,11 +160,11 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                         ),
                         const SizedBox(height: 10),
 
-                        // #sign_out
+                        // #info
                         MyProfileButton(
                           text: 'info'.tr(),
                           function: () => context.read<ProfileBloc>().add(InfoEvent()),
-                          endElement: const Icon(CupertinoIcons.info, size: 24, color: AppColors.white),
+                          endElement:  Icon(CupertinoIcons.info, size: 24, color: AppColors.white),
                         ),
                       ],
                     ),
@@ -182,7 +191,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                           return RadioListTile(
                               activeColor: AppColors.blue,
                               hoverColor: AppColors.blue,
-                              overlayColor: const MaterialStatePropertyAll(AppColors.disableBlue),
+                              overlayColor: MaterialStatePropertyAll(AppColors.transparentBlue),
                               selectedTileColor: AppColors.blue,
                               controlAffinity: ListTileControlAffinity.trailing,
                               contentPadding: EdgeInsets.zero,
@@ -192,7 +201,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                                 height: 24,
                                 fit: BoxFit.fill,
                               ),
-                              title: Text('button_$index'.tr(), style: AppTextStyles.style23),
+                              title: Text('button_$index'.tr(), style: AppTextStyles.style23(context)),
                               selected: bloc.lang[index] == bloc.selectedLang,
                               value: bloc.lang[index],
                               groupValue: bloc.selectedLang,
@@ -214,7 +223,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                     functionDone: () => context.read<ProfileBloc>().add(ConfirmEvent(context: context)),
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 16),
-                      child: Text('confirm_sign_out'.tr(), style: AppTextStyles.style23),
+                      child: Text('confirm_sign_out'.tr(), style: AppTextStyles.style23(context)),
                     ),
                   ),
 
@@ -227,7 +236,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
                     functionCancel: () => context.read<ProfileBloc>().add(CancelEvent()),
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 16),
-                      child: Text('info_text'.tr(), style: AppTextStyles.style23),
+                      child: Text('info_text'.tr(), style: AppTextStyles.style23(context)),
                     ),
                   ),
               ],

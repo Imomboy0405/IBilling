@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:i_billing/Data/Model/history_model.dart';
 import 'package:i_billing/Data/Model/contract_model.dart';
 import 'package:i_billing/Data/Model/invoice_model.dart';
+import 'package:i_billing/Data/Model/saved_model.dart';
 import 'package:i_billing/Data/Model/user_model.dart';
 
 class RTDBService {
@@ -41,15 +42,9 @@ class RTDBService {
   }
 
   static Future<HistoryModel> loadHistory(String uId) async {
-    HistoryModel historyModel = HistoryModel(uId: uId, history: []);
     Query query = database.child('histories').child(uId);
     DatabaseEvent event = await query.once();
-    var result = event.snapshot.children;
-    for (DataSnapshot item in result) {
-      if (item.value != null) {
-        historyModel = HistoryModel.fromJson(Map<String, dynamic>.from(item.value as Map));
-      }
-    }
+    HistoryModel historyModel = HistoryModel.fromJson(event.snapshot.value);
     return historyModel;
   }
 
@@ -114,4 +109,26 @@ class RTDBService {
     }
     return items;
   }
+
+
+  static Future<Stream<DatabaseEvent>> storeSaved(SavedModel savedModel) async {
+    await database
+        .child('saved')
+        .child('${savedModel.uId}')
+        .set(savedModel.toJson());
+    return database.onChildAdded;
+  }
+
+  static Future<Stream<DatabaseEvent>> deleteSaved(SavedModel historyModel) async {
+    await database.child('saved').child(historyModel.uId!).remove();
+    return database.onChildAdded;
+  }
+
+  static Future<SavedModel> loadSaved(String uId) async {
+    Query query = database.child('saved').child(uId);
+    DatabaseEvent event = await query.once();
+    SavedModel savedModel = SavedModel.fromJson(event.snapshot.value);
+    return savedModel;
+  }
+
 }

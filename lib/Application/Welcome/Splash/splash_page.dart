@@ -8,10 +8,10 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: AppColors.black,
       body: Center(
-        child: Text('IBilling', style: AppTextStyles.style0,),
+        child: Text('IBilling', style: AppTextStyles.style0),
       ),
     );
   }

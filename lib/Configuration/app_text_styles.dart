@@ -3,107 +3,139 @@ import 'app_colors.dart';
 
 abstract class AppTextStyles {
   /// color: blue, size: 40, weight: bold, font: monda
-  static const style0 = TextStyle(color: AppColors.blue, fontSize: 40, fontWeight: FontWeight.bold, fontFamily: 'Monda', letterSpacing: 1.5);
+  static TextStyle style0 = TextStyle(color: AppColors.blue, fontSize: 40, fontWeight: FontWeight.bold, fontFamily: 'Monda', letterSpacing: 1.5);
 
-  /// color: blue, size: 20, weight: bold, font: monda
-  static const style0_1 = TextStyle(color: AppColors.blue, fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Monda', letterSpacing: 1.5);
+  /// Example text style: color - blue, size - 20, weight - bold, font - monda
+  static TextStyle style0_1(BuildContext context) => _baseStyle(context, AppColors.blue, 20, FontWeight.bold, 'Monda', letterSpacing: 1.5);
 
-  /// color: blue, size: 20, weight: bold,
-  static const style1 = TextStyle(color: AppColors.blue, fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'Poppins');
+  /// Example text style: color - blue, size - 22, weight - bold, font - Poppins
+  static TextStyle style1(BuildContext context) => _baseStyle(context, AppColors.blue, 22, FontWeight.bold, 'Poppins');
 
-  /// color: white, size: 14
-  static const style2 = TextStyle(color: AppColors.white, fontSize: 14, fontFamily: 'Poppins');
+  /// Example text style: color - white, size - 14, font - Poppins
+  static TextStyle style2(BuildContext context) => _baseStyle(context, AppColors.white, 14, FontWeight.normal, 'Poppins');
 
-  /// color: blue, size: 18, weight: bold
-  static const style3 = TextStyle(color: AppColors.blue, fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Poppins');
+  /// Example text style: color - blue, size - 18, weight - bold, font - Poppins
+  static TextStyle style3(BuildContext context) => _baseStyle(context, AppColors.blue, 18, FontWeight.bold, 'Poppins');
 
-  /// color: red, size: 18, weight: bold
-  static const style3_1 = TextStyle(color: AppColors.red, fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Poppins');
+  /// Example text style: color - red, size - 18, weight - bold, font - Poppins
+  static TextStyle style3_1(BuildContext context) => _baseStyle(context, AppColors.red, 18, FontWeight.bold, 'Poppins');
 
-  /// color: white, size: 18, weight: w500
-  static const style4 = TextStyle(color: AppColors.white, fontSize: 18, fontWeight: FontWeight.w500, fontFamily: 'Poppins');
+  /// Example text style: color - white, size - 18, weight - w500, font - Poppins
+  static TextStyle style4(BuildContext context) => _baseStyle(context, AppColors.white, 18, FontWeight.w500, 'Poppins');
 
-  /// color: disabledBlue, size: 18, weight: w500
-  static const style5 = TextStyle(color: AppColors.disableBlue, fontSize: 18, fontWeight: FontWeight.w500, fontFamily: 'Poppins');
+  /// Example text style: color - transparentBlue, size - 18, weight - w500, font - Poppins
+  static TextStyle style5(BuildContext context) => _baseStyle(context, AppColors.transparentBlue, 18, FontWeight.w500, 'Poppins');
 
-  /// color: darkGray, size: 18,
-  static const style6 = TextStyle(color: AppColors.darkGrey, fontSize: 18, fontFamily: 'Poppins');
+  /// Example text style: color - darkGrey, size - 18, font - Poppins
+  static TextStyle style6(BuildContext context) => _baseStyle(context, AppColors.darkGrey, 18, FontWeight.normal, 'Poppins');
 
-  /// color: blue, size: 18,
-  static const style7 = TextStyle(color: AppColors.blue, fontSize: 18, fontFamily: 'Poppins');
+  /// Example text style: color - blue, size - 18, font - Poppins
+  static TextStyle style7(BuildContext context) => _baseStyle(context, AppColors.blue, 18, FontWeight.normal, 'Poppins');
 
-  /// color: red, size: 18, font: Poppins
-  static const style7_1 = TextStyle(color: AppColors.red, fontSize: 18, fontFamily: 'Poppins');
+  /// Example text style: color - red, size - 18, font - Poppins
+  static TextStyle style7_1(BuildContext context) => _baseStyle(context, AppColors.red, 18, FontWeight.normal, 'Poppins');
 
-  /// color: black, size: 14,
-  static const style8 = TextStyle(color: AppColors.black, fontSize: 14, fontFamily: 'Poppins');
+  /// Example text style: color - black, size - 14, font - Poppins
+  static TextStyle style8(BuildContext context) => _baseStyle(context, AppColors.black, 14, FontWeight.normal, 'Poppins');
 
-  /// color: blue, size: 14
-  static const style9 = TextStyle(color: AppColors.blue, fontSize: 14, fontWeight: FontWeight.bold, fontFamily: 'Poppins');
+  /// Example text style: color - blue, size - 14, weight - bold, font - Poppins
+  static TextStyle style9(BuildContext context) => _baseStyle(context, AppColors.blue, 14, FontWeight.bold, 'Poppins');
 
-  /// color: darkGrey, size: 14
-  static const style10 = TextStyle(color: AppColors.darkGrey, fontSize: 14, fontWeight: FontWeight.bold, fontFamily: 'Poppins');
+  /// Example text style: color - darkGrey, size - 14, weight - bold, font - Poppins
+  static TextStyle style10(BuildContext context) => _baseStyle(context, AppColors.darkGrey, 14, FontWeight.bold, 'Poppins');
 
-  /// color: black, size: 24, weight: bold
-  static const style11 = TextStyle(color: AppColors.black, fontSize: 24, fontWeight: FontWeight.bold, fontFamily: 'Poppins');
+  /// Example text style: color - black, size - 24, weight - bold, font - Poppins
+  static TextStyle style11(BuildContext context) => _baseStyle(context, AppColors.black, 24, FontWeight.bold, 'Poppins');
 
-  /// color: darkGrey, size: 14
-  static const style12 = TextStyle(color: AppColors.darkGrey, fontSize: 14, fontWeight: FontWeight.bold, fontFamily: 'Poppins');
+  /// Example text style: color - darkGrey, size - 14, weight - bold, font - Poppins
+  static TextStyle style12(BuildContext context) => _baseStyle(context, AppColors.darkGrey, 14, FontWeight.bold, 'Poppins');
 
-  /// color: white, size: 14, weight: 400
-  static const style13 = TextStyle(color: AppColors.white, fontSize: 14, fontWeight: FontWeight.w400, fontFamily: 'Poppins');
+  /// Example text style: color - white, size - 14, weight - w400, font - Poppins
+  static TextStyle style13(BuildContext context) => _baseStyle(context, AppColors.white, 14, FontWeight.w400, 'Poppins');
 
-  /// color: disableBlue, size: 14, weight: 400
-  static const style14 = TextStyle(color: AppColors.disableBlue, fontSize: 14, fontWeight: FontWeight.w400, fontFamily: 'Poppins');
+  /// Example text style: color - transparentBlue, size - 14, weight - w400, font - Poppins
+  static TextStyle style14(BuildContext context) => _baseStyle(context, AppColors.transparentBlue, 14, FontWeight.w400, 'Poppins');
 
-  /// color: white, size: 14
-  static const style15 = TextStyle(color: AppColors.white, fontSize: 14, fontFamily: 'Poppins');
+  /// Example text style: color - white, size - 14, font - Poppins
+  static TextStyle style15(BuildContext context) => _baseStyle(context, AppColors.white, 14, FontWeight.normal, 'Poppins');
 
-  /// color: blue, size: 24, weight: bold
-  static const style16 = TextStyle(color: AppColors.blue, fontSize: 24, fontWeight: FontWeight.bold, fontFamily: 'Poppins');
+  /// Example text style: color - blue, size - 24, weight - bold, font - Poppins
+  static TextStyle style16(BuildContext context) => _baseStyle(context, AppColors.blue, 24, FontWeight.bold, 'Poppins');
 
-  /// color: blue, size: 12
-  static const style17 = TextStyle(color: AppColors.blue, fontSize: 11, fontFamily: 'Poppins');
+  /// Example text style: color - blue, size - 11, font - Poppins
+  static TextStyle style17(BuildContext context) => _baseStyle(context, AppColors.blue, 11, FontWeight.normal, 'Poppins');
 
-  /// color: white, size: 18, weight: 500, font: Ubuntu
-  static const style18 = TextStyle(color: AppColors.white, fontSize: 18, fontFamily: 'Ubuntu', fontWeight: FontWeight.w500);
+  /// Example text style: color - white, size - 18, weight - w500, font - Ubuntu
+  static TextStyle style18(BuildContext context) => _baseStyle(context, AppColors.white, 18, FontWeight.w500, 'Ubuntu');
 
-  /// color: white, size: 18, weight: 700, font: Ubuntu
-  static const style18_1 = TextStyle(color: AppColors.white, fontSize: 18, fontFamily: 'Ubuntu', fontWeight: FontWeight.w700);
+  /// Example text style: color - white, size - 20, weight - w500, font - Ubuntu
+  static TextStyle style18_0(BuildContext context) => _baseStyle(context, AppColors.white, 20, FontWeight.w500, 'Ubuntu');
 
-  /// color: white, size: 14, weight: 500, font: Ubuntu
-  static const style19 = TextStyle(color: AppColors.white, fontSize: 14, fontFamily: 'Ubuntu', fontWeight: FontWeight.w500);
+  /// Example text style: color - white, size - 18, weight - w700, font - Ubuntu
+  static TextStyle style18_1(BuildContext context) => _baseStyle(context, AppColors.white, 18, FontWeight.w700, 'Ubuntu');
 
-  /// color: white, size: 16, weight: 700, font: Ubuntu
-  static const style20 = TextStyle(color: AppColors.white, fontSize: 16, fontFamily: 'Ubuntu', fontWeight: FontWeight.w700);
+  /// Example text style: color - white, size - 14, weight - w500, font - Ubuntu
+  static TextStyle style19(BuildContext context) => _baseStyle(context, AppColors.white, 14, FontWeight.w500, 'Ubuntu');
 
-  /// color: white, size: 10, weight: 700, font: Ubuntu
-  static const style21 = TextStyle(color: AppColors.white, fontSize: 10, fontFamily: 'Ubuntu', fontWeight: FontWeight.w700);
+  /// Example text style: color - transparentBlue, size - 14, weight - w500, font - Ubuntu
+  static TextStyle style19_0(BuildContext context) => _baseStyle(context, AppColors.transparentBlue, 14, FontWeight.w500, 'Ubuntu');
 
-  /// color: lightGrey, size: 10, weight: 500, font: Ubuntu
-  static const style22 = TextStyle(color: AppColors.lightGrey, fontSize: 10, fontFamily: 'Ubuntu', fontWeight: FontWeight.w500);
+  /// Example text style: color - lightGrey, size - 14, weight - w500, font - Ubuntu
+  static TextStyle style19_1(BuildContext context) => _baseStyle(context, AppColors.lightGrey, 14, FontWeight.w500, 'Ubuntu');
 
-  /// color: white, size: 14, weight: 400, font: Ubuntu
-  static const style23 = TextStyle(color: AppColors.white, fontSize: 14, fontFamily: 'Ubuntu', fontWeight: FontWeight.w400);
+  /// Example text style: color - white, size - 16, weight - w700, font - Ubuntu
+  static TextStyle style20(BuildContext context) => _baseStyle(context, AppColors.white, 16, FontWeight.w700, 'Ubuntu');
 
-  /// color: white, size: 14, weight: 700, font: Ubuntu
-  static const style23_1 = TextStyle(color: AppColors.white, fontSize: 14, fontFamily: 'Ubuntu', fontWeight: FontWeight.w700);
+  /// Example text style: color - gray, size - 16, weight - w400, font - Ubuntu
+  static TextStyle style20_1(BuildContext context) => _baseStyle(context, AppColors.gray, 16, FontWeight.w400, 'Ubuntu');
 
-  /// color: white, size: 16, weight: 500, font: Ubuntu
-  static const style24 = TextStyle(color: AppColors.white, fontSize: 16, fontFamily: 'Ubuntu', fontWeight: FontWeight.w500);
+  /// Example text style: color - white, size - 16, weight - w400, font - Ubuntu
+  static TextStyle style20_2(BuildContext context) => _baseStyle(context, AppColors.white, 16, FontWeight.w400, 'Ubuntu');
 
-  /// color: gray, size: 14, weight: 400, font: Ubuntu
-  static const style25 = TextStyle(color: AppColors.gray, fontSize: 14, fontFamily: 'Ubuntu', fontWeight: FontWeight.w400);
+  /// Example text style: color - white, size - 10, weight - w700, font - Ubuntu
+  static TextStyle style21(BuildContext context) => _baseStyle(context, AppColors.white, 10, FontWeight.w700, 'Ubuntu');
 
-  /// color: darkGray, size: 14, weight: 700, font: Ubuntu
-  static const style25_1 = TextStyle(color: AppColors.darkGrey, fontSize: 14, fontFamily: 'Ubuntu', fontWeight: FontWeight.w700);
+  /// Example text style: color - lightGrey, size - 10, weight - w500, font - Ubuntu
+  static TextStyle style22(BuildContext context) => _baseStyle(context, AppColors.lightGrey, 10, FontWeight.w500, 'Ubuntu');
 
-  /// color: lightGrey, size: 14, weight: 700, font: Ubuntu
-  static const style25_2 = TextStyle(color: AppColors.lightGrey, fontSize: 14, fontFamily: 'Ubuntu', fontWeight: FontWeight.w700);
+  /// Example text style: color - lightGrey, size - 14, weight - w400, font - Ubuntu
+  static TextStyle style23(BuildContext context) => _baseStyle(context, AppColors.lightGrey, 14, FontWeight.w400, 'Ubuntu');
 
-  /// color: blue, size: 14, weight: 400, font: Ubuntu
-  static const style26 = TextStyle(color: AppColors.blue, fontSize: 14, fontFamily: 'Ubuntu', fontWeight: FontWeight.w400);
+  /// Example text style: color - white, size - 14, weight - w700, font - Ubuntu
+  static TextStyle style23_1(BuildContext context) => _baseStyle(context, AppColors.white, 14, FontWeight.w700, 'Ubuntu');
 
-  /// color: blue, size: 12, weight: 500, font: Ubuntu
-  static const style27 = TextStyle(color: AppColors.blue, fontSize: 12, fontFamily: 'Ubuntu', fontWeight: FontWeight.w500);
+  /// Example text style: color - lightGrey, size - 14, weight - w700, font - Ubuntu
+  static TextStyle style23_3(BuildContext context) => _baseStyle(context, AppColors.lightGrey, 14, FontWeight.w700, 'Ubuntu');
+
+  /// Example text style: color - red, size - 14, weight - w700, font - Ubuntu
+  static TextStyle style23_2(BuildContext context) => _baseStyle(context, AppColors.red, 14, FontWeight.w700, 'Ubuntu');
+
+  /// Example text style: color - white, size - 16, weight - w500, font - Ubuntu
+  static TextStyle style24(BuildContext context) => _baseStyle(context, AppColors.white, 16, FontWeight.w500, 'Ubuntu');
+
+  /// Example text style: color - gray, size - 14, weight - w400, font - Ubuntu
+  static TextStyle style25(BuildContext context) => _baseStyle(context, AppColors.gray, 14, FontWeight.w400, 'Ubuntu');
+
+  /// Example text style: color - darkGrey, size - 14, weight - w700, font - Ubuntu
+  static TextStyle style25_1(BuildContext context) => _baseStyle(context, AppColors.darkGrey, 14, FontWeight.w700, 'Ubuntu');
+
+  /// Example text style: color - lightGrey, size - 14, weight - w700, font - Ubuntu
+  static TextStyle style25_2(BuildContext context) => _baseStyle(context, AppColors.lightGrey, 14, FontWeight.w700, 'Ubuntu');
+
+  /// Example text style: color - white, size - 14, weight - w400, font - Ubuntu
+  static TextStyle style26(BuildContext context) => _baseStyle(context, AppColors.white, 14, FontWeight.w400, 'Ubuntu');
+
+  /// Example text style: color - blue, size - 12, weight - w500, font - Ubuntu
+  static TextStyle style27(BuildContext context) => _baseStyle(context, AppColors.blue, 12, FontWeight.w500, 'Ubuntu');
+
+  /// Base text style function to avoid code duplication.
+  static TextStyle _baseStyle(BuildContext context, Color color, double fontSize, FontWeight fontWeight, String fontFamily, {double letterSpacing = 0.0}) {
+    return TextStyle(
+      color: color,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      fontFamily: fontFamily,
+      letterSpacing: letterSpacing,
+    );
+  }
 }

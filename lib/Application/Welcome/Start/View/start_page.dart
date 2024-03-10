@@ -33,7 +33,7 @@ class StartPage extends StatelessWidget {
                 ],
 
                 // #IBilling
-                title: const Text('IBilling', style: AppTextStyles.style0_1),
+                title: Text('IBilling', style: AppTextStyles.style0_1(context)),
                 leadingWidth: 60,
               ),
               body: Column(
@@ -53,7 +53,7 @@ class StartPage extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const TabPageSelector(
+                        TabPageSelector(
                           indicatorSize: 8,
                           color: AppColors.darkGrey,
                           selectedColor: AppColors.blue,
@@ -80,7 +80,7 @@ class StartPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(6)),
                           height: 48,
                           child:
-                              Text('log_in'.tr(), style: AppTextStyles.style4),
+                              Text('log_in'.tr(), style: AppTextStyles.style4(context).copyWith(color: Colors.white)),
                         ),
                         const Spacer(),
 
@@ -91,13 +91,13 @@ class StartPage extends StatelessWidget {
                             children: [
                               TextSpan(
                                 text: 'log_info'.tr(),
-                                style: AppTextStyles.style2,
+                                style: AppTextStyles.style2(context),
                               ),
 
                               // #terms_of_use
                               TextSpan(
                                 text: 'terms'.tr(),
-                                style: AppTextStyles.style9,
+                                style: AppTextStyles.style9(context),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () => context
                                       .read<StartBloc>()
@@ -105,13 +105,13 @@ class StartPage extends StatelessWidget {
                               ),
                               TextSpan(
                                 text: 'and'.tr(),
-                                style: AppTextStyles.style2,
+                                style: AppTextStyles.style2(context),
                               ),
 
                               // #privacy_policy
                               TextSpan(
                                 text: 'policy'.tr(),
-                                style: AppTextStyles.style9,
+                                style: AppTextStyles.style9(context),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () => context
                                       .read<StartBloc>()
@@ -178,12 +178,12 @@ class StartView extends StatelessWidget {
                   Text(
                     'welcome_$img'.tr(),
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.style1,
+                    style: AppTextStyles.style1(context),
                   ),
                   Text(
                     'welcome_info'.tr(),
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.style2,
+                    style: AppTextStyles.style2(context),
                   ),
                 ],
               ),

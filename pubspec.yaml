@@ -25,7 +25,9 @@ dependencies:
   url_launcher: ^6.2.4
   lottie: any
   intl: ^0.17.0
+  feature_discovery: any
   flutter_staggered_animations: any
+  animated_text_kit: any
 
 
   # state management

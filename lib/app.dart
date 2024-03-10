@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'Application/Main/View/main_page.dart';
 import 'Application/Welcome/SignIn/View/sign_in_page.dart';
 import 'Application/Welcome/SignUp/View/sign_up_page.dart';
@@ -11,7 +10,6 @@ import 'Data/Service/init_service.dart';
 
 class IBilling extends StatelessWidget {
   final Future _initFuture = Init.initialize();
-
   IBilling({super.key});
 
   Widget _startPage() {
@@ -31,6 +29,10 @@ class IBilling extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       title: 'IBilling',
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('ru', 'RU'),
+      ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(secondary: AppColors.blue),
         canvasColor: AppColors.transparentGray,

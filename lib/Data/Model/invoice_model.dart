@@ -12,16 +12,19 @@ class InvoiceModel {
   String? status;
   int? number;
   String? createdDate;
+  bool? deleted;
 
   InvoiceModel({
-      this.uId, 
-      this.key, 
-      this.fullName, 
-      this.serviceName, 
-      this.amount, 
-      this.status, 
-      this.number, 
-      this.createdDate,});
+    this.uId,
+    this.key,
+    this.fullName,
+    this.serviceName,
+    this.amount,
+    this.status,
+    this.number,
+    this.createdDate,
+    this.deleted,
+  });
 
   InvoiceModel.fromJson(dynamic json) {
     uId = json['uId'];
@@ -32,6 +35,19 @@ class InvoiceModel {
     status = json['status'];
     number = json['number'];
     createdDate = json['createdDate'];
+    deleted = json['deleted'];
+  }
+
+  InvoiceModel.copy(InvoiceModel model) {
+    uId = model.uId;
+    key = model.key;
+    fullName = model.fullName;
+    serviceName = model.serviceName;
+    amount = model.amount;
+    status = model.status;
+    number = model.number;
+    createdDate = model.createdDate;
+    deleted = model.deleted;
   }
 
   Map<String, dynamic> toJson() {
@@ -44,7 +60,18 @@ class InvoiceModel {
     map['status'] = status;
     map['number'] = number;
     map['createdDate'] = createdDate;
+    map['deleted'] = deleted;
     return map;
   }
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is InvoiceModel &&
+        other.key == key;
+  }
+
+  @override
+  int get hashCode => key.hashCode;
 }

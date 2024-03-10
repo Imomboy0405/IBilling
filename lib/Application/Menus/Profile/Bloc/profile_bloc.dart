@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_billing/Application/Main/Bloc/main_bloc.dart';
 import 'package:i_billing/Application/Welcome/SignIn/View/sign_in_page.dart';
-import 'package:i_billing/Data/Model/user_model.dart';
 import 'package:i_billing/Data/Service/db_service.dart';
 import 'package:i_billing/Data/Service/lang_service.dart';
 import 'package:i_billing/Data/Service/theme_service.dart';
@@ -37,24 +36,19 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<InfoEvent>(pressInfo);
   }
 
-  void initialUser(InitialUserEvent event, Emitter<ProfileState> emit) async {
-    emit(ProfileLoadingState());
-
-    print('object');
+  void initialUser(InitialUserEvent event, Emitter<ProfileState> emit) {
     darkMode = ThemeService.getTheme == ThemeMode.dark;
     mainBloc.darkMode = darkMode;
     selectedLang = LangService.getLanguage;
-    String? user = await DBService.loadData(StorageKey.user);
-    UserModel  userModel = userFromJson(user!);
 
-    fullName = userModel.fullName!;
-    email = userModel.email != null && userModel.email!.isNotEmpty
-        ? userModel.email!
+    fullName = mainBloc.userModel.fullName!;
+    email = mainBloc.userModel.email != null && mainBloc.userModel.email!.isNotEmpty
+        ? mainBloc.userModel.email!
         : null;
-    phoneNumber = userModel.phoneNumber != null && userModel.phoneNumber!.isNotEmpty
-        ? userModel.phoneNumber!
+    phoneNumber = mainBloc.userModel.phoneNumber != null && mainBloc.userModel.phoneNumber!.isNotEmpty
+        ? mainBloc.userModel.phoneNumber!
         : null;
-    dateSign = userModel.createdTime!;
+    dateSign = mainBloc.userModel.createdTime!;
 
     emit(ProfileInitialState(darkMode: darkMode, phone: phoneNumber, email: email));
   }
@@ -83,8 +77,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   Future<void> pressDarkMode(DarkModeEvent event, Emitter<ProfileState> emit) async {
     darkMode = event.darkMode;
-    mainBloc.darkMode = darkMode;
     await ThemeService.theme(darkMode ? ThemeMode.dark : ThemeMode.light);
+    mainBloc.add(MainThemeEvent());
     emit(ProfileInitialState(darkMode: darkMode, phone: phoneNumber, email: email));
   }
 

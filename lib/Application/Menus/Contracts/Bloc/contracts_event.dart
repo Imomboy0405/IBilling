@@ -28,8 +28,12 @@ class FilterEvent extends ContractsEvent {
 }
 
 class SearchEvent extends ContractsEvent {
+  final BuildContext context;
+
+  SearchEvent({required this.context});
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [context];
 }
 
 class ListenEvent extends ContractsEvent {
@@ -58,9 +62,16 @@ class InitialDay2ControllerEvent extends ContractsEvent {
   List<Object?> get props => [position];
 }
 
-class GetInvoicesEvent extends ContractsEvent {
+class ContractOrInvoiceEvent extends ContractsEvent {
+  final bool contract;
+  final bool network;
+  final bool first;
+  final BuildContext context;
+
+  ContractOrInvoiceEvent({this.contract = false, this.network = false, this.first = false, required this.context});
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [contract, network, first, context];
 }
 
 class OnReorderEvent extends ContractsEvent {
@@ -74,4 +85,69 @@ class OnReorderEvent extends ContractsEvent {
 
 }
 
+class SinglePageEvent extends ContractsEvent {
+  final int index;
+  final BuildContext context;
+  final bool search;
+
+  SinglePageEvent({required this.index, required this.context, this.search = false});
+
+  @override
+  List<Object?> get props => [index, context, search];
+}
+
+class CancelFilterEvent extends ContractsEvent {
+  final bool remove;
+  final double width;
+
+  CancelFilterEvent({this.remove = false, this.width = 0});
+
+  @override
+  List<Object?> get props => [remove, width];
+}
+
+class ApplyFilterEvent extends ContractsEvent {
+  final BuildContext context;
+
+  ApplyFilterEvent({required this.context});
+
+  @override
+  List<Object?> get props => [context];
+}
+
+class StatusFilterEvent extends ContractsEvent {
+  final StatusFilter status;
+
+  StatusFilterEvent({
+    required this.status,
+});
+
+  @override
+  List<Object?> get props => [status];
+
+}
+
+class ShowDatePickerEvent extends ContractsEvent {
+  final BuildContext context;
+  final bool toDate;
+
+  ShowDatePickerEvent({required this.context, this.toDate = false});
+
+  @override
+  List<Object?> get props => [context, toDate];
+}
+
+class ClearHistoryEvent extends ContractsEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class ClearHistoryDoneEvent extends ContractsEvent {
+  final bool cancel;
+
+  ClearHistoryDoneEvent({this.cancel = false});
+
+  @override
+  List<Object?> get props => [cancel];
+}
 

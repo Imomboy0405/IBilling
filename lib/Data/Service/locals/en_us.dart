@@ -78,6 +78,7 @@ const Map<String, String> enUS = {
   'phone_not_set': 'Phone number is not set',
 
   /// NewPage
+  'new': 'New',
   'contract': 'Contract',
   'invoice': 'Invoice',
   'a_new': 'A new invoice or contract',
@@ -101,12 +102,13 @@ const Map<String, String> enUS = {
   'status_contract': 'Status of the contract',
   'tin': 'TIN',
   'save_contract': 'Save contract',
-  'snack_tin': 'INN haqida gap',
+  'snack_tin': 'ITN must be 9 digits long',
   'address_organization': 'Address of the organization',
-  'snack_address': 'Address yoz',
+  'snack_address': 'The full address must be entered',
   'fisher_full_name': 'Fisher’s full name',
-  'snack_full_name': 'Full name yoz',
+  'snack_full_name': 'Full name must be entered',
   'invoice_saved': 'Your invoice has been successfully saved',
+  'contract_saved': 'Your contract has been successfully saved',
 
   /// ContractsPage
   'contracts': 'Contracts',
@@ -132,18 +134,54 @@ const Map<String, String> enUS = {
   'fishers_full_name' : 'Fisher\'s full name',
   'amount' : 'Amount',
   'last_invoice' : 'Last invoice',
+  'last_contract' : 'Last contract',
   'number_invoice' : 'Number of invoice',
+  'number_contract' : 'Number of contracts',
   'Paid': 'Paid',
   'In process': 'In process',
   'Rejected by Payme': 'Rejected by Payme',
   'Rejected by IQ': 'Rejected by IQ',
+  'filters': 'Filters',
+  'date': 'Date',
+  'to': 'To',
+  'apply_filter': 'Apply Filter',
+  'remove': 'Remove',
+  'choose_time_frame': 'Choose a time frame',
+  'set_status': 'Set the status',
+  'previous_month': 'Previous month',
+  'next_month': 'Next month',
+  'previous_month_info': 'Click the button to go to the previous month',
+  'next_month_info': 'Click the button to go to the next month',
+  'invoices': 'Invoices',
+  'invoice_info': 'Click to select invoices',
+  'contract_info': 'Click to select contracts',
+  'day_buttons': 'Select day',
+  'day_buttons_info': 'Click to filter by days',
 
   /// MainPage
   'exit': 'Exit',
   'confirm_exit': 'Confirm that you really want to exit of IBilling',
 
+  /// SinglePage
+  'status': 'Status',
+  'tin_organization': 'ITN/IEC of the organization',
+  'created_at': 'Created at',
+  'other_contracts': 'Other contracts',
+  'other_invoices': 'Other invoices',
+  'delete_contract': 'Delete contract',
+  'create_contract': 'Create contract',
+  'delete_invoice': 'Delete invoice',
+  'create_invoice': 'Create invoice',
+  'delete_this_contract': 'Are you sure you want to delete this contract?',
+  'delete_this_invoice': 'Are you sure you want to delete this invoice?',
+  'deleting_complete': 'Deleted successfully',
 
-  'history': 'History',
-  'new': 'New',
+  /// SavePage
   'saved': 'Saved',
+  'delete': 'Delete',
+
+  /// HistoryPage
+  'history': 'History',
+  'contract_has_been_deleted': 'This contract has been deleted',
+  'invoice_has_been_deleted': 'This invoice has been deleted',
 };

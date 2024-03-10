@@ -1,7 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:i_billing/Data/Model/contract_model.dart';
+import 'package:i_billing/Data/Model/history_model.dart';
 import 'package:i_billing/Data/Model/invoice_model.dart';
+import 'package:i_billing/Data/Model/saved_model.dart';
+import 'package:i_billing/Data/Model/user_model.dart';
 import 'package:i_billing/Data/Service/lang_service.dart';
 import 'package:i_billing/Data/Service/theme_service.dart' as theme;
 
@@ -37,12 +41,26 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   ];
   PageController controller = PageController(keepPage: true, initialPage: 1);
 
+  late UserModel userModel;
   int selectedDay = DateTime.now().day;
   int selectedYear = DateTime.now().year;
   int selectedMonth = DateTime.now().month;
   double dayControllerPixels = 0;
   List<InvoiceModel> invoices = [];
-  //
+  List<ContractModel> contracts = [];
+  List<ContractModel> filterContracts = [];
+  List<InvoiceModel> filterInvoices = [];
+  Iterable<ContractModel> suggestions = [];
+  List<ContractModel> historyListContracts = [];
+  List<ContractModel> historyListSavedContracts = [];
+  List<ContractModel> historyListHistoryContracts = [];
+  List<ContractModel> savedContracts = [];
+  List<InvoiceModel> savedInvoices = [];
+  HistoryModel historyModel = HistoryModel(history: [], savedHistory: [], historyHistory: []);
+  SavedModel savedModel = SavedModel();
+  List<ContractModel> historyContracts = [];
+  List<InvoiceModel> historyInvoices = [];
+
   // ScrollController invoiceController = ScrollController();
 
   MainBloc() : super(MainInitialState(
@@ -58,6 +76,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     on<MainMenuButtonEvent>(pressMenuButton);
     on<MainHideBottomNavigationBarEvent>(hideBottomNavigationBar);
     on<MainLanguageEvent>(languageUpdate);
+    on<MainThemeEvent>(themeUpdate);
   }
 
   void emitComfort(Emitter<MainState> emit) {
@@ -97,7 +116,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       currentScreen = event.index + 1;
       await controller.animateToPage(
           currentScreen,
-          duration: Duration(milliseconds: (currentScreen - oldScreen)  * 50 + 200),
+          duration: Duration(milliseconds: (currentScreen - oldScreen)  * 50 + 150),
           curve: Curves.linear);
       emitComfort(emit);
     }
@@ -107,6 +126,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
           currentScreen,
           duration: Duration(milliseconds: (oldScreen - currentScreen)  * 50 + 150),
           curve: Curves.linear);
+      currentScreen--;
       emitComfort(emit);
     }
     oldScreen = currentScreen;
@@ -124,6 +144,10 @@ class MainBloc extends Bloc<MainEvent, MainState> {
 
   void languageUpdate(MainLanguageEvent event, Emitter<MainState> emit) {
     language = LangService.getLanguage;
+    emitComfort(emit);
+  }
+  void themeUpdate(MainThemeEvent event, Emitter<MainState> emit) {
+    darkMode = theme.ThemeService.getTheme == theme.ThemeMode.dark;
     emitComfort(emit);
   }
 }

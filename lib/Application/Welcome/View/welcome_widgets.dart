@@ -47,9 +47,9 @@ class MyFlagButton extends StatelessWidget {
                 expand: true,
                 builder: (BuildContext cont, ScrollController scrollController) {
                   return Container(
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                         color: AppColors.darker,
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
                     child: ListView.builder(
                       controller: scrollController,
                       itemCount: 4,
@@ -59,7 +59,7 @@ class MyFlagButton extends StatelessWidget {
                                 padding: const EdgeInsets.all(16),
                                 child: Text(
                                   'choose_lang'.tr(),
-                                  style: AppTextStyles.style4,
+                                  style: AppTextStyles.style4(context),
                                 ),
                               )
                             : RadioListTile(
@@ -71,7 +71,7 @@ class MyFlagButton extends StatelessWidget {
                                   height: 28,
                                   fit: BoxFit.fill,
                                 ),
-                                title: Text('button_${index - 1}'.tr(), style: AppTextStyles.style15),
+                                title: Text('button_${index - 1}'.tr(), style: AppTextStyles.style15(context)),
                                 selected: lang[index - 1] == currentLang,
                                 value: lang[index - 1],
                                 groupValue: currentLang,
@@ -137,16 +137,16 @@ class SelectButton extends StatelessWidget {
               ? function()
               : () {}
           : function(),
-      color: select ? AppColors.blue : AppColors.disableBlue,
+      color: select ? AppColors.blue : AppColors.transparentBlue,
       splashColor: AppColors.blue,
       elevation: 0,
-      highlightColor: AppColors.disableBlue,
+      highlightColor: AppColors.transparentBlue,
       minWidth: (MediaQuery.of(context).size.width - 130) / 2,
       height: 37,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
       child: Text(
         text,
-        style: select ? AppTextStyles.style13 : AppTextStyles.style14,
+        style: select ? AppTextStyles.style13(context).copyWith(color: Colors.white) : AppTextStyles.style14(context),
       ),
     );
   }
@@ -217,7 +217,7 @@ class MyTextField extends StatelessWidget {
         obscureText: icon == Icons.lock ? obscure! : false,
         cursorColor: AppColors.blue,
         controller: controller,
-        style: errorState ? AppTextStyles.style7_1 : AppTextStyles.style7,
+        style: errorState ? AppTextStyles.style7_1(context) : AppTextStyles.style7(context),
         onChanged: (v) {
           switch (pageName) {
             case '/sign_in_page':
@@ -306,7 +306,7 @@ class MyTextField extends StatelessWidget {
                                   ),
                                   Text(
                                     phoneCountryData.country ?? '',
-                                    style: AppTextStyles.style17,
+                                    style: AppTextStyles.style17(context),
                                     maxLines: 1,
                                   ),
                                 ],
@@ -330,7 +330,7 @@ class MyTextField extends StatelessWidget {
                             errorBorder: myInputBorder(color1: AppColors.transparent),
                             focusedBorder: myInputBorder(color1: AppColors.transparent),
                           ),
-                          style: errorState ? AppTextStyles.style7_1 : AppTextStyles.style7,
+                          style: errorState ? AppTextStyles.style7_1(context) : AppTextStyles.style7(context),
                           icon: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 4),
                             child: Icon(Icons.expand_circle_down_outlined, size: 18, color: errorState ? AppColors.red : AppColors.blue),
@@ -387,7 +387,7 @@ class MyTextField extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         onPressed: () => !suffixIc ? Utils.mySnackBar(context: context1, txt: snackBarTxt, errorState: true) : {},
                         icon: suffixIc && !errorState
-                            ? const Icon(Icons.done, color: AppColors.blue)
+                            ? Icon(Icons.done, color: AppColors.blue)
                             : const Icon(Icons.error_outline, color: AppColors.red))
                     : const SizedBox.shrink(),
               ],
@@ -395,12 +395,12 @@ class MyTextField extends StatelessWidget {
           ),
           labelText: labelTxt,
           hintText: hintTxt,
-          hintStyle: AppTextStyles.style6,
-          labelStyle: errorState ? AppTextStyles.style3_1 : controller.text.isNotEmpty || focus.hasFocus ? AppTextStyles.style3 : AppTextStyles.style6,
+          hintStyle: AppTextStyles.style6(context),
+          labelStyle: errorState ? AppTextStyles.style3_1(context) : controller.text.isNotEmpty || focus.hasFocus ? AppTextStyles.style3(context) : AppTextStyles.style6(context),
           border: myInputBorder(color1: AppColors.blue),
           enabledBorder: myInputBorder(
             color1: AppColors.blue,
-            color2: AppColors.disableBlue,
+            color2: AppColors.transparentBlue,
             itsColor1: controller.text.isNotEmpty || focus.hasFocus,
           ),
           disabledBorder: myInputBorder(color1: AppColors.blue),
@@ -422,7 +422,7 @@ TextButton myTextButton(
           borderRadius: BorderRadius.circular(10),
         ),
       ),
-      overlayColor: MaterialStateProperty.all(AppColors.disableBlue),
+      overlayColor: MaterialStateProperty.all(AppColors.transparentBlue),
     ),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -430,7 +430,7 @@ TextButton myTextButton(
         assetIc != null
             ? SizedBox(height: 25, child: Image(image: AssetImage('assets/icons/ic_$assetIc.png')))
             : const SizedBox.shrink(),
-        Text(' $txt', style: AppTextStyles.style9),
+        Text(' $txt', style: AppTextStyles.style9(context)),
       ],
     ),
   );
@@ -450,9 +450,9 @@ Container myIsLoading(BuildContext context) {
     width: MediaQuery.of(context).size.width,
     color: AppColors.transparentBlack,
     alignment: Alignment.center,
-    child: const CircularProgressIndicator(
+    child: CircularProgressIndicator(
       color: AppColors.blue,
-      backgroundColor: AppColors.disableBlue,
+      backgroundColor: AppColors.transparentBlue,
     ),
   );
 }
@@ -483,11 +483,39 @@ class MyButton extends StatelessWidget {
           }
         }
       },
-      color: enable ? AppColors.blue : AppColors.disableBlue,
+      color: enable ? AppColors.blue : AppColors.transparentBlue,
       minWidth: double.infinity,
       height: 48,
+      elevation: 0,
+      highlightColor: AppColors.transparentBlack,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-      child: Text(text, style: enable ? AppTextStyles.style4 : AppTextStyles.style5),
+      child: Text(text, style: enable ? AppTextStyles.style4(context).copyWith(color: Colors.white) : AppTextStyles.style5(context)),
+    );
+  }
+}
+
+class MyFilterButton extends StatelessWidget {
+  final bool enable;
+  final String text;
+  final Function function;
+
+  const MyFilterButton({
+    super.key,
+    required this.enable,
+    required this.text,
+    required this.function,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialButton(
+      onPressed: () => function(),
+      color: enable ? AppColors.blue : AppColors.transparentBlue,
+      minWidth: double.infinity,
+      height: 40,
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+      child: Text(text, style: enable ? AppTextStyles.style19(context) : AppTextStyles.style19_0(context)),
     );
   }
 }

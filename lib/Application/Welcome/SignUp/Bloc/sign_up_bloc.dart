@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_multi_formatter/formatters/phone_input_formatter.dart';
 import 'package:i_billing/Data/Model/user_model.dart';
 import 'package:i_billing/Data/Service/logic_service.dart';
-import 'package:i_billing/Data/Service/rtdb_service.dart';
+import 'package:i_billing/Data/Service/r_t_d_b_service.dart';
 import 'package:i_billing/Data/Service/util_service.dart';
 
 import '../../../../Data/Service/auth_service.dart';

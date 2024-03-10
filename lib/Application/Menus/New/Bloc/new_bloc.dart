@@ -1,19 +1,19 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_billing/Application/Main/Bloc/main_bloc.dart';
 import 'package:i_billing/Data/Model/contract_model.dart';
 import 'package:i_billing/Data/Model/invoice_model.dart';
-import 'package:i_billing/Data/Model/user_model.dart';
-import 'package:i_billing/Data/Service/db_service.dart';
 import 'package:i_billing/Data/Service/lang_service.dart';
 import 'package:i_billing/Data/Service/logic_service.dart';
-import 'package:i_billing/Data/Service/rtdb_service.dart';
+import 'package:i_billing/Data/Service/r_t_d_b_service.dart';
 import 'package:i_billing/Data/Service/util_service.dart';
 
 part 'new_event.dart';
 part 'new_state.dart';
 
 class NewBloc extends Bloc<NewEvent, NewState> {
+  MainBloc mainBloc;
   bool suffixServiceName = false;
   bool suffixInvoiceAmount = false;
   bool suffixFullName = false;
@@ -46,7 +46,7 @@ class NewBloc extends Bloc<NewEvent, NewState> {
   FocusNode focusAddress = FocusNode();
   FocusNode focusTIN = FocusNode();
 
-  NewBloc() : super(NewInitialState()) {
+  NewBloc({required this.mainBloc}) : super(NewInitialState()) {
     on<ContractEvent>(pressContractButton);
     on<InvoiceEvent>(pressInvoiceButton);
     on<InvoiceChange>(invoiceChange);
@@ -136,16 +136,17 @@ class NewBloc extends Bloc<NewEvent, NewState> {
   void pressInvoiceSave(InvoiceSave event, Emitter<NewState> emit) async {
     emit(NewInvoiceLoadingState());
     try {
-      UserModel userModel = userFromJson(await DBService.loadData(StorageKey.user) ?? '');
+      int num1 = mainBloc.invoices.isNotEmpty ? mainBloc.invoices.first.number! + 1 : 1;
+      int num2 = mainBloc.historyInvoices.isNotEmpty ? mainBloc.historyInvoices.first.number! + 1 : 1;
       InvoiceModel invoiceModel = InvoiceModel(
-        uId: userModel.uId,
-        key: DateTime.now().toIso8601String().replaceAll('.', '') + userModel.uId!,
-        fullName: userModel.fullName,
+        uId: mainBloc.userModel.uId,
+        key: DateTime.now().toIso8601String().replaceAll('.', '') + mainBloc.userModel.uId!,
+        fullName: mainBloc.userModel.fullName,
         serviceName: serviceNameController.text.trim(),
         amount: invoiceAmountController.text.trim().substring(0, invoiceAmountController.text.trim().length - 3).replaceAll(' ', ''),
         status: status,
         createdDate: DateTime.now().toString().substring(0, 10),
-        number: 1,
+        number: num1 > num2 ? num1 : num2,
       );
       await RTDBService.storeInvoice(invoiceModel);
       status = null;
@@ -156,7 +157,7 @@ class NewBloc extends Bloc<NewEvent, NewState> {
       }
       emit(NewInitialState());
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       if (event.context.mounted) {
         Utils.mySnackBar(txt: e.toString(), context: event.context, errorState: true);
       }
@@ -248,17 +249,18 @@ class NewBloc extends Bloc<NewEvent, NewState> {
   void pressContractSave(ContractSave event, Emitter<NewState> emit) async {
     emit(NewContractLoadingState());
     try {
-      UserModel userModel = userFromJson(await DBService.loadData(StorageKey.user) ?? '');
+      int num1 = mainBloc.contracts.isNotEmpty ? mainBloc.contracts.first.number! + 1 : 1;
+      int num2 = mainBloc.historyContracts.isNotEmpty ? mainBloc.historyContracts.first.number! + 1 : 1;
       ContractModel contractModel = ContractModel(
-        uId: userModel.uId,
-        key: DateTime.now().toIso8601String().replaceAll('.', '') + userModel.uId!,
+        uId: mainBloc.userModel.uId,
+        key: DateTime.now().toIso8601String().replaceAll('.', '') + mainBloc.userModel.uId!,
         face: face,
         fullName: fullNameController.text.trim(),
         address: addressController.text.trim(),
         tin: int.parse(tINController.text.replaceAll(' ', '')),
         status: status,
         createdDate: DateTime.now().toString().substring(0, 10),
-        number: 1,
+        number: num1 > num2 ? num1 : num2,
       );
       await RTDBService.storeContract(contractModel);
       face = null;
@@ -267,11 +269,11 @@ class NewBloc extends Bloc<NewEvent, NewState> {
       addressController.clear();
       tINController.clear();
       if (event.context.mounted) {
-        Utils.mySnackBar(txt: 'invoice_saved'.tr(), context: event.context);
+        Utils.mySnackBar(txt: 'contract_saved'.tr(), context: event.context);
       }
       emit(NewInitialState());
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       if (event.context.mounted) {
         Utils.mySnackBar(txt: e.toString(), context: event.context, errorState: true);
       }

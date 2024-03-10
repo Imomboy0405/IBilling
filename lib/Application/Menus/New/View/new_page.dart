@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_billing/Application/Main/Bloc/main_bloc.dart';
 import 'package:i_billing/Application/Menus/New/Bloc/new_bloc.dart';
 import 'package:i_billing/Application/Menus/View/menus_widgets.dart';
 import 'package:i_billing/Application/Welcome/View/welcome_widgets.dart';
@@ -14,8 +15,9 @@ class NewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mainBloc = BlocProvider.of<MainBloc>(context);
     return BlocProvider(
-      create: (context) => NewBloc(),
+      create: (context) => NewBloc(mainBloc: mainBloc),
       child: BlocBuilder<NewBloc, NewState>(builder: (context, state) {
         NewBloc bloc = context.read<NewBloc>();
         return Scaffold(
@@ -35,11 +37,19 @@ class NewPage extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.dark,
                     borderRadius: BorderRadius.circular(6),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 3,
+                        blurRadius: 5,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('what_create'.tr(), style: AppTextStyles.style20),
+                      Text('what_create'.tr(), style: AppTextStyles.style20(context)),
                       const SizedBox(height: 30),
 
                       // #contract_button
@@ -47,6 +57,7 @@ class NewPage extends StatelessWidget {
                         text: 'contract'.tr(),
                         ic: 'ic_new_contract',
                         function: () => context.read<NewBloc>().add(ContractEvent()),
+                        context: context,
                       ),
                       const SizedBox(height: 15),
 
@@ -55,6 +66,7 @@ class NewPage extends StatelessWidget {
                         text: 'invoice'.tr(),
                         ic: 'ic_new_invoice',
                         function: () => context.read<NewBloc>().add(InvoiceEvent()),
+                        context: context,
                       ),
                     ],
                   ),
@@ -107,6 +119,10 @@ class NewPage extends StatelessWidget {
                                 text: 'save_invoice'.tr(),
                                 function: () => context.read<NewBloc>().add(InvoiceSave(context: context)),
                                 enable: bloc.suffixInvoiceAmount && bloc.suffixServiceName && bloc.status != null,
+                                disabledAction: DisabledAction(
+                                  context: context,
+                                  text: 'fill_all_forms'.tr(),
+                                ),
                               )
                             ],
                           ),
@@ -186,6 +202,10 @@ class NewPage extends StatelessWidget {
                                 function: () => context.read<NewBloc>().add(ContractSave(context: context)),
                                 enable: bloc.suffixFullName && bloc.suffixAddress && bloc.suffixTIN
                                     && bloc.face != null && bloc.status != null,
+                                disabledAction: DisabledAction(
+                                  context: context,
+                                  text: 'fill_all_forms'.tr(),
+                                ),
                               )
                             ],
                           ),
