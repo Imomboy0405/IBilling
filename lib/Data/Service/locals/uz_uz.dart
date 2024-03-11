@@ -157,6 +157,8 @@ const Map<String, String> uzUZ = {
   'contract_info': 'Shartnomalarni tanlash uchun bosing',
   'day_buttons': 'Kun belgilash',
   'day_buttons_info': 'Kunlar bo\'yicha filtrlash uchun bosing',
+  'contract_not_found': 'Shartnoma topilmadi',
+  'invoice_not_found': 'Hisob-faktura topilmadi',
 
   /// MainPage
   'exit': 'Chiqish',

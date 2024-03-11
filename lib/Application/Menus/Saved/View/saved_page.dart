@@ -77,63 +77,80 @@ class SavedPage extends StatelessWidget {
                             [
                               SizedBox(
                                 height: 500,
-                                child: ReorderableListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: (bloc.filterEnabled
-                                      ? bloc.contractButtonSelect
-                                          ? bloc.filterContracts.length
-                                          : bloc.filterInvoices.length
-                                      : bloc.contractButtonSelect
-                                          ? bloc.savedContracts.length
-                                          : bloc.savedInvoices.length),
-                                  onReorder: (int oldIndex, int newIndex) =>
-                                      bloc.add(OnReorderEvent(newIndex: newIndex, oldIndex: oldIndex)),
-                                  itemBuilder: (BuildContext c, int index) {
-                                    return bloc.contractButtonSelect
+                                child: Stack(
+                                  children: [
+                                    ReorderableListView.builder(
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemCount: (bloc.filterEnabled
+                                          ? bloc.contractButtonSelect
+                                              ? bloc.filterContracts.length
+                                              : bloc.filterInvoices.length
+                                          : bloc.contractButtonSelect
+                                              ? bloc.savedContracts.length
+                                              : bloc.savedInvoices.length),
+                                      onReorder: (int oldIndex, int newIndex) =>
+                                          bloc.add(OnReorderEvent(newIndex: newIndex, oldIndex: oldIndex)),
+                                      itemBuilder: (BuildContext c, int index) {
+                                        return bloc.contractButtonSelect
 
-                                        // #contract_container
-                                        ? MyInvoiceOrContractContainer(
-                                            key: Key(
-                                              bloc.filterEnabled
-                                                  ? bloc.filterContracts[index].key!
-                                                  : bloc.savedContracts[index].key!,
-                                            ),
-                                            contract: true,
-                                            animatedDisabled: false,
-                                            index: index,
-                                            contractModel:
-                                                bloc.filterEnabled ? bloc.filterContracts[index] : bloc.savedContracts[index],
-                                            last: mainBloc.contracts.length,
-                                            onPressed: (c) => bloc
-                                                .add(SinglePageEvent(context: context, index: index, filter: bloc.filterEnabled)),
-                                            dismissible: true,
-                                            dismissibleFunc: () => bloc.add(DeleteEvent(
-                                              model:
-                                                  bloc.filterEnabled ? bloc.filterContracts[index] : bloc.savedContracts[index],
-                                            )),
-                                          )
+                                            // #contract_container
+                                            ? MyInvoiceOrContractContainer(
+                                                key: Key(
+                                                  bloc.filterEnabled
+                                                      ? bloc.filterContracts[index].key!
+                                                      : bloc.savedContracts[index].key!,
+                                                ),
+                                                contract: true,
+                                                animatedDisabled: false,
+                                                index: index,
+                                                contractModel:
+                                                    bloc.filterEnabled ? bloc.filterContracts[index] : bloc.savedContracts[index],
+                                                last: mainBloc.contracts.length,
+                                                onPressed: (c) => bloc
+                                                    .add(SinglePageEvent(context: context, index: index, filter: bloc.filterEnabled)),
+                                                dismissible: true,
+                                                dismissibleFunc: () => bloc.add(DeleteEvent(
+                                                  model:
+                                                      bloc.filterEnabled ? bloc.filterContracts[index] : bloc.savedContracts[index],
+                                                )),
+                                              )
 
-                                        // #invoice_container
-                                        : MyInvoiceOrContractContainer(
-                                            key: Key(
-                                              bloc.filterEnabled
-                                                  ? bloc.filterInvoices[index].key!
-                                                  : bloc.savedInvoices[index].key!,
-                                            ),
-                                            contract: false,
-                                            animatedDisabled: false,
-                                            index: index,
-                                            invoiceModel:
-                                                bloc.filterEnabled ? bloc.filterInvoices[index] : bloc.savedInvoices[index],
-                                            last: mainBloc.invoices.length,
-                                            onPressed: (c) => bloc
-                                                .add(SinglePageEvent(context: context, index: index, filter: bloc.filterEnabled)),
-                                            dismissible: true,
-                                            dismissibleFunc: () => bloc.add(DeleteEvent(
-                                              model: bloc.filterEnabled ? bloc.filterInvoices[index] : bloc.savedInvoices[index],
-                                            )),
-                                          );
-                                  },
+                                            // #invoice_container
+                                            : MyInvoiceOrContractContainer(
+                                                key: Key(
+                                                  bloc.filterEnabled
+                                                      ? bloc.filterInvoices[index].key!
+                                                      : bloc.savedInvoices[index].key!,
+                                                ),
+                                                contract: false,
+                                                animatedDisabled: false,
+                                                index: index,
+                                                invoiceModel:
+                                                    bloc.filterEnabled ? bloc.filterInvoices[index] : bloc.savedInvoices[index],
+                                                last: mainBloc.invoices.length,
+                                                onPressed: (c) => bloc
+                                                    .add(SinglePageEvent(context: context, index: index, filter: bloc.filterEnabled)),
+                                                dismissible: true,
+                                                dismissibleFunc: () => bloc.add(DeleteEvent(
+                                                  model: bloc.filterEnabled ? bloc.filterInvoices[index] : bloc.savedInvoices[index],
+                                                )),
+                                              );
+                                      },
+                                    ),
+
+                                    if ((bloc.filterEnabled
+                                        ? bloc.contractButtonSelect
+                                        ? bloc.filterContracts.length
+                                        : bloc.filterInvoices.length
+                                        : bloc.contractButtonSelect
+                                        ? bloc.savedContracts.length
+                                        : bloc.savedInvoices.length) == 0)
+
+                                      if (bloc.contractButtonSelect)
+                                        MyNotFoundWidget(text: 'contract_not_found'.tr())
+                                      else
+                                        MyNotFoundWidget(text: 'invoice_not_found'.tr())
+                                  ],
                                 ),
                               ),
                             ],

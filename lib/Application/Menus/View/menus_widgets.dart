@@ -14,6 +14,7 @@ import 'package:i_billing/Data/Model/invoice_model.dart';
 import 'package:i_billing/Data/Service/db_service.dart';
 import 'package:i_billing/Data/Service/lang_service.dart';
 import 'package:i_billing/Data/Service/util_service.dart';
+import 'package:shimmer/shimmer.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String titleText;
@@ -298,7 +299,7 @@ class SuggestionList extends StatelessWidget {
               ),
             ],
           )
-        : const AnimatedTxt(text: 'Note not found!');
+        : MyNotFoundWidget(text: 'contract_not_found'.tr());
   }
 }
 
@@ -1288,6 +1289,39 @@ class MyFilterPage extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+}
+
+class MyNotFoundWidget extends StatelessWidget {
+  final String text;
+
+  const MyNotFoundWidget({
+    super.key,
+    required this.text
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Shimmer.fromColors(
+        baseColor: AppColors.transparentWhite,
+        highlightColor: AppColors.white,
+        period: const Duration(seconds: 2),
+        enabled: context.debugDoingBuild,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image(
+              image: AssetImage('assets/icons/ic_not_found.png'),
+              color: AppColors.lightGrey,
+              height: 100,
+              width: 100,
+            ),
+            Text(text, style: AppTextStyles.style18(context),)
+          ],
+        ),
+      ),
     );
   }
 }

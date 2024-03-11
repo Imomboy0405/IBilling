@@ -76,48 +76,64 @@ class HistoryPage extends StatelessWidget {
                                 height: (bloc.contractButtonSelect
                                 ? bloc.historyContracts.length
                                 : bloc.historyInvoices.length) * 162 + 83,
-                                child: ReorderableListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: (bloc.filterEnabled
-                                      ? bloc.contractButtonSelect
-                                          ? bloc.filterContracts.length
-                                          : bloc.filterInvoices.length
-                                      : bloc.contractButtonSelect
-                                          ? bloc.historyContracts.length
-                                          : bloc.historyInvoices.length),
-                                  onReorder: (int oldIndex, int newIndex) =>
-                                      bloc.add(OnReorderEvent(newIndex: newIndex, oldIndex: oldIndex)),
-                                  itemBuilder: (BuildContext c, int index) {
-                                    return bloc.contractButtonSelect
+                                child: Stack(
+                                  children: [
+                                    ReorderableListView.builder(
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemCount: (bloc.filterEnabled
+                                          ? bloc.contractButtonSelect
+                                              ? bloc.filterContracts.length
+                                              : bloc.filterInvoices.length
+                                          : bloc.contractButtonSelect
+                                              ? bloc.historyContracts.length
+                                              : bloc.historyInvoices.length),
+                                      onReorder: (int oldIndex, int newIndex) =>
+                                          bloc.add(OnReorderEvent(newIndex: newIndex, oldIndex: oldIndex)),
+                                      itemBuilder: (BuildContext c, int index) {
+                                        return bloc.contractButtonSelect
 
-                                        // #contract_container
-                                        ? MyInvoiceOrContractContainer(
-                                            key: Key(
-                                              bloc.filterEnabled ? bloc.filterContracts[index].key! : bloc.historyContracts[index].key!,
-                                            ),
-                                            contract: true,
-                                            animatedDisabled: false,
-                                            index: index,
-                                            contractModel: bloc.filterEnabled ? bloc.filterContracts[index] : bloc.historyContracts[index],
-                                            last: mainBloc.contracts.length,
-                                            onPressed: (c) =>
-                                                bloc.add(SinglePageEvent(context: context, index: index, filter: bloc.filterEnabled)),
-                                          )
+                                            // #contract_container
+                                            ? MyInvoiceOrContractContainer(
+                                                key: Key(
+                                                  bloc.filterEnabled ? bloc.filterContracts[index].key! : bloc.historyContracts[index].key!,
+                                                ),
+                                                contract: true,
+                                                animatedDisabled: false,
+                                                index: index,
+                                                contractModel: bloc.filterEnabled ? bloc.filterContracts[index] : bloc.historyContracts[index],
+                                                last: mainBloc.contracts.length,
+                                                onPressed: (c) =>
+                                                    bloc.add(SinglePageEvent(context: context, index: index, filter: bloc.filterEnabled)),
+                                              )
 
-                                        // #invoice_container
-                                        : MyInvoiceOrContractContainer(
-                                            key: Key(
-                                              bloc.filterEnabled ? bloc.filterInvoices[index].key! : bloc.historyInvoices[index].key!,
-                                            ),
-                                            contract: false,
-                                            animatedDisabled: false,
-                                            index: index,
-                                            invoiceModel: bloc.filterEnabled ? bloc.filterInvoices[index] : bloc.historyInvoices[index],
-                                            last: mainBloc.invoices.length,
-                                            onPressed: (c) =>
-                                                bloc.add(SinglePageEvent(context: context, index: index, filter: bloc.filterEnabled)),
-                                          );
-                                  },
+                                            // #invoice_container
+                                            : MyInvoiceOrContractContainer(
+                                                key: Key(
+                                                  bloc.filterEnabled ? bloc.filterInvoices[index].key! : bloc.historyInvoices[index].key!,
+                                                ),
+                                                contract: false,
+                                                animatedDisabled: false,
+                                                index: index,
+                                                invoiceModel: bloc.filterEnabled ? bloc.filterInvoices[index] : bloc.historyInvoices[index],
+                                                last: mainBloc.invoices.length,
+                                                onPressed: (c) =>
+                                                    bloc.add(SinglePageEvent(context: context, index: index, filter: bloc.filterEnabled)),
+                                              );
+                                      },
+                                    ),
+
+                                    if ((bloc.filterEnabled
+                                        ? bloc.contractButtonSelect
+                                        ? bloc.filterContracts.length
+                                        : bloc.filterInvoices.length
+                                        : bloc.contractButtonSelect
+                                        ? bloc.historyContracts.length
+                                        : bloc.historyInvoices.length) == 0)
+                                      if (bloc.contractButtonSelect)
+                                        MyNotFoundWidget(text: 'contract_not_found'.tr())
+                                      else
+                                        MyNotFoundWidget(text: 'invoice_not_found'.tr())
+                                  ],
                                 ),
                               ),
                             ],

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
@@ -165,15 +167,23 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
       mainBloc.filterInvoices =
           LogicService.filterInvoiceList(day: selectedDay, month: selectedMonth, year: selectedYear, list: mainBloc.invoices);
       mainBloc.add(MainLanguageEvent());
-      // if (event.context.mounted) {
-      //   await FeatureDiscovery.clearPreferences(
-      //     event.context,
-      //     <String>{'feature1'},
-      //   ).then((value) => FeatureDiscovery.discoverFeatures(
-      //     event.context,
-      //     const <String>{'feature2'},
-      //   ));
-      // }
+      String? featureJson = await DBService.loadData(StorageKey.feature);
+      if (featureJson == null || jsonDecode(featureJson)) {
+        if (event.context.mounted) {
+            FeatureDiscovery.discoverFeatures(
+              event.context,
+              <String>{'feature1', 'feature2', 'feature3', 'feature4', 'feature5'},
+            );
+          }
+        if (event.context.mounted) {
+            await FeatureDiscovery.clearPreferences(
+              event.context,
+              <String>{'feature1', 'feature2', 'feature3', 'feature4', 'feature5'},
+            );
+          }
+      } else {
+        await DBService.saveFeature(false);
+      }
     } else {
       contractButtonSelect = event.contract;
       if (event.network) {
@@ -221,18 +231,6 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
           }
         }
       }
-    }
-    if (event.context.mounted) {
-      FeatureDiscovery.discoverFeatures(
-        event.context,
-        <String>{'feature1', 'feature2', 'feature3', 'feature4', 'feature5'},
-      );
-    }
-    if (event.context.mounted) {
-      await FeatureDiscovery.clearPreferences(
-        event.context,
-        <String>{'feature1', 'feature2', 'feature3', 'feature4', 'feature5'},
-      );
     }
 
     emit(ContractsInitialState(

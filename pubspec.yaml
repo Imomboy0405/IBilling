@@ -28,7 +28,7 @@ dependencies:
   feature_discovery: any
   flutter_staggered_animations: any
   animated_text_kit: any
-
+  shimmer: any
 
   # state management
   flutter_bloc: any
@@ -53,8 +53,16 @@ dependencies:
   get_it: any
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.13.1
   flutter_test:
     sdk: flutter
+
+
+
+flutter_icons:
+  android: true
+  image_path: "lib/icons/app_icon.png"
+  adaptive_icon_foreground: "lib/icons/adaptive_icon_foreground.png"
 
   flutter_lints: ^3.0.0
 
