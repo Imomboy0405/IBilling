@@ -182,7 +182,7 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
             );
           }
       } else {
-        await DBService.saveFeature(true);
+        await DBService.saveFeature(false);
       }
     } else {
       contractButtonSelect = event.contract;
