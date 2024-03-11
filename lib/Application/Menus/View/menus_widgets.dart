@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
@@ -300,37 +299,6 @@ class SuggestionList extends StatelessWidget {
             ],
           )
         : MyNotFoundWidget(text: 'contract_not_found'.tr());
-  }
-}
-
-class AnimatedTxt extends StatelessWidget {
-  const AnimatedTxt({
-    super.key,
-    required this.text,
-  });
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: AnimatedTextKit(
-        animatedTexts: [
-          ColorizeAnimatedText(
-            text,
-            textStyle: const TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-            textAlign: TextAlign.end,
-            colors: [Colors.grey.shade600, Colors.white, Colors.grey.shade900],
-          ),
-        ],
-        // text: _kTexts,
-        repeatForever: true,
-      ),
-    );
   }
 }
 
