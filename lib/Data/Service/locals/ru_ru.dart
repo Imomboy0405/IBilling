@@ -157,6 +157,8 @@ const Map<String, String> ruRU = {
   'contract_info': 'Нажмите, чтобы выбрать контракты',
   'day_buttons': 'Выберите день',
   'day_buttons_info': 'Нажмите, чтобы отфильтровать по дням',
+  'contract_not_found': 'Контракт не найден',
+  'invoice_not_found': 'Счет не найден',
 
   /// MainPage
   'exit': 'Выход',

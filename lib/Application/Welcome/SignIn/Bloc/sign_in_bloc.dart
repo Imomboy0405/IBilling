@@ -183,6 +183,8 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
           Navigator.pushReplacementNamed(event.context, MainPage.id);
         }
       } else {
+        print('object');
+        print(error);
         if (event.context.mounted) {
           Utils.mySnackBar(txt: LogicService.parseError(error.toString()).tr(), context: event.context, errorState: true);
         }

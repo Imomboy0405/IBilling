@@ -74,8 +74,8 @@ class HistoryPage extends StatelessWidget {
                             [
                               SizedBox(
                                 height: (bloc.contractButtonSelect
-                                ? bloc.historyContracts.length
-                                : bloc.historyInvoices.length) * 162 + 83,
+                                ? (bloc.historyContracts.length * 162 < (MediaQuery.of(context).size.height - 235) ? (MediaQuery.of(context).size.height - 235) : bloc.historyContracts.length * 162)
+                                : (bloc.historyInvoices.length) * 162 < (MediaQuery.of(context).size.height - 235) ? (MediaQuery.of(context).size.height - 235) : bloc.historyInvoices.length * 162),
                                 child: Stack(
                                   children: [
                                     ReorderableListView.builder(

@@ -90,7 +90,7 @@ class LogicService {
     List<ContractModel> result = [];
     String dateTime = DateTime(year, month, day).toString().substring(0, 10);
     for (ContractModel model in list) {
-      if (model.key!.substring(0, 10) == dateTime) result.add(model);
+      if (model.createdDate == dateTime) result.add(model);
     }
     return result;
   }
@@ -99,7 +99,7 @@ class LogicService {
     List<InvoiceModel> result = [];
     String dateTime = DateTime(year, month, day).toString().substring(0, 10);
     for (InvoiceModel model in list) {
-      if (model.key!.substring(0, 10) == dateTime) result.add(model);
+      if (model.createdDate == dateTime) result.add(model);
     }
     return result;
   }

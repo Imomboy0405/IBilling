@@ -61,8 +61,6 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   List<ContractModel> historyContracts = [];
   List<InvoiceModel> historyInvoices = [];
 
-  // ScrollController invoiceController = ScrollController();
-
   MainBloc() : super(MainInitialState(
     screen: 1,
     lang: LangService.getLanguage,
@@ -146,6 +144,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     language = LangService.getLanguage;
     emitComfort(emit);
   }
+
   void themeUpdate(MainThemeEvent event, Emitter<MainState> emit) {
     darkMode = theme.ThemeService.getTheme == theme.ThemeMode.dark;
     emitComfort(emit);

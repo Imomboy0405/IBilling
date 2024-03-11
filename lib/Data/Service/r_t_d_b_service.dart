@@ -127,7 +127,10 @@ class RTDBService {
   static Future<SavedModel> loadSaved(String uId) async {
     Query query = database.child('saved').child(uId);
     DatabaseEvent event = await query.once();
-    SavedModel savedModel = SavedModel.fromJson(event.snapshot.value);
+    SavedModel savedModel = SavedModel();
+    if (event.snapshot.value != null) {
+      savedModel = SavedModel.fromJson(event.snapshot.value);
+    }
     return savedModel;
   }
 

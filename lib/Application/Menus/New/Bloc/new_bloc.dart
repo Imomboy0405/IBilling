@@ -149,6 +149,7 @@ class NewBloc extends Bloc<NewEvent, NewState> {
         number: num1 > num2 ? num1 : num2,
       );
       await RTDBService.storeInvoice(invoiceModel);
+      mainBloc.invoices.insert(0, invoiceModel);
       status = null;
       serviceNameController.clear();
       invoiceAmountController.clear();
@@ -263,6 +264,7 @@ class NewBloc extends Bloc<NewEvent, NewState> {
         number: num1 > num2 ? num1 : num2,
       );
       await RTDBService.storeContract(contractModel);
+      mainBloc.contracts.insert(0, contractModel);
       face = null;
       status = null;
       fullNameController.clear();

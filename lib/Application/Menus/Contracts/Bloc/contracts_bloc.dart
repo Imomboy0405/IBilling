@@ -193,17 +193,20 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
           mainBloc.contracts = mainBloc.contracts.reversed.toList();
           mainBloc.filterContracts =
               LogicService.filterContractList(day: selectedDay, month: selectedMonth, year: selectedYear, list: mainBloc.contracts);
-          filterContracts = [];
-          for (ContractModel model in mainBloc.contracts) {
-            if (LogicService.compareDate(selectedDateFilter, selectedDateFilterTo, model.createdDate!) &&
-                LogicService.compareStatus(
-                  filterInProcess: filterInProcess,
-                  filterIQ: filterIQ,
-                  filterPaid: filterPaid,
-                  filterPayme: filterPayme,
-                  status: model.status!,
-                )) {
-              filterContracts.add(model);
+
+          if (filterEnabled) {
+            filterContracts = [];
+            for (ContractModel model in mainBloc.contracts) {
+              if (LogicService.compareDate(selectedDateFilter, selectedDateFilterTo, model.createdDate!) &&
+                  LogicService.compareStatus(
+                    filterInProcess: filterInProcess,
+                    filterIQ: filterIQ,
+                    filterPaid: filterPaid,
+                    filterPayme: filterPayme,
+                    status: model.status!,
+                  )) {
+                filterContracts.add(model);
+              }
             }
           }
         } else {
@@ -217,17 +220,19 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
             list: mainBloc.invoices,
           );
         }
-        filterInvoices = [];
-        for (InvoiceModel model in mainBloc.invoices) {
-          if (LogicService.compareDate(selectedDateFilter, selectedDateFilterTo, model.createdDate!) &&
-              LogicService.compareStatus(
-                filterInProcess: filterInProcess,
-                filterIQ: filterIQ,
-                filterPaid: filterPaid,
-                filterPayme: filterPayme,
-                status: model.status!,
-              )) {
-            filterInvoices.add(model);
+        if (filterEnabled) {
+          filterInvoices = [];
+          for (InvoiceModel model in mainBloc.invoices) {
+            if (LogicService.compareDate(selectedDateFilter, selectedDateFilterTo, model.createdDate!) &&
+                LogicService.compareStatus(
+                  filterInProcess: filterInProcess,
+                  filterIQ: filterIQ,
+                  filterPaid: filterPaid,
+                  filterPayme: filterPayme,
+                  status: model.status!,
+                )) {
+              filterInvoices.add(model);
+            }
           }
         }
       }

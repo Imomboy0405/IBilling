@@ -262,80 +262,72 @@ class _ContractsPageState extends State<ContractsPage> with AutomaticKeepAliveCl
                                 delegate: SliverChildListDelegate([
                                   SizedBox(
                                     height: bloc.filterEnabled
-                                        ? (bloc.contractButtonSelect ? bloc.filterContracts.length : bloc.filterInvoices.length) * 162 <
-                                                (MediaQuery.of(context).size.height - 235)
+                                        ? ((bloc.contractButtonSelect ? bloc.filterContracts.length : bloc.filterInvoices.length) * 162) < (MediaQuery.of(context).size.height - 235)
                                             ? MediaQuery.of(context).size.height - 235
-                                            : (bloc.contractButtonSelect ? bloc.filterContracts.length : bloc.filterInvoices.length) * 162
-                                        : (bloc.contractButtonSelect ? bloc.filterContracts.length : bloc.filterInvoices.length) * 162 <
-                                                (MediaQuery.of(context).size.height - 387)
+                                            : ((bloc.contractButtonSelect ? bloc.filterContracts.length : bloc.filterInvoices.length) * 162)
+                                        : ((bloc.contractButtonSelect ? mainBloc.filterContracts.length : mainBloc.filterInvoices.length) * 162) < (MediaQuery.of(context).size.height - 386)
                                             ? MediaQuery.of(context).size.height - 386
-                                            : (bloc.contractButtonSelect
+                                            : ((bloc.contractButtonSelect
                                                     ? mainBloc.filterContracts.length
                                                     : mainBloc.filterInvoices.length) *
-                                                162,
-                                    child: Stack(
-                                      children: [
-                                        ReorderableListView.builder(
-                                          physics: const NeverScrollableScrollPhysics(),
-                                          itemCount: (bloc.filterEnabled
-                                              ? bloc.contractButtonSelect
-                                                  ? bloc.filterContracts.length
-                                                  : bloc.filterInvoices.length
-                                              : bloc.contractButtonSelect
-                                                  ? mainBloc.filterContracts.length
-                                                  : mainBloc.filterInvoices.length),
-                                          onReorder: (int oldIndex, int newIndex) =>
-                                              bloc.add(OnReorderEvent(newIndex: newIndex, oldIndex: oldIndex)),
-                                          itemBuilder: (BuildContext c, int index) {
-                                            return bloc.contractButtonSelect
-
-                                                // #contract_container
-                                                ? MyInvoiceOrContractContainer(
-                                                    key: Key(
-                                                      bloc.filterEnabled
-                                                          ? bloc.filterContracts[index].key!
-                                                          : mainBloc.filterContracts[index].key!,
-                                                    ),
-                                                    contract: true,
-                                                    animatedDisabled: widget.key == const Key('2'),
-                                                    index: index,
-                                                    contractModel:
-                                                        bloc.filterEnabled ? bloc.filterContracts[index] : mainBloc.filterContracts[index],
-                                                    last: mainBloc.contracts.length,
-                                                    onPressed: (c) => bloc.add(SinglePageEvent(index: index, context: c)),
-                                                  )
-
-                                                // #invoice_container
-                                                : MyInvoiceOrContractContainer(
-                                                    key: Key(
-                                                      bloc.filterEnabled
-                                                          ? bloc.filterInvoices[index].key!
-                                                          : mainBloc.filterInvoices[index].key!,
-                                                    ),
-                                                    contract: false,
-                                                    animatedDisabled: widget.key == const Key('2'),
-                                                    index: index,
-                                                    invoiceModel:
-                                                        bloc.filterEnabled ? bloc.filterInvoices[index] : mainBloc.filterInvoices[index],
-                                                    last: mainBloc.invoices.length,
-                                                    onPressed: (c) => bloc.add(SinglePageEvent(index: index, context: c)),
-                                                  );
-                                          },
-                                        ),
-                                        if ((bloc.filterEnabled
+                                                162),
+                                    child: ((bloc.filterEnabled
                                                 ? bloc.contractButtonSelect
                                                     ? bloc.filterContracts.length
                                                     : bloc.filterInvoices.length
                                                 : bloc.contractButtonSelect
                                                     ? mainBloc.filterContracts.length
-                                                    : mainBloc.filterInvoices.length) ==
-                                            0)
-                                          if (bloc.contractButtonSelect)
-                                            MyNotFoundWidget(text: 'contract_not_found'.tr())
-                                          else
-                                            MyNotFoundWidget(text: 'invoice_not_found'.tr())
-                                      ],
-                                    ),
+                                                    : mainBloc.filterInvoices.length) == 0)
+                                        ? (bloc.contractButtonSelect)
+                                            ? MyNotFoundWidget(text: 'contract_not_found'.tr())
+                                            : MyNotFoundWidget(text: 'invoice_not_found'.tr())
+                                        : ReorderableListView.builder(
+                                            physics: const NeverScrollableScrollPhysics(),
+                                            itemCount: (bloc.filterEnabled
+                                                ? (bloc.contractButtonSelect
+                                                    ? bloc.filterContracts.length
+                                                    : bloc.filterInvoices.length)
+                                                : (bloc.contractButtonSelect
+                                                    ? mainBloc.filterContracts.length
+                                                    : mainBloc.filterInvoices.length)),
+                                            onReorder: (int oldIndex, int newIndex) =>
+                                                bloc.add(OnReorderEvent(newIndex: newIndex, oldIndex: oldIndex)),
+                                            itemBuilder: (BuildContext c, int index) {
+                                              return bloc.contractButtonSelect
+                                                  // #contract_container
+                                                  ? MyInvoiceOrContractContainer(
+                                                      key: Key(
+                                                        bloc.filterEnabled
+                                                            ? bloc.filterContracts[index].key!
+                                                            : mainBloc.filterContracts[index].key!,
+                                                      ),
+                                                      contract: true,
+                                                      animatedDisabled: widget.key == const Key('2'),
+                                                      index: index,
+                                                      contractModel: bloc.filterEnabled
+                                                          ? bloc.filterContracts[index]
+                                                          : mainBloc.filterContracts[index],
+                                                      last: mainBloc.contracts.length,
+                                                      onPressed: (c) => bloc.add(SinglePageEvent(index: index, context: c)),
+                                                    )
+
+                                                  // #invoice_container
+                                                  : MyInvoiceOrContractContainer(
+                                                      key: Key(
+                                                        bloc.filterEnabled
+                                                            ? bloc.filterInvoices[index].key!
+                                                            : mainBloc.filterInvoices[index].key!,
+                                                      ),
+                                                      contract: false,
+                                                      animatedDisabled: widget.key == const Key('2'),
+                                                      index: index,
+                                                      invoiceModel:
+                                                          bloc.filterEnabled ? bloc.filterInvoices[index] : mainBloc.filterInvoices[index],
+                                                      last: mainBloc.invoices.length,
+                                                      onPressed: (c) => bloc.add(SinglePageEvent(index: index, context: c)),
+                                                    );
+                                            },
+                                          ),
                                   ),
                                 ]),
                               ),

@@ -157,6 +157,8 @@ const Map<String, String> enUS = {
   'contract_info': 'Click to select contracts',
   'day_buttons': 'Select day',
   'day_buttons_info': 'Click to filter by days',
+  'contract_not_found': 'Contract not found',
+  'invoice_not_found': 'Invoice not found',
 
   /// MainPage
   'exit': 'Exit',
