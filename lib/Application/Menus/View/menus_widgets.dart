@@ -1312,11 +1312,13 @@ class MyNotFoundWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image(
-              image: AssetImage('assets/icons/ic_not_found.png'),
-              color: AppColors.lightGrey,
-              height: 100,
-              width: 100,
+            Flexible(
+              child: Image(
+                image: AssetImage('assets/icons/ic_not_found.png'),
+                color: AppColors.lightGrey,
+                height: 100,
+                width: 100,
+              ),
             ),
             Text(text, style: AppTextStyles.style18(context),)
           ],
